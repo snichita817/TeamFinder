@@ -17,7 +17,7 @@ public class ActivitiesController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateActivity(CreateActivityRequestDto request)
+    public async Task<IActionResult> CreateActivity([FromBody] CreateActivityRequestDto request)
     {
         // Map DTO to Domain Model
         var activity = new Activity
@@ -29,12 +29,12 @@ public class ActivitiesController : Controller
             EndDate = request.EndDate,
             OpenRegistration = request.OpenRegistration,
             MaxParticipant = request.MaxParticipant,
-            UrlHandle = request.UrlHandle,
+            UrlHandle = "randomUrlHandle",
             CreatedBy = request.CreatedBy,
             CreatedDate = DateTime.Now
         };
 
-        await _activityRepository.CreateAsync(activity);
+        activity = await _activityRepository.CreateAsync(activity);
         
         // From Domain Model to DTO
         var response = new ActivityDto

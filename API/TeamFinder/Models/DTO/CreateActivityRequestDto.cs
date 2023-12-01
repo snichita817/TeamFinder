@@ -9,7 +9,6 @@ public class CreateActivityRequestDto
     public DateTime EndDate { get; set; }
     public bool OpenRegistration { get; set; }
     public int MaxParticipant { get; set; }
-    public string UrlHandle { get; set; }
     // Here will be the user that created the Activity
     public string CreatedBy { get; set; }
 }

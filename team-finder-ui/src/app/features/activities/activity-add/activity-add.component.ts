@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivityAddRequest } from '../models/activity-add-request.model';
 import { ActivityService } from '../services/activity.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-activity-add',
   templateUrl: './activity-add.component.html',
   styleUrls: ['./activity-add.component.css']
 })
-export class ActivityAddComponent {
+export class ActivityAddComponent implements OnDestroy {
   model: ActivityAddRequest;
 
   private addActivitySubscription?: Subscription;
 
-  constructor(private activityService: ActivityService) {
+  constructor(private activityService: ActivityService,
+    private router: Router) {
     this.model = {
       title: '',
       shortDescription: '',
@@ -29,7 +31,7 @@ export class ActivityAddComponent {
     this.addActivitySubscription = this.activityService.addActivity(this.model)
     .subscribe({
       next: (response) => {
-        console.log("this submit was successful");
+        this.router.navigateByUrl('');
       }
     })
   }

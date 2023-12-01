@@ -5,13 +5,16 @@
         <a class="btn btn-primary create-activity-btn" [routerLink]="['/activities/add']" role="button">Create new activity</a>
     </div>
 
-    <div class="container custom-card-container">
-        <div class="card mb-3 custom-card">
-            <div class="card-body">
-                <h5 class="card-title">Activity Title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <ng-container *ngIf="activities$ | async as activities">
+        <div *ngFor="let activity of activities" class="container custom-card-container">
+            <div class="card mb-3 custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{activity.title}}</h5>
+                    <p class="card-text">{{activity.shortDescription}}</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
+    
 </div>
