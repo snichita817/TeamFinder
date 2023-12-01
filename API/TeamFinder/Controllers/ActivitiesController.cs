@@ -84,4 +84,35 @@ public class ActivitiesController : Controller
 
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllActivities()
+    {
+        var activities = await _activityRepository.GetAllActivities();
+        
+        // Mapping Domain Model to DTO
+        var response = new List<ActivityDto>();
+
+        foreach (var activity in activities)
+        {
+            response.Add(
+            new ActivityDto
+            {
+                Id = activity.Id,
+                Title = activity.Title,
+                ShortDescription = activity.ShortDescription,
+                LongDescription = activity.LongDescription,
+                StartDate = activity.StartDate,
+                EndDate = activity.EndDate,
+                OpenRegistration = activity.OpenRegistration,
+                MaxParticipant = activity.MaxParticipant,
+                UrlHandle = activity.UrlHandle,
+                CreatedBy = activity.CreatedBy,
+                CreatedDate = activity.CreatedDate
+            });
+        }
+
+        return Ok(response);
+    }
+
 }

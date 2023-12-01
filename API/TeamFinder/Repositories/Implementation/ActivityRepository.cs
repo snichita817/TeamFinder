@@ -26,4 +26,9 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dbContext.Activities.FirstOrDefaultAsync(a => a.Id == id);
     }
+
+    public async Task<IEnumerable<Activity>> GetAllActivities()
+    {
+        return await _dbContext.Activities.ToListAsync();
+    }
 }

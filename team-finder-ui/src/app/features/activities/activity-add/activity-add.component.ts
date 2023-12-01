@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivityAddRequest } from '../models/activity-add-request.model';
-
+import { ActivityService } from '../services/activity.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-activity-add',
   templateUrl: './activity-add.component.html',
@@ -9,7 +10,9 @@ import { ActivityAddRequest } from '../models/activity-add-request.model';
 export class ActivityAddComponent {
   model: ActivityAddRequest;
 
-  constructor() {
+  private addActivitySubscription?: Subscription;
+
+  constructor(private activityService: ActivityService) {
     this.model = {
       title: '',
       shortDescription: '',
@@ -23,6 +26,15 @@ export class ActivityAddComponent {
   }
 
   onFormSubmit(){
-    
+    this.addActivitySubscription = this.activityService.addActivity(this.model)
+    .subscribe({
+      next: (response) => {
+        console.log("this submit was successful");
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.addActivitySubscription?.unsubscribe();
   }
 }
