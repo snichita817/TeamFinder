@@ -5,6 +5,6 @@ export interface ActivityAddRequest {
     startDate: Date;
     endDate: Date;
     openRegistration: boolean;
-    maxParticipants: number;
+    maxParticipant: number;
     createdBy: string;
 }

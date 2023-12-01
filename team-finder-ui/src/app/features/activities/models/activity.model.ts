@@ -6,7 +6,7 @@ export interface Activity {
     startDate: Date;
     endDate: Date;
     openRegistration: boolean;
-    maxParticipants: number;
+    maxParticipant: number;
     createdBy: string;
     createdDate: Date;
 }
