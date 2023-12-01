@@ -1,0 +1,51 @@
+.activity-container {
+    margin: 20px;
+}
+
+.activity-header {
+    margin-left: 20px;
+}
+
+.activity-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.create-activity-btn {
+    margin-bottom: 30px;
+    border-color: #28a745;
+}
+
+.container.custom-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card.custom-card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border: none;
+    width: 100%;
+}
+
+.card.custom-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    color: #555;
+}
+
+.text-muted {
+    color: #888;
+}

@@ -1,0 +1,8 @@
+.navbar-custom {
+    background-color: #171a21;
+}
+
+.my-navbar .navbar-nav .nav-link,
+.my-navbar .navbar-brand {
+    color: white !important;
+}

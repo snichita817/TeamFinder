@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamFinder", "TeamFinder\TeamFinder.csproj", "{4BCE120C-B70B-4FC6-A9D6-8143A8F5D801}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BCE120C-B70B-4FC6-A9D6-8143A8F5D801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BCE120C-B70B-4FC6-A9D6-8143A8F5D801}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BCE120C-B70B-4FC6-A9D6-8143A8F5D801}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BCE120C-B70B-4FC6-A9D6-8143A8F5D801}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAA65C88-312A-433C-8F06-7B11F50C5935}
+	EndGlobalSection
+EndGlobal
