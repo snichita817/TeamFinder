@@ -8,13 +8,17 @@ import { ActivityListComponent } from './features/activities/activity-list/activ
 import { ActivityAddComponent } from './features/activities/activity-add/activity-add.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
+import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     ActivityListComponent,
-    ActivityAddComponent
+    ActivityAddComponent,
+    ActivityListPrivateComponent,
+    ActivityEditComponent
   ],
   imports: [
     BrowserModule,

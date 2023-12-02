@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <h2>All Activities - Admin</h2>
+    <ng-container *ngIf="activities$ | async as activities">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Short Description</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let activity of activities">
+                    <th scope="row">{{activity.id}}</th>
+                    <td>{{activity.title}}</td>
+                    <td>{{activity.shortDescription}}</td>
+                    <td><button class="btn btn-primary" [routerLink]="['/activities/edit', activity.id]">Edit</button></td>
+            </tbody>
+        </table>
+    </ng-container>
+</div>

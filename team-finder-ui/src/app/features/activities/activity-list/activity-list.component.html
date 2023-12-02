@@ -1,7 +1,7 @@
 <div class="container mt-5">
 
     <div class = "activity-header">
-        <h1>Activities</h1>
+        <h2>Activities</h2>
         <a class="btn btn-primary create-activity-btn" [routerLink]="['/activities/add']" role="button">Create new activity</a>
     </div>
 
@@ -14,7 +14,6 @@
                     <div class="d-flex gap-3">
                         <p class="card-text"><i class="bi bi-people"></i> {{activity.maxParticipant || 'N/A'}}</p>
                         <p class="card-text"><i class="bi bi-calendar-range"></i> <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small></p>
-                        
                     </div>
                 </div>
             </div>

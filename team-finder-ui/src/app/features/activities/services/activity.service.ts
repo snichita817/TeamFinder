@@ -15,6 +15,10 @@ export class ActivityService {
     return this.http.post<void>(`${environment.apiBaseUrl}/activities`, model);
   }
 
+  getActivity(id: string): Observable<Activity> {
+    return this.http.get<Activity>(`${environment.apiBaseUrl}/activities/${id}`);
+  }
+
   indexActivities(): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${environment.apiBaseUrl}/activities`);
   }
