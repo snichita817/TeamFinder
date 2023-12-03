@@ -16,7 +16,7 @@
                     <th scope="row">{{activity.id}}</th>
                     <td>{{activity.title}}</td>
                     <td>{{activity.shortDescription}}</td>
-                    <td><button class="btn btn-primary" [routerLink]="['/activities/edit', activity.id]">Edit</button></td>
+                    <td><button class="btn btn-secondary" [routerLink]="['/activities/edit', activity.id]">Edit</button></td>
                     <td><button class="btn btn-danger" [routerLink]="['/activities/delete', activity.id]">Delete</button></td>
             </tbody>
         </table>
