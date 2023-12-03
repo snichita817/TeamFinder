@@ -27,4 +27,8 @@ export class ActivityService {
   updateActivity(id: string, model:ActivityEditRequest): Observable<void> {
     return this.http.put<void>(`${environment.apiBaseUrl}/activities/${id}`, model);
   }
+
+  deleteActivity(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiBaseUrl}/activities/${id}`);
+  }
 }

@@ -45,4 +45,18 @@ public class ActivityRepository : IActivityRepository
 
         return null;
     }
+
+    public async Task<Activity?> DeleteActivity(Guid id)
+    {
+        var existingActivity = await _dbContext.Activities.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (existingActivity == null)
+        {
+            return null;
+        }
+
+        _dbContext.Activities.Remove(existingActivity);
+        await _dbContext.SaveChangesAsync();
+        return existingActivity;
+    }
 }

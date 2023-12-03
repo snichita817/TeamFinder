@@ -160,5 +160,34 @@ public class ActivitiesController : Controller
 
         return Ok(response);
     }
-    
+
+    [HttpDelete]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> DeleteActivity([FromRoute] Guid id)
+    {
+        var deletedActivity = await _activityRepository.DeleteActivity(id);
+
+        if (deletedActivity == null)
+        {
+            return NotFound();
+        }
+        
+        // Map from Domain Model to Dto
+        var activityDto = new ActivityDto
+        {
+            Id = deletedActivity.Id,
+            Title = deletedActivity.Title,
+            ShortDescription = deletedActivity.ShortDescription,
+            LongDescription = deletedActivity.LongDescription,
+            StartDate = deletedActivity.StartDate,
+            EndDate = deletedActivity.EndDate,
+            OpenRegistration = deletedActivity.OpenRegistration,
+            MaxParticipant = deletedActivity.MaxParticipant,
+            UrlHandle = deletedActivity.UrlHandle,
+            CreatedBy = deletedActivity.CreatedBy,
+            CreatedDate = deletedActivity.CreatedDate
+        };
+
+        return Ok(activityDto);
+    }
 }

@@ -11,4 +11,6 @@ public interface IActivityRepository
     Task<IEnumerable<Activity>> GetAllActivities();
 
     Task<Activity?> EditActivity(Activity activity);
+
+    Task<Activity?> DeleteActivity(Guid id);
 }

@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
+import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ActivityEditComponent } from './features/activities/activity-edit/activ
     ActivityListComponent,
     ActivityAddComponent,
     ActivityListPrivateComponent,
-    ActivityEditComponent
+    ActivityEditComponent,
+    ActivityDeleteComponent
   ],
   imports: [
     BrowserModule,

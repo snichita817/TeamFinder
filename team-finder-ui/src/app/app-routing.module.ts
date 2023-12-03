@@ -4,6 +4,7 @@ import { ActivityListComponent } from './features/activities/activity-list/activ
 import { ActivityAddComponent } from './features/activities/activity-add/activity-add.component';
 import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
+import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'activities/edit/:id',
     component: ActivityEditComponent
+  },
+  {
+    path: 'activities/delete/:id',
+    component: ActivityDeleteComponent
   }
 ];
 
