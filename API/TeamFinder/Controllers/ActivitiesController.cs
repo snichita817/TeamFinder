@@ -115,4 +115,50 @@ public class ActivitiesController : Controller
         return Ok(response);
     }
 
+    [HttpPut]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> EditActivity([FromRoute] Guid id, EditActivityRequestDto request)
+    {
+        // From DTO to Domain Model
+        var activity = new Activity
+        {
+            Id = id,
+            Title = request.Title,
+            ShortDescription = request.ShortDescription,
+            LongDescription = request.LongDescription,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            OpenRegistration = request.OpenRegistration,
+            MaxParticipant = request.MaxParticipant,
+            UrlHandle = "exampleHandle",
+            CreatedBy = request.CreatedBy,
+            CreatedDate = new DateTime()
+        };
+
+        activity = await _activityRepository.EditActivity(activity);
+
+        if (activity == null)
+        {
+            return NotFound();
+        }
+        
+        // Convert Domain Model to Dto
+        var response = new ActivityDto
+        {
+            Id = activity.Id,
+            Title = activity.Title,
+            ShortDescription = activity.ShortDescription,
+            LongDescription = activity.LongDescription,
+            StartDate = activity.StartDate,
+            EndDate = activity.EndDate,
+            OpenRegistration = activity.OpenRegistration,
+            MaxParticipant = activity.MaxParticipant,
+            UrlHandle = activity.UrlHandle,
+            CreatedBy = activity.CreatedBy,
+            CreatedDate = activity.CreatedDate
+        };
+
+        return Ok(response);
+    }
+    
 }

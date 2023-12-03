@@ -4,6 +4,7 @@ import { ActivityAddRequest } from '../models/activity-add-request.model';
 import { Activity } from '../models/activity.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ActivityEditRequest } from '../models/activity-edit-request.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,5 +22,9 @@ export class ActivityService {
 
   indexActivities(): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${environment.apiBaseUrl}/activities`);
+  }
+
+  updateActivity(id: string, model:ActivityEditRequest): Observable<void> {
+    return this.http.put<void>(`${environment.apiBaseUrl}/activities/${id}`, model);
   }
 }

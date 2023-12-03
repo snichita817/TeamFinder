@@ -9,4 +9,6 @@ public interface IActivityRepository
     Task<Activity?> GetActivityAsync(Guid id);
 
     Task<IEnumerable<Activity>> GetAllActivities();
+
+    Task<Activity?> EditActivity(Activity activity);
 }

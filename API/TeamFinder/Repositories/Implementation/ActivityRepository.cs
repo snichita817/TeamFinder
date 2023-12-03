@@ -31,4 +31,18 @@ public class ActivityRepository : IActivityRepository
     {
         return await _dbContext.Activities.ToListAsync();
     }
+
+    public async Task<Activity?> EditActivity(Activity activity)
+    {
+        var existingActivity = await _dbContext.Activities.FirstOrDefaultAsync(act => act.Id == activity.Id);
+
+        if (existingActivity != null)
+        {
+            _dbContext.Entry(existingActivity).CurrentValues.SetValues(activity);
+            await _dbContext.SaveChangesAsync();
+            return activity;
+        }
+
+        return null;
+    }
 }

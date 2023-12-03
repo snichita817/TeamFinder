@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivityService } from '../services/activity.service';
 import { Activity } from '../models/activity.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ActivityEditRequest } from '../models/activity-edit-request.model';
 
 @Component({
   selector: 'app-activity-edit',
@@ -15,9 +16,11 @@ export class ActivityEditComponent {
 
   routeSubscription?: Subscription;
   getActivitySubscription?: Subscription;
+  editActivitySubscription?: Subscription;
 
   constructor(private route: ActivatedRoute,
-    private ActivityService: ActivityService) { 
+    private activityService: ActivityService,
+    private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -26,7 +29,7 @@ export class ActivityEditComponent {
         this.id = params.get('id');
 
         if(this.id){
-          this.getActivitySubscription = this.ActivityService.getActivity(this.id).subscribe({
+          this.getActivitySubscription = this.activityService.getActivity(this.id).subscribe({
             next: (result) => {
               this.model = result;
             }
@@ -39,8 +42,28 @@ export class ActivityEditComponent {
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
     this.getActivitySubscription?.unsubscribe();
+    this.editActivitySubscription?.unsubscribe();
   }
 
   onFormSubmit(): void {
+    const editActivityRequest: ActivityEditRequest = {
+      title: this.model?.title ?? '',
+      shortDescription: this.model?.shortDescription ?? '',
+      longDescription: this.model?.longDescription ?? '',
+      startDate: this.model?.startDate ?? new Date(),
+      endDate: this.model?.endDate ?? new Date(),
+      openRegistration: this.model?.openRegistration ?? true,
+      maxParticipant: this.model?.maxParticipant ?? 0,
+      createdBy: this.model?.createdBy ?? ''
+    }
+
+    if(this.id) {
+      this.editActivitySubscription = this.activityService.updateActivity(this.id, editActivityRequest).subscribe({
+        next: (response) => {
+          this.router.navigateByUrl('');
+        },
+      });
+    }
+
   }
 }
