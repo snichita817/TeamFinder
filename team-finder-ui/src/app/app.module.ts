@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
 import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
+import { ActivityGetComponent } from './features/activities/activity-get/activity-get.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,15 @@ import { ActivityDeleteComponent } from './features/activities/activity-delete/a
     ActivityAddComponent,
     ActivityListPrivateComponent,
     ActivityEditComponent,
-    ActivityDeleteComponent
+    ActivityDeleteComponent,
+    ActivityGetComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

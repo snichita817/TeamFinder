@@ -1,0 +1,57 @@
+<div *ngIf="model" class="container py-5">
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-sm-3">
+
+            <!-- Schedule Card -->
+            <div class="card border-0 shadow mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">Schedule</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <span class="text-black">What?</span>
+                            <span class="float-end text-black">When?</span>
+                        </li>
+                        <li class="border-top mb-2">
+                            <span class="text-secondary">Start Date</span>
+                            <strong class="float-end">{{model.startDate | date:'mediumDate'}}</strong>
+                        </li>
+                        <li class="mb-2">
+                            <span class="text-secondary">End Date</span>
+                            <strong class="float-end">{{model.endDate | date:'mediumDate'}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow mb-2">
+                <!-- Registration Type -->
+                <div class="card-body">
+                    <span>
+                        Registration: {{ model.openRegistration ? 'Open' : 'Closed' }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <span>
+                        Max Participants: {{model.maxParticipant}}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Register Button -->
+            <a href="#" class="btn btn-primary mt-2 mb-4">Register</a>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-sm-8 card border-0 shadow">
+            <div class="card-body">
+                <h4 class="card-title text-primary">{{model.title}}</h4>
+                <h6 class="card-subtitle mb-3 text-muted">Created by {{model.createdBy}} on {{model.createdDate | date:'mediumDate'}}</h6>
+                <div class="border-top pt-3">
+                    <p class="card-text">{{model.shortDescription}}</p>
+                    <p class="card-text">{{model.longDescription}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

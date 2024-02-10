@@ -1,23 +1,27 @@
 <div class="container mt-5">
-
-    <div class = "activity-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Activities</h2>
-        <a class="btn btn-primary create-activity-btn" [routerLink]="['/activities/add']" role="button">Create new activity</a>
+        <a class="btn btn-primary" [routerLink]="['/activities/add']" role="button">Create New Activity</a>
     </div>
 
     <ng-container *ngIf="activities$ | async as activities">
-        <div *ngFor="let activity of activities" class="container custom-card-container">
-            <div class="card mb-3 custom-card">
+        <div *ngFor="let activity of activities" class="mb-3">
+            <div class="card border-0 shadow-sm custom-card" [routerLink]="['/activities/get', activity.id]">
                 <div class="card-body">
-                    <h3 class="card-title">{{activity.title}}</h3>
+                    <h3 class="card-title text-primary">{{activity.title}}</h3>
                     <p class="card-text">{{activity.shortDescription}}</p>
-                    <div class="d-flex gap-3">
-                        <p class="card-text"><i class="bi bi-people"></i> {{activity.maxParticipant || 'N/A'}}</p>
-                        <p class="card-text"><i class="bi bi-calendar-range"></i> <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small></p>
+                    <div class="d-flex align-items-center gap-3">
+                        <p class="card-text m-0">
+                            <i class="bi bi-people-fill text-secondary"></i> 
+                            {{activity.maxParticipant || 'N/A'}}
+                        </p>
+                        <p class="card-text m-0">
+                            <i class="bi bi-calendar-range-fill text-secondary"></i> 
+                            <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </ng-container>
-    
 </div>

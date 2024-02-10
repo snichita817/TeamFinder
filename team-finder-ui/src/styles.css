@@ -1,6 +1,7 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
 body {
-    /* background-color: #9cc5e0; */
-    background-color: #C9DFEC;
+    background-color: #a9ffe4;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
