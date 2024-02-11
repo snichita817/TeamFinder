@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Data;
 using TeamFinder.Models;
+using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Repositories.Interface;
 
@@ -31,7 +32,8 @@ public class ActivitiesController : Controller
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "randomUrlHandle",
             CreatedBy = request.CreatedBy,
-            CreatedDate = DateTime.Now
+            CreatedDate = DateTime.Now,
+            Updates = new List<Update>()
         };
 
         activity = await _activityRepository.CreateAsync(activity);
@@ -49,7 +51,8 @@ public class ActivitiesController : Controller
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
             CreatedBy = activity.CreatedBy,
-            CreatedDate = activity.CreatedDate
+            CreatedDate = activity.CreatedDate,
+            Updates = new List<UpdateDto>()
         };
         return Ok(response);
     }
@@ -79,7 +82,14 @@ public class ActivitiesController : Controller
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
             CreatedBy = activity.CreatedBy,
-            CreatedDate = activity.CreatedDate
+            CreatedDate = activity.CreatedDate,
+            Updates = activity.Updates.Select(x => new UpdateDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Text = x.Text,
+                Date = x.Date
+            }).ToList()
         };
 
         return Ok(response);
@@ -108,7 +118,15 @@ public class ActivitiesController : Controller
                 MaxParticipant = activity.MaxParticipant,
                 UrlHandle = activity.UrlHandle,
                 CreatedBy = activity.CreatedBy,
-                CreatedDate = activity.CreatedDate
+                CreatedDate = activity.CreatedDate,
+                Updates = activity.Updates.Select(x => new UpdateDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    Date = x.Date,
+                    ActivityId = x.Activity.Id
+                }).ToList()
             });
         }
 

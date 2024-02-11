@@ -14,4 +14,6 @@ public class ActivityDto
     // Here will be the user that created the Activity
     public string CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
+
+    public List<UpdateDto> Updates { get; set; }
 }

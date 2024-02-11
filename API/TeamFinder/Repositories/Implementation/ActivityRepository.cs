@@ -24,12 +24,12 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> GetActivityAsync(Guid id)
     {
-        return await _dbContext.Activities.FirstOrDefaultAsync(a => a.Id == id);
+        return await _dbContext.Activities.Include(x => x.Updates).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<IEnumerable<Activity>> GetAllActivities()
     {
-        return await _dbContext.Activities.ToListAsync();
+        return await _dbContext.Activities.Include(x => x.Updates).ToListAsync();
     }
 
     public async Task<Activity?> EditActivity(Activity activity)

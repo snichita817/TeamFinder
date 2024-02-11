@@ -17,4 +17,6 @@ public class Activity
     // Here will be the user that created the Activity
     public string CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
+
+    public ICollection<Update> Updates { get; set; }
 }

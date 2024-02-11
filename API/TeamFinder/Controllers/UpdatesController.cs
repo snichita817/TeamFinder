@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Repositories.Interface;
+using TeamFinder.Models;
 
 namespace TeamFinder.Controllers
 {
@@ -11,9 +12,12 @@ namespace TeamFinder.Controllers
     public class UpdatesController : Controller
     {
         private readonly IUpdateRepository _updateRepository;
-        public UpdatesController(IUpdateRepository updateRepository)
+        private readonly IActivityRepository _activityRepository;
+
+        public UpdatesController(IUpdateRepository updateRepository, IActivityRepository activityRepository)
         {
             this._updateRepository = updateRepository;
+            this._activityRepository = activityRepository;
         }
 
         [HttpPost]
@@ -25,6 +29,7 @@ namespace TeamFinder.Controllers
                 Title = request.Title,
                 Text = request.Text,
                 Date = request.Date,
+                Activity = await _activityRepository.GetActivityAsync(request.ActivityId)
             };
 
             update = await _updateRepository.CreateAsync(update);
@@ -36,6 +41,7 @@ namespace TeamFinder.Controllers
                 Title = update.Title,
                 Text = update.Text,
                 Date = update.Date,
+                ActivityId = update.Activity.Id
             };
 
             return Ok(response);
@@ -57,6 +63,7 @@ namespace TeamFinder.Controllers
                     Title = update.Title,
                     Text = update.Text,
                     Date = update.Date,
+                    ActivityId = update.Activity.Id
                 });
             }
 

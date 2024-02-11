@@ -22,7 +22,7 @@ namespace TeamFinder.Repositories.Implementation
 
         public async Task<IEnumerable<Update>> GetAllAsync()
         {
-            return await _dbContext.Updates.ToListAsync();
+            return await _dbContext.Updates.Include(x => x.Activity).ToListAsync();
         }
 
         public async Task<Update?> DeleteAsync(Guid id)
