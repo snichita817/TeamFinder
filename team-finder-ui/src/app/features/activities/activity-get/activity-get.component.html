@@ -12,7 +12,7 @@
                             <span class="text-black">What?</span>
                             <span class="float-end text-black">When?</span>
                         </li>
-                        <li class="border-top mb-2">
+                        <li class="border-top mb-2 pr-2">
                             <span class="text-secondary">Start Date</span>
                             <strong class="float-end">{{model.startDate | date:'mediumDate'}}</strong>
                         </li>
@@ -39,8 +39,8 @@
             </div>
 
             <!-- Register Button -->
-            <a href="#" class="btn btn-primary mt-2 mb-4">Register</a>
-            <a class="btn btn-primary mt-2 mb-4" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
+            <a href="#" class="btn btn-primary mt-2">Register</a>
+            <a class="btn btn-primary mt-2 ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
         </div>
 
         <!-- Right Column -->
@@ -53,13 +53,15 @@
                     <p class="card-text">{{model.longDescription}}</p>
                 </div>
             </div>
-            
-            <h4>Updates</h4>
-            <div *ngFor="let update of model.updates" class="mb-3">
-                <div class="card border-0 shadow-sm custom-card">
-                    <div class="card-body">
-                        <h3 class="card-title text-primary"> {{update.title}} </h3>
-                        <p class="card-text"> {{update.text}} </p>
+
+            <div class="card-body">
+                <h4 class="card-title">Updates</h4>
+                <div class="border-top">
+                    <div *ngFor="let update of model.updates">
+                        <div class="card-body">
+                            <h3 class="card-title text-primary"> {{update.title}} </h3>
+                            <p class="card-text"> {{update.text}} </p>
+                        </div>
                     </div>
                 </div>
             </div>
