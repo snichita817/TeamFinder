@@ -24,6 +24,7 @@ namespace TeamFinder.Controllers
             {
                 Title = request.Title,
                 Text = request.Text,
+                Date = request.Date,
             };
 
             update = await _updateRepository.CreateAsync(update);
@@ -34,6 +35,7 @@ namespace TeamFinder.Controllers
                 Id = update.Id,
                 Title = update.Title,
                 Text = update.Text,
+                Date = update.Date,
             };
 
             return Ok(response);

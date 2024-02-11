@@ -6,6 +6,7 @@ import { ActivityListPrivateComponent } from './features/activities/activity-lis
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
 import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
 import { ActivityGetComponent } from './features/activities/activity-get/activity-get.component';
+import { UpdateAddComponent } from './features/updates/update-add/update-add.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'activities/get/:id',
     component: ActivityGetComponent
+  },
+  {
+    path: 'updates/add',
+    component: UpdateAddComponent
   }
 ];
 
