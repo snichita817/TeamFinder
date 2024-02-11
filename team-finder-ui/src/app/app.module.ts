@@ -14,6 +14,7 @@ import { ActivityDeleteComponent } from './features/activities/activity-delete/a
 import { ActivityGetComponent } from './features/activities/activity-get/activity-get.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UpdateAddComponent } from './features/updates/update-add/update-add.component';
+import { UpdateListPrivateComponent } from './features/updates/update-list-private/update-list-private.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { UpdateAddComponent } from './features/updates/update-add/update-add.com
     ActivityEditComponent,
     ActivityDeleteComponent,
     ActivityGetComponent,
-    UpdateAddComponent
+    UpdateAddComponent,
+    UpdateListPrivateComponent
   ],
   imports: [
     BrowserModule,

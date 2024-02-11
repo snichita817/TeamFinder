@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AddUpdateRequest } from '../models/update-add-request.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Update } from '../models/update.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +15,9 @@ export class UpdateService {
 
   addUpdate(model: AddUpdateRequest): Observable<void> {
     return this.http.post<void>(`${environment.apiBaseUrl}/updates`, model);
+  }
+
+  indexUpdates(): Observable<Update[]> {
+    return this.http.get<Update[]>(`${environment.apiBaseUrl}/updates`);
   }
 }

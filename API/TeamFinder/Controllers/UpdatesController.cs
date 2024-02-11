@@ -40,5 +40,27 @@ namespace TeamFinder.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUpdates()
+        {
+            var updates = await _updateRepository.GetAllAsync();
+
+            // converting domain model to dto
+            var response = new List<UpdateDto>();
+
+            foreach (var update in updates)
+            {
+                response.Add(new UpdateDto
+                {
+                    Id = update.Id,
+                    Title = update.Title,
+                    Text = update.Text,
+                    Date = update.Date,
+                });
+            }
+
+            return Ok(response);
+        }
     }
 }

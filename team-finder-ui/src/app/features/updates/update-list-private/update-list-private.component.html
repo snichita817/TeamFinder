@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    <h2>All Activities - Admin</h2>
+    <ng-container *ngIf="updates$ | async as updates">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let update of updates">
+                    <th scope="row">{{update.id}}</th>
+                    <td>{{update.title}}</td>
+                    <td>{{update.text}}</td>
+                    <td>{{update.date}}</td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                    <td><button class="btn btn-danger">Delete</button></td>
+            </tbody>
+        </table>
+    </ng-container>
+</div>

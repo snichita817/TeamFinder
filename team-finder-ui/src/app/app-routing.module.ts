@@ -7,6 +7,7 @@ import { ActivityEditComponent } from './features/activities/activity-edit/activ
 import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
 import { ActivityGetComponent } from './features/activities/activity-get/activity-get.component';
 import { UpdateAddComponent } from './features/updates/update-add/update-add.component';
+import { UpdateListPrivateComponent } from './features/updates/update-list-private/update-list-private.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'updates/add',
     component: UpdateAddComponent
+  },
+  {
+    path: 'admin/updates',
+    component: UpdateListPrivateComponent
   }
 ];
 

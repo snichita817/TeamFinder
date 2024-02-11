@@ -5,5 +5,7 @@ namespace TeamFinder.Repositories.Interface
     public interface IUpdateRepository
     {
         Task<Update> CreateAsync(Update update);
+
+        Task<IEnumerable<Update>> GetAllAsync();
     }
 }
