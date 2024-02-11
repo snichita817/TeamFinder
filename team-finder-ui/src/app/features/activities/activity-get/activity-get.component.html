@@ -40,7 +40,7 @@
 
             <!-- Register Button -->
             <a href="#" class="btn btn-primary mt-2 mb-4">Register</a>
-            <a class="btn btn-primary mt-2 mb-4" [routerLink]="['/updates/add']" role="button">Add Update to this activity</a>
+            <a class="btn btn-primary mt-2 mb-4" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
         </div>
 
         <!-- Right Column -->
@@ -51,6 +51,16 @@
                 <div class="border-top pt-3">
                     <p class="card-text">{{model.shortDescription}}</p>
                     <p class="card-text">{{model.longDescription}}</p>
+                </div>
+            </div>
+            
+            <h4>Updates</h4>
+            <div *ngFor="let update of model.updates" class="mb-3">
+                <div class="card border-0 shadow-sm custom-card">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary"> {{update.title}} </h3>
+                        <p class="card-text"> {{update.text}} </p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -36,7 +36,7 @@ const routes: Routes = [
     component: ActivityGetComponent
   },
   {
-    path: 'updates/add',
+    path: 'updates/add/:activityId',
     component: UpdateAddComponent
   },
   {

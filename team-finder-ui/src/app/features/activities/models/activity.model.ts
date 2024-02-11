@@ -1,3 +1,5 @@
+import { Update } from "../../updates/models/update.model";
+
 export interface Activity {
     id: string;
     title: string;
@@ -9,4 +11,5 @@ export interface Activity {
     maxParticipant: number;
     createdBy: string;
     createdDate: Date;
+    updates: Update[];
 }

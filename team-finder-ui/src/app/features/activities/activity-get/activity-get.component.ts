@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Activity } from '../models/activity.model';
 import { ActivityService } from '../services/activity.service';
 import { ActivatedRoute } from '@angular/router';
+import { Update } from '../../updates/models/update.model';
 
 @Component({
   selector: 'app-activity-get',

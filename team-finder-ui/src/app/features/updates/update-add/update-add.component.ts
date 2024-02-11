@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { AddUpdateRequest } from '../models/update-add-request.model';
 import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-update-add',
@@ -11,25 +12,40 @@ import { Router } from '@angular/router';
 })
 export class UpdateAddComponent {
   model: AddUpdateRequest;
+  activityId: string | null = null;
 
+  private routeSubscription?: Subscription;
   private addUpdateSubscription?: Subscription;
 
   constructor(private updateService: UpdateService,
+    private location: Location,
+    private route: ActivatedRoute,
     private router: Router){
     this.model = {
       title: '',
       text: '',
-      date: new Date()
+      date: new Date(),
+      activityId: '',
     }
   }
 
   onFormSubmit()
   {
-    this.addUpdateSubscription = this.updateService.addUpdate(this.model)
-    .subscribe({
-      next: (response) => {
-        this.router.navigateByUrl('');
+    this.routeSubscription = this.route.paramMap.subscribe({
+      next: (params) => {
+        this.activityId = params.get('activityId')
+
+        if(this.activityId) {
+          this.model.activityId = this.activityId;
+          this.addUpdateSubscription = this.updateService.addUpdate(this.model)
+          .subscribe({
+            next: (response) => {
+              this.router.navigateByUrl(`activities/get/${this.activityId}`,);
+            }
+          })
+        }
       }
     })
+    
   }
 }
