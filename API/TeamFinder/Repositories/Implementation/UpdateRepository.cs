@@ -24,5 +24,18 @@ namespace TeamFinder.Repositories.Implementation
         {
             return await _dbContext.Updates.ToListAsync();
         }
+
+        public async Task<Update?> DeleteAsync(Guid id)
+        {
+            var existingUpdate = await _dbContext.Updates.FirstOrDefaultAsync(u => u.Id == id);
+            
+            if (existingUpdate == null) {
+                return null;
+            }
+            
+            _dbContext.Updates.Remove(existingUpdate);
+            await _dbContext.SaveChangesAsync();
+            return existingUpdate;
+        }
     }
 }

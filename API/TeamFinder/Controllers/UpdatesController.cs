@@ -62,5 +62,28 @@ namespace TeamFinder.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteUpdate([FromRoute] Guid id)
+        {
+            var updateToDelete = await _updateRepository.DeleteAsync(id);
+
+            if(updateToDelete == null)
+            {
+                return NotFound();
+            }
+
+            // map domain model to dto
+            var updateDto = new UpdateDto
+            {
+                Id = updateToDelete.Id,
+                Title = updateToDelete.Title,
+                Text = updateToDelete.Text,
+                Date = updateToDelete.Date,
+            };
+
+            return Ok(updateDto);
+        }
     }
 }

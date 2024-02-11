@@ -20,4 +20,8 @@ export class UpdateService {
   indexUpdates(): Observable<Update[]> {
     return this.http.get<Update[]>(`${environment.apiBaseUrl}/updates`);
   }
+
+  deleteUpdate(id: string): Observable<void>{
+    return this.http.delete<void>(`${environment.apiBaseUrl}/updates/${id}`);
+  }
 }

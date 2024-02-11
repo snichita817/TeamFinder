@@ -7,5 +7,7 @@ namespace TeamFinder.Repositories.Interface
         Task<Update> CreateAsync(Update update);
 
         Task<IEnumerable<Update>> GetAllAsync();
+
+        Task<Update?> DeleteAsync(Guid id);
     }
 }

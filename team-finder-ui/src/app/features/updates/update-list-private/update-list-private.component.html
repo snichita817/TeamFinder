@@ -19,7 +19,7 @@
                     <td>{{update.text}}</td>
                     <td>{{update.date}}</td>
                     <td><button class="btn btn-secondary">Edit</button></td>
-                    <td><button class="btn btn-danger">Delete</button></td>
+                    <td><button class="btn btn-danger" [routerLink]="['/updates/delete', update.id]">Delete</button></td>
             </tbody>
         </table>
     </ng-container>

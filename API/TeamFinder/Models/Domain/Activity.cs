@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TeamFinder.Models.Domain;
 
 namespace TeamFinder.Models;
 
