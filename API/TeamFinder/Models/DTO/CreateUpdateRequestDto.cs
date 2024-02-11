@@ -1,0 +1,8 @@
+﻿namespace TeamFinder.Models.DTO
+{
+    public class CreateUpdateRequestDto
+    {
+        public string Title { get; set; }
+        public string Text { get; set; }
+    }
+}

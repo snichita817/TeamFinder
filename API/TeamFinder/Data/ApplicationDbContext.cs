@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamFinder.Models;
+using TeamFinder.Models.Domain;
 
 namespace TeamFinder.Data;
 
@@ -10,4 +11,5 @@ public class ApplicationDbContext : DbContext
     }
     
     public DbSet<Activity> Activities { get; set; }
+    public DbSet<Update> Updates { get; set; }
 }

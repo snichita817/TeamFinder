@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TeamFinderDb"));
 });
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IUpdateRepository, UpdateRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
