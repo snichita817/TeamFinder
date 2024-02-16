@@ -37,5 +37,31 @@ namespace TeamFinder.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
             return existingUpdate;
         }
+    
+        public async Task<Update?> GetAsync(Guid id)
+        {
+            var update = await _dbContext.Updates.Include(x => x.Activity).FirstOrDefaultAsync(x => x.Id == id);
+
+            if(update == null)
+            {
+                return null;
+            }
+
+            return update;
+        }
+    
+        public async Task<Update?> EditUpdate(Update update)
+        {
+            var existingUpdate = await _dbContext.Updates.FirstOrDefaultAsync(upd => upd.Id == update.Id);
+
+            if (existingUpdate != null)
+            {
+                _dbContext.Entry(existingUpdate).CurrentValues.SetValues(update);
+                await _dbContext.SaveChangesAsync();
+                return update;
+            }
+
+            return null;
+        }
     }
 }

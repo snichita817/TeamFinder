@@ -92,5 +92,61 @@ namespace TeamFinder.Controllers
 
             return Ok(updateDto);
         }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetUpdate([FromRoute] Guid id)
+        {
+            var update = await _updateRepository.GetAsync(id);
+
+            if (update is null)
+            {
+                return NotFound();
+            }
+
+            // domain model to dto
+            var response = new UpdateDto
+            {
+                Id = update.Id,
+                Title = update.Title,
+                Text = update.Text,
+                Date = update.Date,
+                ActivityId = update.Activity.Id
+            };
+
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> EditUpdate([FromRoute] Guid id, [FromBody] EditUpdateRequestDto request)
+        {
+            var update = new Update
+            {
+                Id = id,
+                Title = request.Title,
+                Text = request.Text,
+                Date = new DateTime(),
+                Activity = await _activityRepository.GetActivityAsync(request.ActivityId)
+            };
+
+            update = await _updateRepository.EditUpdate(update);
+
+            if(update is null)
+            {
+                return NotFound();
+            }
+
+            var response = new UpdateDto
+            {
+                Id = update.Id,
+                Title = update.Title,
+                Text = update.Text,
+                Date = update.Date,
+                ActivityId = update.Activity.Id
+            };
+
+            return Ok(response);
+        }
     }
 }

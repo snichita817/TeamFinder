@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UpdateAddComponent } from './features/updates/update-add/update-add.component';
 import { UpdateListPrivateComponent } from './features/updates/update-list-private/update-list-private.component';
 import { UpdateDeleteComponent } from './features/updates/update-delete/update-delete.component';
+import { UpdateGetComponent } from './features/updates/update-get/update-get.component';
+import { UpdateEditComponent } from './features/updates/update-edit/update-edit.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { UpdateDeleteComponent } from './features/updates/update-delete/update-d
     ActivityGetComponent,
     UpdateAddComponent,
     UpdateListPrivateComponent,
-    UpdateDeleteComponent
+    UpdateDeleteComponent,
+    UpdateGetComponent,
+    UpdateEditComponent
   ],
   imports: [
     BrowserModule,

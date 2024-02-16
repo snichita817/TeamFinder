@@ -54,17 +54,28 @@
                 </div>
             </div>
 
-            <div class="card-body">
+            <div *ngIf="model.updates && model.updates.length > 0" class="card-body">
                 <h4 class="card-title">Updates</h4>
                 <div class="border-top">
                     <div *ngFor="let update of model.updates">
-                        <div class="card-body">
-                            <h3 class="card-title text-primary"> {{update.title}} </h3>
-                            <p class="card-text"> {{update.text}} </p>
+                        <div class="card-body" (click)="navigateToUpdate(update.id)" tabindex="0">
+                            <!-- Flex container for title and action buttons -->
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title text-primary mb-0">{{update.title}}</h3>
+                                <!-- Container for View and Delete -->
+                                <div>
+                                    <p class="text-primary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToUpdate(update.id, $event)">Read More</p>
+                                    <p class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
+                                    <small class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
+                                </div>
+                            </div>
+                            <p class="card-text">{{update.text}}</p>
+                            <!-- <button type="button" class="btn btn-primary" (click)="navigateToUpdate(update.id, $event)">Read More</button> -->
                         </div>
                     </div>
                 </div>
             </div>
+              
         </div>
     </div>
 </div>

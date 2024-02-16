@@ -1,0 +1,12 @@
+<div class="container py-5">
+    <div class="card border-0 shadow mb-4" *ngIf="model">
+      <div class="card-body">
+        <h4 class="card-title">{{ model.title }}</h4>
+        <div class="card-text mt-3">
+          <p>{{ model.text }}</p>
+          <small class="text-muted">Created on: {{ model.date | date:'mediumDate' }}</small>
+        </div>
+      </div>
+    </div>
+</div>
+  

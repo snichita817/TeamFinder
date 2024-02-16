@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Activity } from '../models/activity.model';
 import { ActivityService } from '../services/activity.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Update } from '../../updates/models/update.model';
 
 @Component({
@@ -18,7 +18,8 @@ export class ActivityGetComponent implements OnInit {
   getActivitySubscription?: Subscription;
 
   constructor(private activityService: ActivityService,
-    private route:ActivatedRoute) {
+    private route:ActivatedRoute,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -40,5 +41,28 @@ export class ActivityGetComponent implements OnInit {
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
     this.getActivitySubscription?.unsubscribe();
+  }
+
+  navigateToUpdate(id: string, event?:MouseEvent) {
+    if(event) {
+      event.stopPropagation();
+    }
+
+    this.router.navigate(['/updates/get', id]);
+  }
+
+  navigateToEditUpdate(id: string, event?:MouseEvent) { 
+    if(event) {
+      event.stopPropagation();
+    }
+    
+    this.router.navigate(['updates/edit', id]);
+  }
+
+  navigateToDeleteUpdate(id: string, event?:MouseEvent) { 
+    if(event) {
+      event.stopPropagation();
+    }
+    this.router.navigate(['/updates/delete', id]);
   }
 }

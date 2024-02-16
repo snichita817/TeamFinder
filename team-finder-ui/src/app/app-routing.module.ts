@@ -9,6 +9,8 @@ import { ActivityGetComponent } from './features/activities/activity-get/activit
 import { UpdateAddComponent } from './features/updates/update-add/update-add.component';
 import { UpdateListPrivateComponent } from './features/updates/update-list-private/update-list-private.component';
 import { UpdateDeleteComponent } from './features/updates/update-delete/update-delete.component';
+import { UpdateGetComponent } from './features/updates/update-get/update-get.component';
+import { UpdateEditComponent } from './features/updates/update-edit/update-edit.component';
 
 const routes: Routes = [
   {
@@ -42,6 +44,14 @@ const routes: Routes = [
   {
     path: 'updates/delete/:id',
     component: UpdateDeleteComponent
+  },
+  {
+    path: 'updates/get/:id',
+    component: UpdateGetComponent
+  },
+  {
+    path: 'updates/edit/:id',
+    component: UpdateEditComponent
   },
   {
     path: 'admin/updates',

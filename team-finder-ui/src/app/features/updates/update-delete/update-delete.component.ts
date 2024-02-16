@@ -26,6 +26,7 @@ export class UpdateDeleteComponent {
         if(this.id) {
           this.deleteUpdateSubscription = this.updateService.deleteUpdate(this.id).subscribe({
             next: (response) => {
+              this.router.navigateByUrl('');
             }
           })
         }
