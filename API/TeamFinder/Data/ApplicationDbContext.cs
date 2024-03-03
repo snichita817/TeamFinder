@@ -12,4 +12,5 @@ public class ApplicationDbContext : DbContext
     
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Update> Updates { get; set; }
+    public DbSet<Category> Categories { get; set; }
 }

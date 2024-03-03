@@ -1,1 +1,28 @@
-<p>update-edit works!</p>
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="shadow p-4 rounded" style="max-width: 600px;">
+            <h2>Edit Update</h2>
+            <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+                <div *ngIf="model" class="mt-2">
+                    <div class="mt-3">
+                        <label class="form-label">Update Title</label>
+                        <input type="text" [(ngModel)]="model.title" 
+                        id="updateTitle"
+                        class="form-control"
+                        name="updateTitle">
+                    </div>
+    
+                    <div class="mt-3">
+                        <label class="form-label">What the update is about?</label>
+                        <textarea class="form-control" [(ngModel)]="model.text"
+                        id="updateText"
+                        name="updateText"></textarea>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-secondary d-block mx-auto" style="width: 200px;">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

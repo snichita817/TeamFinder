@@ -126,7 +126,7 @@ namespace TeamFinder.Controllers
                 Id = id,
                 Title = request.Title,
                 Text = request.Text,
-                Date = new DateTime(),
+                Date = DateTime.Now,
                 Activity = await _activityRepository.GetActivityAsync(request.ActivityId)
             };
 

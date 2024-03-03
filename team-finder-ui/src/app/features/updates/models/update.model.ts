@@ -3,4 +3,5 @@ export interface Update{
     title: string
     text: string
     date: Date
+    activityId: string
 }

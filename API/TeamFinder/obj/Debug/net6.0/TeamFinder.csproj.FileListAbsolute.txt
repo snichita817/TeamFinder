@@ -174,9 +174,9 @@ D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\staticwebassets\msbuild.buildMulti
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.TeamFinder.props
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\staticwebassets.pack.json
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\scopedcss\bundle\TeamFinder.styles.css
-D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.csproj.CopyComplete
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.dll
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\refint\TeamFinder.dll
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.pdb
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.genruntimeconfig.cache
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\ref\TeamFinder.dll
+D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.csproj.Up2Date
