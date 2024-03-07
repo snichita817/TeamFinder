@@ -3,7 +3,6 @@ import { AddUpdateRequest } from '../models/update-add-request.model';
 import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-update-add',
@@ -18,15 +17,14 @@ export class UpdateAddComponent {
   private addUpdateSubscription?: Subscription;
 
   constructor(private updateService: UpdateService,
-    private location: Location,
     private route: ActivatedRoute,
     private router: Router){
-    this.model = {
-      title: '',
-      text: '',
-      date: new Date(),
-      activityId: '',
-    }
+      this.model = {
+        title: '',
+        text: '',
+        date: new Date(),
+        activityId: '',
+      }
   }
 
   onFormSubmit()
@@ -46,6 +44,10 @@ export class UpdateAddComponent {
         }
       }
     })
-    
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription?.unsubscribe();
+    this.addUpdateSubscription?.unsubscribe();
   }
 }

@@ -41,6 +41,7 @@ export class UpdateEditComponent {
   ngOnDestroy() {
     this.routeSubscription?.unsubscribe();
     this.updateServiceSubscription?.unsubscribe();
+    this.editUpdateServiceSubscription?.unsubscribe();
   }
 
   onFormSubmit(): void {

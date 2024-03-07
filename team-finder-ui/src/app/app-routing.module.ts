@@ -11,6 +11,10 @@ import { UpdateListPrivateComponent } from './features/updates/update-list-priva
 import { UpdateDeleteComponent } from './features/updates/update-delete/update-delete.component';
 import { UpdateGetComponent } from './features/updates/update-get/update-get.component';
 import { UpdateEditComponent } from './features/updates/update-edit/update-edit.component';
+import { CategoriesListPrivateComponent } from './features/categories/categories-list-private/categories-list-private.component';
+import { CategoryDeleteComponent } from './features/categories/category-delete/category-delete.component';
+import { CategoryEditComponent } from './features/categories/category-edit/category-edit.component';
+import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
 
 const routes: Routes = [
   {
@@ -56,6 +60,22 @@ const routes: Routes = [
   {
     path: 'admin/updates',
     component: UpdateListPrivateComponent
+  },
+  {
+    path: 'admin/categories',
+    component: CategoriesListPrivateComponent
+  },
+  {
+    path: 'categories/delete/:id',
+    component: CategoryDeleteComponent
+  },
+  {
+    path: 'categories/edit/:id',
+    component: CategoryEditComponent
+  },
+  {
+    path: 'categories/add',
+    component: CategoryAddComponent
   }
 ];
 
