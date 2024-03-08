@@ -1,8 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivityAddRequest } from '../models/activity-add-request.model';
 import { ActivityService } from '../services/activity.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Category } from '../../categories/models/category.model';
+import { CategoryService } from '../../categories/services/category.service';
 @Component({
   selector: 'app-activity-add',
   templateUrl: './activity-add.component.html',
@@ -10,10 +12,12 @@ import { Router } from '@angular/router';
 })
 export class ActivityAddComponent implements OnDestroy {
   model: ActivityAddRequest;
+  categories$?: Observable<Category[]>; 
 
   private addActivitySubscription?: Subscription;
 
   constructor(private activityService: ActivityService,
+    private categoryService: CategoryService,
     private router: Router) {
     this.model = {
       title: '',
@@ -23,8 +27,13 @@ export class ActivityAddComponent implements OnDestroy {
       endDate: new Date(),
       openRegistration: true,
       maxParticipant: 0,
-      createdBy: ''
+      createdBy: '',
+      categories: []
     }
+  }
+
+  ngOnInit(): void {
+    this.categories$ = this.categoryService.indexCategories();
   }
 
   onFormSubmit(){

@@ -10,6 +10,9 @@
                 <div class="card-body">
                     <h3 class="card-title text-primary">{{activity.title}}</h3>
                     <p class="card-text">{{activity.shortDescription}}</p>
+                    <span *ngFor="let category of activity.categories">
+                        <span class="badge bg-secondary">{{category.name}}</span>
+                    </span>
                     <div class="d-flex align-items-center gap-3">
                         <p class="card-text m-0">
                             <i class="bi bi-people-fill text-secondary"></i> 

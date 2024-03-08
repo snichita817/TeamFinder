@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { ActivityService } from '../services/activity.service';
 import { Activity } from '../models/activity.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivityEditRequest } from '../models/activity-edit-request.model';
+import { Category } from '../../categories/models/category.model';
+import { CategoryService } from '../../categories/services/category.service';
 
 @Component({
   selector: 'app-activity-edit',
@@ -13,6 +15,8 @@ import { ActivityEditRequest } from '../models/activity-edit-request.model';
 export class ActivityEditComponent {
   id: string | null = null;
   model?: Activity;
+  categories$?: Observable<Category[]>;
+  selectedCategories?: string[];
 
   routeSubscription?: Subscription;
   getActivitySubscription?: Subscription;
@@ -20,10 +24,13 @@ export class ActivityEditComponent {
 
   constructor(private route: ActivatedRoute,
     private activityService: ActivityService,
+    private categoryService: CategoryService,
     private router: Router) { 
   }
 
   ngOnInit(): void {
+    this.categories$ = this.categoryService.indexCategories();
+
     this.routeSubscription = this.route.paramMap.subscribe({
       next: (params) => {
         this.id = params.get('id');
@@ -32,6 +39,7 @@ export class ActivityEditComponent {
           this.getActivitySubscription = this.activityService.getActivity(this.id).subscribe({
             next: (result) => {
               this.model = result;
+              this.selectedCategories = result.categories.map(x => x.id)
             }
           });
         }
@@ -54,7 +62,8 @@ export class ActivityEditComponent {
       endDate: this.model?.endDate ?? new Date(),
       openRegistration: this.model?.openRegistration ?? true,
       maxParticipant: this.model?.maxParticipant ?? 0,
-      createdBy: this.model?.createdBy ?? ''
+      createdBy: this.model?.createdBy ?? '',
+      categories: this.selectedCategories ?? []
     }
 
     if(this.id) {

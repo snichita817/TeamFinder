@@ -7,4 +7,5 @@ export interface ActivityEditRequest {
     openRegistration: boolean;
     maxParticipant: number;
     createdBy: string;
+    categories: string[];
 }
