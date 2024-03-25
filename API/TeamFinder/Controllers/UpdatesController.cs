@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.Domain;
-using TeamFinder.Models.DTO;
 using TeamFinder.Repositories.Interface;
 using TeamFinder.Models;
+using TeamFinder.Models.DTO.Updates;
 
 namespace TeamFinder.Controllers
 {

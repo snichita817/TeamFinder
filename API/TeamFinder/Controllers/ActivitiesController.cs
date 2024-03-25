@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamFinder.Data;
 using TeamFinder.Models;
 using TeamFinder.Models.Domain;
-using TeamFinder.Models.DTO;
+using TeamFinder.Models.DTO.Activities;
+using TeamFinder.Models.DTO.Updates;
+using TeamFinder.Models.DTO.Categories;
 using TeamFinder.Repositories.Interface;
 
 namespace TeamFinder.Controllers;

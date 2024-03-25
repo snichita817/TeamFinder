@@ -1,4 +1,7 @@
-﻿namespace TeamFinder.Models.DTO;
+﻿using TeamFinder.Models.DTO.Categories;
+using TeamFinder.Models.DTO.Updates;
+
+namespace TeamFinder.Models.DTO.Activities;
 
 public class ActivityDto
 {

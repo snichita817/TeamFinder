@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.DTO;
+using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
 
 namespace TeamFinder.Controllers

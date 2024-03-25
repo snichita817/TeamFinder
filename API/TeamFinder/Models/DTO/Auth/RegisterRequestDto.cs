@@ -1,6 +1,6 @@
-﻿namespace TeamFinder.Models.DTO
+﻿namespace TeamFinder.Models.DTO.Auth
 {
-    public class LoginRequestDto
+    public class RegisterRequestDto
     {
         public string Email { get; set; }
         public string Password { get; set; }

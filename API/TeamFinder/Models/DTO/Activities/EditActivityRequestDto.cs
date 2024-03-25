@@ -1,6 +1,6 @@
-﻿namespace TeamFinder.Models.DTO;
+﻿namespace TeamFinder.Models.DTO.Activities;
 
-public class CreateActivityRequestDto
+public class EditActivityRequestDto
 {
     public string Title { get; set; }
     public string ShortDescription { get; set; }
@@ -11,6 +11,5 @@ public class CreateActivityRequestDto
     public int MaxParticipant { get; set; }
     // Here will be the user that created the Activity
     public string CreatedBy { get; set; }
-
-    public Guid[] Categories { get; set; }
+    public List<Guid> Categories { get; set; }
 }

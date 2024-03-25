@@ -1,6 +1,6 @@
-﻿namespace TeamFinder.Models.DTO
+﻿namespace TeamFinder.Models.DTO.Updates
 {
-    public class CreateUpdateRequestDto
+    public class EditUpdateRequestDto
     {
         public string Title { get; set; }
         public string Text { get; set; }

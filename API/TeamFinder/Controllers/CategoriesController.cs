@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.Domain;
-using TeamFinder.Models.DTO;
+using TeamFinder.Models.DTO.Categories;
 using TeamFinder.Repositories.Interface;
 
 namespace TeamFinder.Controllers

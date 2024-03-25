@@ -1,4 +1,4 @@
-﻿namespace TeamFinder.Models.DTO
+﻿namespace TeamFinder.Models.DTO.Categories
 {
     public class EditCateogryRequestDto
     {
