@@ -11,10 +11,13 @@ namespace TeamFinder.Controllers;
 public class ActivitiesController : Controller
 {
     private readonly IActivityRepository _activityRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public ActivitiesController(IActivityRepository activityRepository)
+    public ActivitiesController(IActivityRepository activityRepository,
+        ICategoryRepository categoryRepository)
     {
         this._activityRepository = activityRepository;
+        this._categoryRepository = categoryRepository;
     }
     
     [HttpPost]
@@ -33,11 +36,22 @@ public class ActivitiesController : Controller
             UrlHandle = "randomUrlHandle",
             CreatedBy = request.CreatedBy,
             CreatedDate = DateTime.Now,
-            Updates = new List<Update>()
+            Updates = new List<Update>(),
+            Categories = new List<Category>()
         };
 
+        foreach (var categoryId in request.Categories) 
+        {
+            var existingCategory = await _categoryRepository.GetAsync(categoryId);
+
+            if(existingCategory is not null)
+            {
+                activity.Categories.Add(existingCategory);
+            }
+        }
+
         activity = await _activityRepository.CreateAsync(activity);
-        
+
         // From Domain Model to DTO
         var response = new ActivityDto
         {
@@ -52,7 +66,12 @@ public class ActivitiesController : Controller
             UrlHandle = activity.UrlHandle,
             CreatedBy = activity.CreatedBy,
             CreatedDate = activity.CreatedDate,
-            Updates = new List<UpdateDto>()
+            Updates = new List<UpdateDto>(),
+            Categories = activity.Categories.Select(x => new CategoryDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }).ToList()
         };
         return Ok(response);
     }
@@ -89,6 +108,11 @@ public class ActivitiesController : Controller
                 Title = x.Title,
                 Text = x.Text,
                 Date = x.Date
+            }).ToList(),
+            Categories = activity.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
             }).ToList()
         };
 
@@ -126,6 +150,11 @@ public class ActivitiesController : Controller
                     Text = x.Text,
                     Date = x.Date,
                     ActivityId = x.Activity.Id
+                }).ToList(),
+                Categories = activity.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
                 }).ToList()
             });
         }
@@ -150,8 +179,19 @@ public class ActivitiesController : Controller
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "exampleHandle",
             CreatedBy = request.CreatedBy,
-            CreatedDate = new DateTime()
+            CreatedDate = new DateTime(),
+            Categories = new List<Category>()
         };
+
+        foreach(var categoryId in request.Categories)
+        {
+            var existingCategory = await _categoryRepository.GetAsync(categoryId);
+
+            if (existingCategory != null)
+            {
+                activity.Categories.Add(existingCategory);
+            }
+        }
 
         activity = await _activityRepository.EditActivity(activity);
 
@@ -173,7 +213,12 @@ public class ActivitiesController : Controller
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
             CreatedBy = activity.CreatedBy,
-            CreatedDate = activity.CreatedDate
+            CreatedDate = activity.CreatedDate,
+            Categories = activity.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList()
         };
 
         return Ok(response);

@@ -65,7 +65,7 @@ namespace TeamFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Category", b =>
@@ -80,7 +80,7 @@ namespace TeamFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Update", b =>
@@ -107,7 +107,7 @@ namespace TeamFinder.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.ToTable("Updates");
+                    b.ToTable("Updates", (string)null);
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Update", b =>

@@ -19,4 +19,5 @@ public class Activity
     public DateTime CreatedDate { get; set; }
 
     public ICollection<Update> Updates { get; set; }
+    public ICollection<Category> Categories { get; set; }
 }

@@ -16,4 +16,5 @@ public class ActivityDto
     public DateTime CreatedDate { get; set; }
 
     public List<UpdateDto> Updates { get; set; }
+    public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 }

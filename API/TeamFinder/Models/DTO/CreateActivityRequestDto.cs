@@ -11,4 +11,6 @@ public class CreateActivityRequestDto
     public int MaxParticipant { get; set; }
     // Here will be the user that created the Activity
     public string CreatedBy { get; set; }
+
+    public Guid[] Categories { get; set; }
 }

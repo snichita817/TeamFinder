@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Repositories.Interface;
@@ -37,6 +38,7 @@ namespace TeamFinder.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryRepository.GetAllAsync();

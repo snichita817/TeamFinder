@@ -24,20 +24,22 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> GetActivityAsync(Guid id)
     {
-        return await _dbContext.Activities.Include(x => x.Updates).FirstOrDefaultAsync(a => a.Id == id);
+        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<IEnumerable<Activity>> GetAllActivities()
     {
-        return await _dbContext.Activities.Include(x => x.Updates).ToListAsync();
+        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).ToListAsync();
     }
 
     public async Task<Activity?> EditActivity(Activity activity)
     {
-        var existingActivity = await _dbContext.Activities.FirstOrDefaultAsync(act => act.Id == activity.Id);
+        var existingActivity = await _dbContext.Activities.Include(c => c.Categories)
+            .FirstOrDefaultAsync(act => act.Id == activity.Id);
 
         if (existingActivity != null)
         {
+            existingActivity.Categories = activity.Categories;
             _dbContext.Entry(existingActivity).CurrentValues.SetValues(activity);
             await _dbContext.SaveChangesAsync();
             return activity;
