@@ -7,7 +7,7 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { ActivityListComponent } from './features/activities/activity-list/activity-list.component';
 import { ActivityAddComponent } from './features/activities/activity-add/activity-add.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
 import { ActivityDeleteComponent } from './features/activities/activity-delete/activity-delete.component';
@@ -23,6 +23,7 @@ import { CategoryDeleteComponent } from './features/categories/category-delete/c
 import { CategoryEditComponent } from './features/categories/category-edit/category-edit.component';
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
 import { LoginComponent } from './features/auth/login/login.component';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,13 @@ import { LoginComponent } from './features/auth/login/login.component';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

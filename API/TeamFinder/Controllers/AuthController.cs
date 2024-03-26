@@ -36,7 +36,7 @@ namespace TeamFinder.Controllers
             if(identityResult.Succeeded)
             {
                 // Add Role to user (user)
-                identityResult = await _userManager.AddToRoleAsync(user, "Reader");
+                identityResult = await _userManager.AddToRoleAsync(user, "User");
 
                 if (identityResult.Succeeded)
                 {

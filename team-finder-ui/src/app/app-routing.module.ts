@@ -15,6 +15,8 @@ import { CategoriesListPrivateComponent } from './features/categories/categories
 import { CategoryDeleteComponent } from './features/categories/category-delete/category-delete.component';
 import { CategoryEditComponent } from './features/categories/category-edit/category-edit.component';
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { authGuard } from './features/auth/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -22,20 +24,26 @@ const routes: Routes = [
     component: ActivityListComponent
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'activities/add',
     component: ActivityAddComponent
   },
   {
     path: 'admin/activities',
-    component: ActivityListPrivateComponent
+    component: ActivityListPrivateComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'activities/edit/:id',
-    component: ActivityEditComponent
+    component: ActivityEditComponent,
   },
   {
     path: 'activities/delete/:id',
-    component: ActivityDeleteComponent
+    component: ActivityDeleteComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'activities/get/:id',
@@ -47,7 +55,8 @@ const routes: Routes = [
   },
   {
     path: 'updates/delete/:id',
-    component: UpdateDeleteComponent
+    component: UpdateDeleteComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'updates/get/:id',
@@ -59,11 +68,13 @@ const routes: Routes = [
   },
   {
     path: 'admin/updates',
-    component: UpdateListPrivateComponent
+    component: UpdateListPrivateComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'admin/categories',
-    component: CategoriesListPrivateComponent
+    component: CategoriesListPrivateComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'categories/delete/:id',
