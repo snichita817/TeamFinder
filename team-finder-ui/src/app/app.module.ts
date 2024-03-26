@@ -22,6 +22,7 @@ import { CategoriesListPrivateComponent } from './features/categories/categories
 import { CategoryDeleteComponent } from './features/categories/category-delete/category-delete.component';
 import { CategoryEditComponent } from './features/categories/category-edit/category-edit.component';
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
+import { LoginComponent } from './features/auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CategoryAddComponent } from './features/categories/category-add/categor
     CategoriesListPrivateComponent,
     CategoryDeleteComponent,
     CategoryEditComponent,
-    CategoryAddComponent
+    CategoryAddComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
