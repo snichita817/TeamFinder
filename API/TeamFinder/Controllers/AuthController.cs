@@ -21,6 +21,44 @@ namespace TeamFinder.Controllers
             _tokenRepository = tokenRepository;
         }
 
+        [HttpGet]
+        [Route("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = _userManager.Users.ToList();
+
+            var response = new List<UserResponseDto>();
+
+            foreach(var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                response.Add(
+                    new UserResponseDto 
+                    { 
+                        Id = user.Id,
+                        Email = user.Email,
+                        Roles = roles.ToList()
+                    });
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("users/{id:Guid}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        {
+            var userToDelete = await _userManager.FindByIdAsync(id.ToString());
+            var deletedUser = await _userManager.DeleteAsync(userToDelete);
+
+            if(deletedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
