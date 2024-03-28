@@ -24,6 +24,7 @@ import { CategoryEditComponent } from './features/categories/category-edit/categ
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { RegisterComponent } from './features/auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     CategoryDeleteComponent,
     CategoryEditComponent,
     CategoryAddComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

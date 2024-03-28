@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using TeamFinder.Models.DTO;
 using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
@@ -40,7 +41,17 @@ namespace TeamFinder.Controllers
 
                 if (identityResult.Succeeded)
                 {
-                    return Ok();
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    var token = _tokenRepository.CreateJwtToken(user, roles.ToList());
+
+                    var response = new LoginResponseDto
+                    {
+                        Email = user.Email,
+                        Roles = roles.ToList(),
+                        Token = token
+                    };
+                    return Ok(response);
                 }
                 else
                 {

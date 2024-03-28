@@ -17,6 +17,7 @@ import { CategoryEditComponent } from './features/categories/category-edit/categ
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './features/auth/guards/auth.guard';
+import { RegisterComponent } from './features/auth/register/register.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'activities/add',
