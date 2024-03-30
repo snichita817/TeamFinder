@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamFinder.Data;
 
@@ -11,9 +12,11 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329164146_SeedAdminUser")]
+    partial class SeedAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,15 +162,15 @@ namespace TeamFinder.Migrations.AuthDb
                         {
                             Id = "66a83869-d054-4385-8f6f-2ad64ba78e3c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ea5183ef-d75c-410d-9733-c63d3f7a04e3",
+                            ConcurrencyStamp = "3fda100f-c25f-4f21-beff-a9f0890a7834",
                             Email = "admin@teamfinder.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@TEAMFINDER.COM",
                             NormalizedUserName = "ADMIN@TEAMFINDER.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN+2vBw7U8XL897ehGdDmo78husM688Gl5d2uAMPpvvZf+Poq7dzXZ58cnsgK98NeQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPBarbP9KG8iETN/QaGeDPjJHOcJCyTIWPZaszrdfLXvQvmjEtjXnE0bSICQzgtjdA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2fcf9161-5538-4653-918a-494b2335917d",
+                            SecurityStamp = "a7c6100e-24bd-4107-9776-e944b5f795f5",
                             TwoFactorEnabled = false,
                             UserName = "admin@teamfinder.com"
                         });

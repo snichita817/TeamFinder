@@ -18,6 +18,8 @@ import { CategoryAddComponent } from './features/categories/category-add/categor
 import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './features/auth/guards/auth.guard';
 import { RegisterComponent } from './features/auth/register/register.component';
+import { UsersListPrivateComponent } from './features/users/users-list-private/users-list-private.component';
+import { UserDeleteComponent } from './features/users/user-delete/user-delete.component';
 
 const routes: Routes = [
   {
@@ -31,6 +33,14 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'admin/users',
+    component: UsersListPrivateComponent
+  },
+  {
+    path: 'users/delete/:id',
+    component: UserDeleteComponent
   },
   {
     path: 'activities/add',

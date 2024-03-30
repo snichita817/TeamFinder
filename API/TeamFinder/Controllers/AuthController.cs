@@ -56,7 +56,7 @@ namespace TeamFinder.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return Ok();    
         }
 
         [HttpPost]
