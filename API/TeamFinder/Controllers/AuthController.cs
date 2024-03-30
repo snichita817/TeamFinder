@@ -14,6 +14,7 @@ namespace TeamFinder.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
+
         public AuthController(UserManager<IdentityUser> userManager,
             ITokenRepository tokenRepository)
         {
@@ -145,6 +146,44 @@ namespace TeamFinder.Controllers
             ModelState.AddModelError("", "Email or Password Incorrect");
 
             return ValidationProblem(ModelState);
+        }
+
+        [HttpPost]
+        [Route("addrole")]
+        public async Task<IActionResult> AddRole([FromBody] AddRoleRequestDto request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if(user is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                if(userRoles.Contains(request.RoleToAdd))
+                {
+                    ModelState.AddModelError("", "Role already exists");
+                    return ValidationProblem(ModelState);
+                }
+
+                var identityResult = await _userManager.AddToRoleAsync(user, request.RoleToAdd);
+                if(identityResult.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    if(identityResult.Errors.Any())
+                    {
+                        foreach(var error in identityResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                    return ValidationProblem(ModelState);
+                }
+            }
         }
     }
 }

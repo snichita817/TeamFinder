@@ -17,6 +17,7 @@ namespace TeamFinder.Data
             base.OnModelCreating(builder);
 
             var userRoleId = "298f9218-3e3a-4b21-9198-3cf08a40f191";
+            var organizerRoleId = "5a0f7a7e-c62f-49db-bc0f-9b0061917e77";
             var adminRoleId = "a84035d4-a82f-4d10-a979-7a40f209256c";
 
             // Creater User and Admin Role
@@ -28,6 +29,13 @@ namespace TeamFinder.Data
                     Name = "User",
                     NormalizedName = "User".ToUpper(),
                     ConcurrencyStamp = userRoleId
+                },
+                new IdentityRole
+                {
+                    Id = organizerRoleId,
+                    Name = "Organizer",
+                    NormalizedName = "Organizer".ToUpper(),
+                    ConcurrencyStamp = organizerRoleId
                 },
                 new IdentityRole
                 {
