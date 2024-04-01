@@ -34,7 +34,7 @@
 				</ng-container>
 				<ng-template #showLogout>
 					<div class="d-flex align-items-center">
-						<span class="text-white">{{user?.email}}</span>
+						<span class="text-white"> <a style="color: white; text-decoration: none;" [routerLink]="['/user', user?.id]"> {{user?.email}}</a></span>
 						<button class="btn btn-primary ms-3" (click)="onLogout()">Logout</button>
 					</div>
 				</ng-template>

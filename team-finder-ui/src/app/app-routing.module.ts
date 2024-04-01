@@ -20,6 +20,8 @@ import { authGuard } from './features/auth/guards/auth.guard';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { UsersListPrivateComponent } from './features/users/users-list-private/users-list-private.component';
 import { UserDeleteComponent } from './features/users/user-delete/user-delete.component';
+import { UserProfileComponent } from './features/users/user-profile/user-profile.component';
+import { UserEditComponent } from './features/users/user-edit/user-edit.component';
 
 const routes: Routes = [
   {
@@ -41,6 +43,14 @@ const routes: Routes = [
   {
     path: 'users/delete/:id',
     component: UserDeleteComponent
+  },
+  {
+    path: 'user/:id',
+    component: UserProfileComponent
+  },
+  {
+    path: 'user/edit/:id',
+    component: UserEditComponent
   },
   {
     path: 'activities/add',

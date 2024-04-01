@@ -27,6 +27,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { UsersListPrivateComponent } from './features/users/users-list-private/users-list-private.component';
 import { UserDeleteComponent } from './features/users/user-delete/user-delete.component';
+import { UserProfileComponent } from './features/users/user-profile/user-profile.component';
+import { UserEditComponent } from './features/users/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { UserDeleteComponent } from './features/users/user-delete/user-delete.co
     LoginComponent,
     RegisterComponent,
     UsersListPrivateComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    UserProfileComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Roles</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -15,6 +16,12 @@
                     <th scope="row">{{user.id}}</th>
                     <td>{{user.email}}</td>
                     <td>{{user.roles}}</td>
+                    <ng-container *ngIf="user?.roles?.includes('Organizer'); else addOrganizerRole">
+                        <td><button class="btn" [class.btn-primary]="false" [class.disabled]="true">Assign Organizer</button></td>
+                    </ng-container>
+                    <ng-template #addOrganizerRole>
+                        <td><button class="btn btn-primary" (click)="assignOrganizer(this.user.email)">Assign Organizer</button></td>
+                    </ng-template>
                     <td><button class="btn btn-danger" [routerLink]="['/users/delete', user.id]">Delete</button></td>
             </tbody>
         </table>

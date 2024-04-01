@@ -31,13 +31,14 @@ export class LoginComponent {
         // Set Auth cookie
         this.cookieService.set('Authorization', `Bearer ${response.token}`,
         undefined, '/', undefined, true, 'Strict');
-
+        
         // Set user
         this.authService.setUser({
+          id: response.id,
           email: response.email,
           roles: response.roles
         });
-
+        console.log(response.id);
         this.router.navigateByUrl('/');
       }
     })

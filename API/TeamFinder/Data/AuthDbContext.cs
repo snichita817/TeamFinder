@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TeamFinder.Models.Domain;
 
 namespace TeamFinder.Data
 {
@@ -52,7 +53,7 @@ namespace TeamFinder.Data
             var adminId = "66a83869-d054-4385-8f6f-2ad64ba78e3c";
 
             // Create an Admin
-            var admin = new IdentityUser
+            var admin = new ApplicationUser
             {
                 Id = adminId,
                 UserName = "admin@teamfinder.com",
@@ -60,9 +61,9 @@ namespace TeamFinder.Data
                 NormalizedEmail = "admin@teamfinder.com".ToUpper(),
                 NormalizedUserName = "admin@teamfinder.com".ToUpper()
             };
-            admin.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(admin, "Admin@123");
+            admin.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(admin, "Admin@123");
 
-            builder.Entity<IdentityUser>().HasData(admin);
+            builder.Entity<ApplicationUser>().HasData(admin);
 
             // Give roles to the Admin
             var adminRoles = new List<IdentityUserRole<string>>
@@ -81,5 +82,7 @@ namespace TeamFinder.Data
 
             builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
         }
+    
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

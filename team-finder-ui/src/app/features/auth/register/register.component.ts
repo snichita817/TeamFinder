@@ -32,6 +32,7 @@ export class RegisterComponent {
         undefined, '/', undefined, true, 'Strict');
 
         this.authService.setUser({
+          id: response.id,
           email: response.email,
           roles: response.roles
         });

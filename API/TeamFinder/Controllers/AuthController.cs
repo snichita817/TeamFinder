@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
@@ -12,10 +13,10 @@ namespace TeamFinder.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager,
+        public AuthController(UserManager<ApplicationUser> userManager,
             ITokenRepository tokenRepository)
         {
             _userManager = userManager;
@@ -38,11 +39,48 @@ namespace TeamFinder.Controllers
                     { 
                         Id = user.Id,
                         Email = user.Email,
+                        UserName = user.UserName,
                         Roles = roles.ToList()
                     });
             }
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("users/{id:Guid}")]
+        public async Task<IActionResult> GetUser([FromRoute] Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if(user is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var response = new UserProfileResponseDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    Roles = roles.ToList(),
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    University = user.University,
+                    CourseOfStudy = user.CourseOfStudy,
+                    GraduationYear = user.GraduationYear,
+                    Bio = user.Bio,
+                    LinkedInUrl = user.LinkedInUrl,
+                    GitHubUrl = user.GitHubUrl,
+                    Skills = user.Skills,
+                    Interests = user.Interests,
+                    PortfolioUrl = user.PortfolioUrl
+                };
+
+                return Ok(response);
+            }
         }
 
         [HttpDelete]
@@ -65,7 +103,7 @@ namespace TeamFinder.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             // Create IdentityUser object
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 UserName = request.Email?.Trim(),
                 Email = request.Email?.Trim()
@@ -86,6 +124,7 @@ namespace TeamFinder.Controllers
 
                     var response = new LoginResponseDto
                     {
+                        Id = user.Id,
                         Email = user.Email,
                         Roles = roles.ToList(),
                         Token = token
@@ -135,6 +174,7 @@ namespace TeamFinder.Controllers
 
                     var response = new LoginResponseDto
                     {
+                        Id = identityUser.Id,
                         Email = request.Email,
                         Roles = roles.ToList(),
                         Token = jwtToken
@@ -168,6 +208,59 @@ namespace TeamFinder.Controllers
                 }
 
                 var identityResult = await _userManager.AddToRoleAsync(user, request.RoleToAdd);
+                if(identityResult.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    if(identityResult.Errors.Any())
+                    {
+                        foreach(var error in identityResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                    return ValidationProblem(ModelState);
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("users/edit/{id:Guid}")]
+        public async Task<IActionResult> EditUser([FromRoute] Guid id, [FromBody] EditUserRequestDto request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            var findUserByEmail = await _userManager.FindByEmailAsync(request.Email);
+
+            if(user is null)
+            {
+                return NotFound();
+            }
+            else if(findUserByEmail != null && findUserByEmail.Id != user.Id)
+            {
+                ModelState.AddModelError("", "Email already exists");
+                return ValidationProblem(ModelState);
+            }
+            else
+            {
+                user.Email = request.Email;
+                user.UserName = request.UserName;
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
+                user.University = request.University;
+                user.CourseOfStudy = request.CourseOfStudy;
+                user.GraduationYear = request.GraduationYear;
+                user.Bio = request.Bio;
+                user.LinkedInUrl = request.LinkedInUrl;
+                user.GitHubUrl = request.GitHubUrl;
+                user.Skills = request.Skills;
+                user.Interests = request.Interests;
+                user.PortfolioUrl = request.PortfolioUrl;
+
+                var identityResult = await _userManager.UpdateAsync(user);
+
                 if(identityResult.Succeeded)
                 {
                     return Ok();

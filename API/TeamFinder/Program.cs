@@ -5,6 +5,7 @@ using TeamFinder.Data;
 using TeamFinder.Repositories.Implementation;
 using TeamFinder.Repositories.Interface;
 using Microsoft.IdentityModel.Tokens;
+using TeamFinder.Models.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,9 +30,9 @@ builder.Services.AddScoped<IUpdateRepository, UpdateRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
-builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("TeamFinder")
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("TeamFinder")
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
