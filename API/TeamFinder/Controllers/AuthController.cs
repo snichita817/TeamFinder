@@ -230,53 +230,52 @@ namespace TeamFinder.Controllers
         [Route("users/edit/{id:Guid}")]
         public async Task<IActionResult> EditUser([FromRoute] Guid id, [FromBody] EditUserRequestDto request)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-
-            var findUserByEmail = await _userManager.FindByEmailAsync(request.Email);
-
-            if(user is null)
+            // Find the user by ID.
+            var userToUpdate = await _userManager.FindByIdAsync(id.ToString());
+            if (userToUpdate == null)
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
-            else if(findUserByEmail != null && findUserByEmail.Id != user.Id)
+
+            // Check if the new email is already taken by another user.
+            var existingUserByEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (existingUserByEmail != null && existingUserByEmail.Id != userToUpdate.Id)
             {
-                ModelState.AddModelError("", "Email already exists");
+                return Conflict("Email already exists.");
+            }
+
+            // Update user properties.
+            UpdateUserProperties(userToUpdate, request);
+
+            // Try updating the user.
+            var updateResult = await _userManager.UpdateAsync(userToUpdate);
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
                 return ValidationProblem(ModelState);
             }
-            else
-            {
-                user.Email = request.Email;
-                user.UserName = request.UserName;
-                user.FirstName = request.FirstName;
-                user.LastName = request.LastName;
-                user.University = request.University;
-                user.CourseOfStudy = request.CourseOfStudy;
-                user.GraduationYear = request.GraduationYear;
-                user.Bio = request.Bio;
-                user.LinkedInUrl = request.LinkedInUrl;
-                user.GitHubUrl = request.GitHubUrl;
-                user.Skills = request.Skills;
-                user.Interests = request.Interests;
-                user.PortfolioUrl = request.PortfolioUrl;
 
-                var identityResult = await _userManager.UpdateAsync(user);
+            return Ok("User updated successfully.");
+        }
 
-                if(identityResult.Succeeded)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    if(identityResult.Errors.Any())
-                    {
-                        foreach(var error in identityResult.Errors)
-                        {
-                            ModelState.AddModelError("", error.Description);
-                        }
-                    }
-                    return ValidationProblem(ModelState);
-                }
-            }
+        private void UpdateUserProperties(ApplicationUser user, EditUserRequestDto request)
+        {
+            user.Email = request.Email;
+            user.UserName = request.UserName;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.University = request.University;
+            user.CourseOfStudy = request.CourseOfStudy;
+            user.GraduationYear = request.GraduationYear;
+            user.Bio = request.Bio;
+            user.LinkedInUrl = request.LinkedInUrl;
+            user.GitHubUrl = request.GitHubUrl;
+            user.Skills = request.Skills;
+            user.Interests = request.Interests;
+            user.PortfolioUrl = request.PortfolioUrl;
         }
     }
 }
