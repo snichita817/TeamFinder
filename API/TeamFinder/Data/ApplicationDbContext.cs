@@ -15,14 +15,4 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Update> Updates { get; set; }
     public DbSet<Category> Categories { get; set; }
-
-    /*protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<ApplicationUser>()
-            .HasMany(u => u.Categories)
-            .WithMany(c => c.ApplicationUsers)
-            .UsingEntity(j => j.ToTable("ApplicationUserCategory"));
-    }*/
 }

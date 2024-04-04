@@ -55,8 +55,8 @@ namespace TeamFinder.Controllers
         [Route("users/{id:Guid}")]
         public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            //var user = await _userManager.FindByIdAsync(id.ToString());
             var user = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
+            
             if(user is null)
             {
                 return NotFound();
@@ -196,7 +196,7 @@ namespace TeamFinder.Controllers
             return ValidationProblem(ModelState);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("addrole")]
         public async Task<IActionResult> AddRole([FromBody] AddRoleRequestDto request)
         {
@@ -238,8 +238,6 @@ namespace TeamFinder.Controllers
         [Route("users/edit/{id:Guid}")]
         public async Task<IActionResult> EditUser([FromRoute] Guid id, [FromBody] EditUserRequestDto request)
         {
-            // Find the user by ID.
-           // var userToUpdate = await _userManager.FindByIdAsync(id.ToString());
             var userToUpdate = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
             if (userToUpdate == null)
             {
@@ -251,6 +249,13 @@ namespace TeamFinder.Controllers
             if (existingUserByEmail != null && existingUserByEmail.Id != userToUpdate.Id)
             {
                 return Conflict("Email already exists.");
+            }
+            
+            // Check if the new username is already taken by another user.
+            var existingUserByUsername = await _userManager.FindByNameAsync(request.UserName);
+            if (existingUserByUsername != null && existingUserByUsername.Id != userToUpdate.Id)
+            {
+                return Conflict("Username already exists.");
             }
 
             // Update user properties.
