@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240404132012_InitDbMigration")]
-    partial class InitDbMigration
+    [Migration("20240404145545_ChangedToIdentityContext")]
+    partial class ChangedToIdentityContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

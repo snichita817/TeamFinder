@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDbMigration : Migration
+    public partial class ChangedToIdentityContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

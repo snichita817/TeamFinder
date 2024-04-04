@@ -295,7 +295,7 @@ namespace TeamFinder.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            return Ok("User updated successfully.");
+            return Ok(new { message = "User updated successfully." });
         }
     }
 }

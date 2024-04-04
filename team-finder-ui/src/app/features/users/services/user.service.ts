@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { environment } from 'src/environments/environment';
 import { UserProfile } from '../models/user-profile.model';
+import { UserEditRequest } from '../models/user-edit-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class UserService {
 
   getUser(id: string): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${environment.apiBaseUrl}/auth/users/${id}`);
+  }
+
+  updateUser(id: string, editUserRequest: UserEditRequest): Observable<void> {
+    return this.http.put<void>(`${environment.apiBaseUrl}/auth/users/edit/${id}`, editUserRequest);
   }
 }

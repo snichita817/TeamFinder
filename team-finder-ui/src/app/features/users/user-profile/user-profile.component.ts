@@ -33,17 +33,16 @@ export class UserProfileComponent {
                 email: response.email,
                 userName: response.userName,
                 roles: response.roles,
-                firstName: response.firstName ?? "",
-                lastName: response.lastName ?? "",
+                firstName: response.firstName ?? "Your",
+                lastName: response.lastName ?? "Name",
                 university: response.university ?? "",
-                categories: response.categories ?? null,
                 graduationYear: response.graduationYear ?? Date.now,
                 bio: response.bio ?? "No bio yet...",
                 linkedinUrl: response.linkedinUrl ?? "",
                 githubUrl: response.githubUrl ?? "",
                 skills: response.skills ?? "",
-                interests: response.interests ?? "",
-                portfolioUrl: response.portfolioUrl ?? ""
+                portfolioUrl: response.portfolioUrl ?? "",
+                categories: response.categories ?? [],
               };
               console.log(this.model);
             }

@@ -2,6 +2,7 @@
     <div class="main-body">
       <div class="row gutters-sm">
         <div class="col-md-4 mb-3">
+
           <div class="card">
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
@@ -9,55 +10,64 @@
                 <div class="mt-3">
                   <h4>{{model.userName}}</h4>
                   <p class="text-secondary mb-1">{{model.skills}}</p>
-                  <p class="text-muted font-size-sm">{{model.university}}, Graduation: {{model.graduationYear | date:'yyyy'}}</p>
+                  <p class="text-muted font-size-sm">
+                    <ng-container *ngIf="model.university">{{model.university}}, </ng-container>
+                    <ng-container *ngIf="model.graduationYear">Graduation: {{model.graduationYear}}</ng-container>
+                  </p>                  
                   <button class="btn btn-primary me-2">Follow</button>
                   <button class="btn btn-outline-primary">Message</button>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="card mt-3">
             <ul class="list-group list-group-flush">
-              <!-- <li class="list-group-item">Email: {{model.email}}</li> -->
-              <li class="list-group-item">Skills: {{model.skills}}</li>
-              <li class="list-group-item">Roles: {{model.roles.join(', ')}}</li>
-              <li class="list-group-item">Interests: {{model.interests}}</li>
+              <li *ngIf="model.skills" class="list-group-item">Skills: {{model.skills}}</li>
+              
+              <li class="list-group-item">Roles:
+                <span *ngFor="let role of model.roles">
+                  <span class="badge bg-secondary">{{role}}</span>
+                </span> 
+              </li>
+              
+              <li *ngIf="model.categories.length != 0" class="list-group-item">Interests: 
+                <span *ngFor="let category of model.categories">
+                  <span class="badge bg-secondary">{{category.name}}</span>
+                </span>
+              </li>
+              
+              <!-- Social Buttons -->
               <li class="list-group-item">
                 <div class="d-flex justify-content-center">
-                  <a href="{{model.linkedinUrl}}" class="btn btn-outline-primary me-3">
+                  <a [href]="model.linkedinUrl ? model.linkedinUrl : undefined" 
+                     class="btn btn-outline-primary me-3" 
+                     [class.btn-disabled]="!model.linkedinUrl" 
+                     (click)="!model.linkedinUrl && $event.preventDefault()">
                     <i class="bi bi-linkedin"></i> LinkedIn
                   </a>
-                  <a href="{{model.githubUrl}}" class="btn btn-outline-primary me-3">
+                  <a [href]="model.githubUrl ? model.githubUrl : undefined" 
+                     class="btn btn-outline-primary me-3" 
+                     [class.btn-disabled]="!model.githubUrl" 
+                     (click)="!model.githubUrl && $event.preventDefault()">
                     <i class="bi bi-github"></i> GitHub
                   </a>
-                  <a href="{{model.portfolioUrl}}" class="btn btn-outline-primary">
+                  <a [href]="model.portfolioUrl ? model.portfolioUrl : undefined" 
+                     class="btn btn-outline-primary" 
+                     [class.btn-disabled]="!model.portfolioUrl" 
+                     (click)="!model.portfolioUrl && $event.preventDefault()">
                     <i class="bi bi-briefcase"></i> Portfolio
                   </a>
                 </div> 
               </li>
-                           
-              <!-- <li class="list-group-item">
-                <a href="{{model.linkedinUrl}}" class="btn btn-outline-primary">
-                    <i class="bi bi-linkedin"></i> LinkedIn
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="{{model.githubUrl}}" class="btn btn-outline-primary">
-                    <i class="bi bi-github"></i> GitHub
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="{{model.portfolioUrl}}" class="btn btn-outline-primary">
-                  <i class="bi bi-briefcase"></i> Portfolio
-                </a>
-              </li> -->
             </ul>
           </div>
         </div>
+
         <div class="col-md-8">
           <div class="card mb-3">
             <div class="card-body">
-              <div class="row">
+              <div *ngIf="model.firstName || model.lastName" class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Full Name</h6>
                 </div>
