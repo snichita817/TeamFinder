@@ -18,10 +18,10 @@ namespace TeamFinder.Models.Domain
 
         // Skills & Interests
         public string? Skills { get; set; } // Could be further normalized into a separate table if needed
-        public string? Interests { get; set; } // E.g., Web Development, AI, etc.
-
         // Portfolio
         // Consider a separate table for project links if they are numerous
         public string? PortfolioUrl { get; set; } // Optional
+
+        public ICollection<Category> Categories { get; set; }
     }
 }

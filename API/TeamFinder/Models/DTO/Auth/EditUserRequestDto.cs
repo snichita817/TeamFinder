@@ -13,7 +13,8 @@
         public string? LinkedInUrl { get; set; }
         public string? GitHubUrl { get; set; }
         public string? Skills { get; set; }
-        public string? Interests { get; set; }
         public string? PortfolioUrl { get; set; }
+
+        public List<Guid> Categories { get; set; }
     }
 }

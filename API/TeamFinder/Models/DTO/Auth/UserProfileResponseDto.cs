@@ -1,4 +1,6 @@
-﻿namespace TeamFinder.Models.DTO.Auth
+﻿using TeamFinder.Models.DTO.Categories;
+
+namespace TeamFinder.Models.DTO.Auth
 {
     public class UserProfileResponseDto
     {
@@ -15,7 +17,7 @@
         public string? LinkedInUrl { get; set; }
         public string? GitHubUrl { get; set; }
         public string? Skills { get; set; }
-        public string? Interests { get; set; }
+        public List<CategoryDto>? Categories { get; set; } = new List<CategoryDto>();
         public string? PortfolioUrl { get; set; }
     }
 }

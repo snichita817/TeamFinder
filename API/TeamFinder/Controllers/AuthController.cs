@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
@@ -15,12 +16,15 @@ namespace TeamFinder.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public AuthController(UserManager<ApplicationUser> userManager,
-            ITokenRepository tokenRepository)
+            ITokenRepository tokenRepository,
+            ICategoryRepository categoryRepository)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -51,8 +55,8 @@ namespace TeamFinder.Controllers
         [Route("users/{id:Guid}")]
         public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-
+            //var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
             if(user is null)
             {
                 return NotFound();
@@ -75,7 +79,11 @@ namespace TeamFinder.Controllers
                     LinkedInUrl = user.LinkedInUrl,
                     GitHubUrl = user.GitHubUrl,
                     Skills = user.Skills,
-                    Interests = user.Interests,
+                    Categories = user.Categories.Select(x => new Models.DTO.Categories.CategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToList(),
                     PortfolioUrl = user.PortfolioUrl
                 };
 
@@ -226,12 +234,13 @@ namespace TeamFinder.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("users/edit/{id:Guid}")]
         public async Task<IActionResult> EditUser([FromRoute] Guid id, [FromBody] EditUserRequestDto request)
         {
             // Find the user by ID.
-            var userToUpdate = await _userManager.FindByIdAsync(id.ToString());
+           // var userToUpdate = await _userManager.FindByIdAsync(id.ToString());
+            var userToUpdate = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
             if (userToUpdate == null)
             {
                 return NotFound("User not found.");
@@ -245,8 +254,31 @@ namespace TeamFinder.Controllers
             }
 
             // Update user properties.
-            UpdateUserProperties(userToUpdate, request);
+            userToUpdate.Email = request.Email;
+            userToUpdate.UserName = request.UserName;
+            userToUpdate.FirstName = request.FirstName;
+            userToUpdate.LastName = request.LastName;
+            userToUpdate.University = request.University;
+            userToUpdate.CourseOfStudy = request.CourseOfStudy;
+            userToUpdate.GraduationYear = request.GraduationYear;
+            userToUpdate.Bio = request.Bio;
+            userToUpdate.LinkedInUrl = request.LinkedInUrl;
+            userToUpdate.GitHubUrl = request.GitHubUrl;
+            userToUpdate.Skills = request.Skills;
+            userToUpdate.PortfolioUrl = request.PortfolioUrl;
+            userToUpdate.Categories = new List<Category>();
 
+            var categoriesToAdd = new List<Category>();
+            foreach(var categoryId in request.Categories)
+            {
+                var category = await _categoryRepository.GetAsync(categoryId);
+                if(category != null)
+                {
+                    categoriesToAdd.Add(category);
+                }
+            }
+            userToUpdate.Categories = categoriesToAdd;
+            
             // Try updating the user.
             var updateResult = await _userManager.UpdateAsync(userToUpdate);
             if (!updateResult.Succeeded)
@@ -259,23 +291,6 @@ namespace TeamFinder.Controllers
             }
 
             return Ok("User updated successfully.");
-        }
-
-        private void UpdateUserProperties(ApplicationUser user, EditUserRequestDto request)
-        {
-            user.Email = request.Email;
-            user.UserName = request.UserName;
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-            user.University = request.University;
-            user.CourseOfStudy = request.CourseOfStudy;
-            user.GraduationYear = request.GraduationYear;
-            user.Bio = request.Bio;
-            user.LinkedInUrl = request.LinkedInUrl;
-            user.GitHubUrl = request.GitHubUrl;
-            user.Skills = request.Skills;
-            user.Interests = request.Interests;
-            user.PortfolioUrl = request.PortfolioUrl;
         }
     }
 }
