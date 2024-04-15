@@ -50,7 +50,6 @@ export class AuthService {
         email: email,
         roles: roles.split(',')
       }
-
       return user;
     }
 

@@ -24,12 +24,12 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> GetActivityAsync(Guid id)
     {
-        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).FirstOrDefaultAsync(a => a.Id == id);
+        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).Include(x => x.CreatedBy).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<IEnumerable<Activity>> GetAllActivities()
     {
-        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).ToListAsync();
+        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).Include(x => x.CreatedBy).ToListAsync();
     }
 
     public async Task<Activity?> EditActivity(Activity activity)
@@ -50,7 +50,7 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> DeleteActivity(Guid id)
     {
-        var existingActivity = await _dbContext.Activities.FirstOrDefaultAsync(a => a.Id == id);
+        var existingActivity = await _dbContext.Activities.Include(x => x.CreatedBy).FirstOrDefaultAsync(a => a.Id == id);
 
         if (existingActivity == null)
         {

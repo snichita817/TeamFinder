@@ -23,5 +23,6 @@ namespace TeamFinder.Models.Domain
         public string? PortfolioUrl { get; set; } // Optional
 
         public ICollection<Category> Categories { get; set; }
+        public ICollection<ApplicationUser>? CreatedActivities { get; set; }
     }
 }

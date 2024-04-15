@@ -1,6 +1,6 @@
 import { Update } from "../../updates/models/update.model";
 import { Category } from "../../categories/models/category.model";
-
+import { User } from "../../users/models/user.model";
 export interface Activity {
     id: string;
     title: string;
@@ -10,7 +10,8 @@ export interface Activity {
     endDate: Date;
     openRegistration: boolean;
     maxParticipant: number;
-    createdBy: string;
+    urlHandle: string;
+    createdBy: User;
     createdDate: Date;
     updates: Update[];
     categories: Category[];

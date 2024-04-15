@@ -19,6 +19,7 @@ export class ActivityAddComponent implements OnDestroy {
   constructor(private activityService: ActivityService,
     private categoryService: CategoryService,
     private router: Router) {
+    const userId = localStorage.getItem('user-id');
     this.model = {
       title: '',
       shortDescription: '',
@@ -27,12 +28,13 @@ export class ActivityAddComponent implements OnDestroy {
       endDate: new Date(),
       openRegistration: true,
       maxParticipant: 0,
-      createdBy: '',
+      createdBy: userId !== null ? userId : '',
       categories: []
     }
   }
 
   ngOnInit(): void {
+    console.log(this.model);
     this.categories$ = this.categoryService.indexCategories();
   }
 

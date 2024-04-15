@@ -4,7 +4,10 @@ using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.Activities;
 using TeamFinder.Models.DTO.Updates;
 using TeamFinder.Models.DTO.Categories;
+using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace TeamFinder.Controllers;
 [Route("api/[controller]")]
@@ -13,19 +16,22 @@ public class ActivitiesController : Controller
 {
     private readonly IActivityRepository _activityRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public ActivitiesController(IActivityRepository activityRepository,
-        ICategoryRepository categoryRepository)
+        ICategoryRepository categoryRepository,
+        UserManager<ApplicationUser> userManager)
     {
         this._activityRepository = activityRepository;
         this._categoryRepository = categoryRepository;
+        this._userManager = userManager;
     }
     
     [HttpPost]
     public async Task<IActionResult> CreateActivity([FromBody] CreateActivityRequestDto request)
     {
         // Map DTO to Domain Model
-        var activity = new Activity
+        var activity = new Models.Activity
         {
             Title = request.Title,
             ShortDescription = request.ShortDescription,
@@ -35,7 +41,7 @@ public class ActivitiesController : Controller
             OpenRegistration = request.OpenRegistration,
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "randomUrlHandle",
-            CreatedBy = request.CreatedBy,
+            CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
             CreatedDate = DateTime.Now,
             Updates = new List<Update>(),
             Categories = new List<Category>()
@@ -65,7 +71,13 @@ public class ActivitiesController : Controller
             OpenRegistration = activity.OpenRegistration,
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
-            CreatedBy = activity.CreatedBy,
+            CreatedBy = new UserResponseDto
+            {
+                Id = activity.CreatedBy.Id,
+                UserName = activity.CreatedBy.UserName,
+                Email = activity.CreatedBy.Email,
+                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
+            },
             CreatedDate = activity.CreatedDate,
             Updates = new List<UpdateDto>(),
             Categories = activity.Categories.Select(x => new CategoryDto
@@ -101,7 +113,13 @@ public class ActivitiesController : Controller
             OpenRegistration = activity.OpenRegistration,
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
-            CreatedBy = activity.CreatedBy,
+            CreatedBy = new UserResponseDto
+            {
+                Id = activity.CreatedBy.Id,
+                Email = activity.CreatedBy.Email,
+                UserName = activity.CreatedBy.UserName,
+                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
+            },
             CreatedDate = activity.CreatedDate,
             Updates = activity.Updates.Select(x => new UpdateDto
             {
@@ -142,7 +160,13 @@ public class ActivitiesController : Controller
                 OpenRegistration = activity.OpenRegistration,
                 MaxParticipant = activity.MaxParticipant,
                 UrlHandle = activity.UrlHandle,
-                CreatedBy = activity.CreatedBy,
+                CreatedBy = new UserResponseDto
+                {
+                    Id = activity.CreatedBy.Id,
+                    Email = activity.CreatedBy.Email,
+                    UserName = activity.CreatedBy.UserName,
+                    Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
+                },
                 CreatedDate = activity.CreatedDate,
                 Updates = activity.Updates.Select(x => new UpdateDto
                 {
@@ -168,7 +192,7 @@ public class ActivitiesController : Controller
     public async Task<IActionResult> EditActivity([FromRoute] Guid id, EditActivityRequestDto request)
     {
         // From DTO to Domain Model
-        var activity = new Activity
+        var activity = new Models.Activity
         {
             Id = id,
             Title = request.Title,
@@ -179,7 +203,7 @@ public class ActivitiesController : Controller
             OpenRegistration = request.OpenRegistration,
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "exampleHandle",
-            CreatedBy = request.CreatedBy,
+            CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
             CreatedDate = new DateTime(),
             Categories = new List<Category>()
         };
@@ -213,7 +237,13 @@ public class ActivitiesController : Controller
             OpenRegistration = activity.OpenRegistration,
             MaxParticipant = activity.MaxParticipant,
             UrlHandle = activity.UrlHandle,
-            CreatedBy = activity.CreatedBy,
+            CreatedBy = new UserResponseDto
+            {
+                Id = activity.CreatedBy.Id,
+                Email = activity.CreatedBy.Email,
+                UserName = activity.CreatedBy.UserName,
+                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
+            },
             CreatedDate = activity.CreatedDate,
             Categories = activity.Categories.Select(c => new CategoryDto
             {
@@ -248,7 +278,13 @@ public class ActivitiesController : Controller
             OpenRegistration = deletedActivity.OpenRegistration,
             MaxParticipant = deletedActivity.MaxParticipant,
             UrlHandle = deletedActivity.UrlHandle,
-            CreatedBy = deletedActivity.CreatedBy,
+            CreatedBy = new UserResponseDto
+            {
+                Id = deletedActivity.CreatedBy.Id,
+                Email = deletedActivity.CreatedBy.Email
+                UserName = deletedActivity.CreatedBy.UserName,
+                Roles = (List<string>)await _userManager.GetRolesAsync(deletedActivity.CreatedBy)
+            },
             CreatedDate = deletedActivity.CreatedDate
         };
 

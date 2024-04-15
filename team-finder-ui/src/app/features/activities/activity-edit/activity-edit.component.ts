@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { ActivityEditRequest } from '../models/activity-edit-request.model';
 import { Category } from '../../categories/models/category.model';
+import { User } from '../../users/models/user.model';
 import { CategoryService } from '../../categories/services/category.service';
 
 @Component({
@@ -62,7 +63,7 @@ export class ActivityEditComponent {
       endDate: this.model?.endDate ?? new Date(),
       openRegistration: this.model?.openRegistration ?? true,
       maxParticipant: this.model?.maxParticipant ?? 0,
-      createdBy: this.model?.createdBy ?? '',
+      createdBy: this.model?.createdBy as User,
       categories: this.selectedCategories ?? []
     }
 

@@ -15,6 +15,10 @@
                     </span>
                     <div class="d-flex align-items-center gap-3">
                         <p class="card-text m-0">
+                            <i class="bi bi-pencil-square"> </i>
+                            <a class="subtle-link ms-1" [routerLink]="['/user', activity.createdBy.id]">{{activity.createdBy.userName}}</a>
+                        </p>
+                        <p class="card-text m-0">
                             <i class="bi bi-people-fill text-secondary"></i> 
                             {{activity.maxParticipant || 'N/A'}}
                         </p>

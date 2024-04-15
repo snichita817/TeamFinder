@@ -15,7 +15,7 @@ public class Activity
     public int MaxParticipant { get; set; }
     public string UrlHandle { get; set; }
     // Here will be the user that created the Activity
-    public string CreatedBy { get; set; }
+    public ApplicationUser CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
 
     public ICollection<Update> Updates { get; set; }

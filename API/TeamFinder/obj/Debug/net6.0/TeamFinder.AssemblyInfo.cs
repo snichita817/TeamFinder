@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeamFinder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8f7ebff77e0e2b360e2bd03354bbdbb189886bc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0937ac595b73ebf662b668d8fc3995036b766625")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeamFinder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeamFinder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

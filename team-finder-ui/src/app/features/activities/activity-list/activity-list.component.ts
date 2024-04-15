@@ -17,6 +17,15 @@ export class ActivityListComponent implements OnInit {
 
   ngOnInit(): void {
     this.activities$ = this.activityService.indexActivities();
+
+    this.activities$.subscribe({
+      next: (activities) => {
+        console.log('Activities:', activities);
+      },
+      error: (error) => {
+        console.error('Error fetching activities:', error);
+      }
+    });
   }
 
 }

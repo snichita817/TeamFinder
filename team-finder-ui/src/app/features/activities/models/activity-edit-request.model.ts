@@ -1,3 +1,5 @@
+import { User } from "../../auth/models/user.model";
+
 export interface ActivityEditRequest {
     title: string;
     shortDescription: string;
@@ -6,6 +8,6 @@ export interface ActivityEditRequest {
     endDate: Date;
     openRegistration: boolean;
     maxParticipant: number;
-    createdBy: string;
+    createdBy: User;
     categories: string[];
 }
