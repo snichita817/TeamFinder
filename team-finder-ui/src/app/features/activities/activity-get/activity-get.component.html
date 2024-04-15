@@ -47,7 +47,7 @@
         <div class="col-sm-8 card border-0 shadow">
             <div class="card-body">
                 <h4 class="card-title text-primary">{{model.title}}</h4>
-                <h6 class="card-subtitle mb-3 text-muted">Created by {{model.createdBy}} on {{model.createdDate | date:'mediumDate'}}</h6>
+                <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
                 <div class="border-top pt-3">
                     <p class="card-text">{{model.shortDescription}}</p>
                     <p class="card-text">{{model.longDescription}}</p>
