@@ -22,10 +22,15 @@ import { UsersListPrivateComponent } from './features/users/users-list-private/u
 import { UserDeleteComponent } from './features/users/user-delete/user-delete.component';
 import { UserProfileComponent } from './features/users/user-profile/user-profile.component';
 import { UserEditComponent } from './features/users/user-edit/user-edit.component';
+import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
 
 const routes: Routes = [
   {
     path: '',
+    component: LandingPageComponent
+  },
+  {
+    path: 'activities',
     component: ActivityListComponent
   },
   {
