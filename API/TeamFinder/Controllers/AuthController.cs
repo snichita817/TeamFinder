@@ -7,6 +7,7 @@ using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
+using TeamFinder.Services;
 
 namespace TeamFinder.Controllers
 {
@@ -17,14 +18,26 @@ namespace TeamFinder.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly JWTService _jwtService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AuthController(UserManager<ApplicationUser> userManager,
             ITokenRepository tokenRepository,
-            ICategoryRepository categoryRepository)
+            ICategoryRepository categoryRepository,
+            JWTService jwtService,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
             _categoryRepository = categoryRepository;
+            _jwtService = jwtService;
+            _signInManager = signInManager;
+        }
+
+        private async Task<bool> CheckEmailTakenAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
         }
 
         [HttpGet]
@@ -110,14 +123,22 @@ namespace TeamFinder.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
+            if (await CheckEmailTakenAsync(request.Email))
+            {
+                return BadRequest($"An existing account is already using {request.Email}. Try using another email address.");
+            }
+
             // Create IdentityUser object
             var user = new ApplicationUser
             {
                 UserName = request.Email?.Trim(),
-                Email = request.Email?.Trim()
+                Email = request.Email?.Trim(),
+                EmailConfirmed = true
             };
 
             var identityResult = await _userManager.CreateAsync(user, request.Password);
+
+            if(!identityResult.Succeeded) return BadRequest(identityResult.Errors);
 
             if(identityResult.Succeeded)
             {
@@ -169,8 +190,35 @@ namespace TeamFinder.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             var identityUser = await _userManager.FindByEmailAsync(request.Email);
+            if(identityUser is null)
+            {
+                return Unauthorized("Invalid username or password");
+            }
 
-            if(identityUser is not null)
+            if (identityUser.EmailConfirmed == false) return Unauthorized("Please check your email to confirm your account.");
+
+            var result = await _signInManager.CheckPasswordSignInAsync(identityUser, request.Password, false);
+            if(!result.Succeeded)
+            {
+                return Unauthorized("Invalid username or password");
+            }
+
+            var roles = await _userManager.GetRolesAsync(identityUser);
+
+            // Create a token and response
+            var jwtToken = _tokenRepository.CreateJwtToken(identityUser, roles.ToList());
+
+            var response = new LoginResponseDto
+            {
+                Id = identityUser.Id,
+                Email = request.Email,
+                Roles = roles.ToList(),
+                Token = jwtToken
+            };
+
+            return Ok(response);
+
+            /*if (identityUser is not null)
             {
                 var checkPasswordResult = await _userManager.CheckPasswordAsync(identityUser, request.Password);
                 if(checkPasswordResult) 
@@ -190,10 +238,11 @@ namespace TeamFinder.Controllers
 
                     return Ok(response);
                 }
+                return Unauthorized("Invalid username or password");
             }
             ModelState.AddModelError("", "Email or Password Incorrect");
 
-            return ValidationProblem(ModelState);
+            return ValidationProblem(ModelState);*/
         }
 
         [HttpPut]

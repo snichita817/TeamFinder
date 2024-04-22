@@ -253,6 +253,9 @@ namespace TeamFinder.Migrations
                     b.Property<string>("CourseOfStudy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");

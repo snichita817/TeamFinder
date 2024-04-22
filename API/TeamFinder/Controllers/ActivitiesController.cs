@@ -281,7 +281,7 @@ public class ActivitiesController : Controller
             CreatedBy = new UserResponseDto
             {
                 Id = deletedActivity.CreatedBy.Id,
-                Email = deletedActivity.CreatedBy.Email
+                Email = deletedActivity.CreatedBy.Email,
                 UserName = deletedActivity.CreatedBy.UserName,
                 Roles = (List<string>)await _userManager.GetRolesAsync(deletedActivity.CreatedBy)
             },

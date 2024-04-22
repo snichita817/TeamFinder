@@ -4,6 +4,7 @@ namespace TeamFinder.Models.Domain
 {
     public class ApplicationUser : IdentityUser
     {
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         // Personal Info
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

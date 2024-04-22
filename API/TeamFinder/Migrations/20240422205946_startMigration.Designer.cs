@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240415135803_addCreatedUser")]
-    partial class addCreatedUser
+    [Migration("20240422205946_startMigration")]
+    partial class startMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,6 +255,9 @@ namespace TeamFinder.Migrations
 
                     b.Property<string>("CourseOfStudy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

@@ -62,7 +62,8 @@ namespace TeamFinder.Models.Domain
                     Email = "admin@teamfinder.com",
                     NormalizedEmail = "admin@teamfinder.com".ToUpper(),
                     NormalizedUserName = "admin@teamfinder.com".ToUpper(),
-                    Categories = new List<Category>()
+                    Categories = new List<Category>(),
+                    EmailConfirmed = true,
                 };
                 admin.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(admin, "Admin@123");
 

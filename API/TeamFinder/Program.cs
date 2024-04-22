@@ -6,6 +6,7 @@ using TeamFinder.Repositories.Implementation;
 using TeamFinder.Repositories.Interface;
 using Microsoft.IdentityModel.Tokens;
 using TeamFinder.Models.Domain;
+using TeamFinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TeamFinderDb"));
 });*/
 
+builder.Services.AddScoped<JWTService>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IUpdateRepository, UpdateRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -38,7 +40,11 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
+                .AddUserManager<UserManager<ApplicationUser>>()
+                .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -48,8 +54,10 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
+    options.SignIn.RequireConfirmedEmail = true;
 });
 
+// Setup for authentication users using JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -59,7 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = true, // to validate the token based on the key we have provided inside the appsettings Jwt:key
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey =
@@ -92,8 +100,8 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); // verifies the identity of user/service
+app.UseAuthorization(); // access rights
 
 app.MapControllers();
 

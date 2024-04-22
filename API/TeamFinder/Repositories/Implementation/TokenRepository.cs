@@ -21,6 +21,7 @@ namespace TeamFinder.Repositories.Implementation
             // Create Claims
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
@@ -29,14 +30,15 @@ namespace TeamFinder.Repositories.Implementation
             // JWT Security Token parameters
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials);
+                expires: DateTime.UtcNow.AddDays(int.Parse(_configuration["Jwt:ExpiresInDays"])),
+                signingCredentials: signInCredentials
+            );
 
             // Return token
             return new JwtSecurityTokenHandler().WriteToken(token);
