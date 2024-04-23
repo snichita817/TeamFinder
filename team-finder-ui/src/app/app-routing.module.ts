@@ -23,11 +23,16 @@ import { UserDeleteComponent } from './features/users/user-delete/user-delete.co
 import { UserProfileComponent } from './features/users/user-profile/user-profile.component';
 import { UserEditComponent } from './features/users/user-edit/user-edit.component';
 import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
+import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent
   },
   {
     path: 'activities',
@@ -117,7 +122,12 @@ const routes: Routes = [
   {
     path: 'categories/add',
     component: CategoryAddComponent
-  }
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

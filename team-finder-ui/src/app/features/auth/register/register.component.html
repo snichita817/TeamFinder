@@ -4,19 +4,34 @@
             <div class="card border-0 shadow">
                 <div class="card-body p-4 p-sm-5">
                     <h3 class="card-title text-center mb-4 fw-bold">Sign Up</h3>
-                    <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+                    <form [formGroup]="registerForm" #form="ngForm" (ngSubmit)="onFormSubmit()">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" name="email"
-                                   placeholder="name@example.com" [(ngModel)]="model.email" required>
+                            <input formControlName="email" type="email" class="form-control" id="email" name="email"
+                                   placeholder="name@example.com" [class.is-invalid]="submitted && registerForm.get('email')?.errors" required>
                             <label for="email">Email address</label>
+                            <span class="text-danger" *ngIf="submitted && registerForm.get('email')?.hasError('required')">
+                                Email is required
+                            </span>
+                            <span class="text-danger" *ngIf="submitted && registerForm.get('email')?.hasError('pattern')">
+                                Invalid email address
+                            </span>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="Password" [(ngModel)]="model.password" required>
+                            <input formControlName="password" type="password" class="form-control" id="password" name="password"
+                                   placeholder="Password" [class.is-invalid]="submitted && registerForm.get('password')?.errors">
                             <label for="password">Password</label>
+                            <span class="text-danger" *ngIf="submitted && registerForm.get('password')?.hasError('required')">
+                                Password is required
+                            </span>
+                            <span class="text-danger" *ngIf="submitted && registerForm.get('password')?.hasError('minlength')">
+                                Password should be at least 6 characters
+                            </span>
+                            <span class="text-danger" *ngIf="submitted && registerForm.get('password')?.hasError('maxlength')">
+                                Password should be maximum 15 characters
+                            </span>
                         </div>
                         <div class="d-grid mb-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
+                            <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
                         </div>
                     </form>
                     <hr class="my-4">

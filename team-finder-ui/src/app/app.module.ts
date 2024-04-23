@@ -4,9 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
+import { FooterComponent } from './core/components/footer/footer.component';
 import { ActivityListComponent } from './features/activities/activity-list/activity-list.component';
 import { ActivityAddComponent } from './features/activities/activity-add/activity-add.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ActivityListPrivateComponent } from './features/activities/activity-list-private/activity-list-private.component';
 import { ActivityEditComponent } from './features/activities/activity-edit/activity-edit.component';
@@ -30,11 +31,13 @@ import { UserDeleteComponent } from './features/users/user-delete/user-delete.co
 import { UserProfileComponent } from './features/users/user-profile/user-profile.component';
 import { UserEditComponent } from './features/users/user-edit/user-edit.component';
 import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
+import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
+    FooterComponent,
     ActivityListComponent,
     ActivityAddComponent,
     ActivityListPrivateComponent,
@@ -56,14 +59,16 @@ import { LandingPageComponent } from './features/landing-page/landing-page/landi
     UserDeleteComponent,
     UserProfileComponent,
     UserEditComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [
     {
