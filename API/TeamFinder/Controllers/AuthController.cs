@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Security.Claims;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Repositories.Interface;
-using TeamFinder.Services;
 
 namespace TeamFinder.Controllers
 {
@@ -18,19 +19,16 @@ namespace TeamFinder.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly JWTService _jwtService;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AuthController(UserManager<ApplicationUser> userManager,
             ITokenRepository tokenRepository,
             ICategoryRepository categoryRepository,
-            JWTService jwtService,
             SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
             _categoryRepository = categoryRepository;
-            _jwtService = jwtService;
             _signInManager = signInManager;
         }
 
@@ -281,6 +279,26 @@ namespace TeamFinder.Controllers
                     return ValidationProblem(ModelState);
                 }
             }
+        }
+
+        [Authorize]
+        [HttpGet("refresh-user-token")]
+        public async Task<IActionResult> RefreshUserToken()
+        {
+            var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email)?.Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var token = _tokenRepository.CreateJwtToken(user, roles.ToList());
+
+            var response = new LoginResponseDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Roles = roles.ToList(),
+                Token = token
+            };
+
+            return Ok(response);
         }
 
         [HttpPut]

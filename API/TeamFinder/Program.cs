@@ -6,7 +6,6 @@ using TeamFinder.Repositories.Implementation;
 using TeamFinder.Repositories.Interface;
 using Microsoft.IdentityModel.Tokens;
 using TeamFinder.Models.Domain;
-using TeamFinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TeamFinderDb"));
 });*/
 
-builder.Services.AddScoped<JWTService>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IUpdateRepository, UpdateRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
