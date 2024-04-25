@@ -32,6 +32,7 @@ import { UserProfileComponent } from './features/users/user-profile/user-profile
 import { UserEditComponent } from './features/users/user-edit/user-edit.component';
 import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
 import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
+import { ValidationMessagesComponent } from './features/auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { NotFoundComponent } from './shared/components/errors/not-found/not-foun
     UserProfileComponent,
     UserEditComponent,
     LandingPageComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ValidationMessagesComponent
   ],
   imports: [
     BrowserModule,

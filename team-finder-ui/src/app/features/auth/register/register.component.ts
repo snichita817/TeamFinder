@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RegisterRequest } from '../models/register-request.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidationMessagesComponent } from 'src/app/shared/components/errors/validation-messages/validation-messages.component';
+export {ValidationMessagesComponent}
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
+
 export class RegisterComponent {
   model: RegisterRequest;
   registerForm: FormGroup = new FormGroup({});
@@ -44,8 +47,8 @@ export class RegisterComponent {
     this.submitted = true;
     this.errorMessages = [];
 
-    if(this.registerForm.valid)
-    {
+   if(this.registerForm.valid)
+   {
       this.registerSubscription = this.authService.register(this.registerForm.value)
       .subscribe({
         next: (response) => {
@@ -61,7 +64,11 @@ export class RegisterComponent {
           this.router.navigateByUrl('/');
         },
         error: error => {
-          console.log(error);
+          if(error.error.errors) {
+            this.errorMessages = error.error.errors; // this are the errors coming from Backend
+          } else {
+            this.errorMessages.push(error.error);
+          }
         }
       })
     }
