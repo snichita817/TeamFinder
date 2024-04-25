@@ -33,6 +33,8 @@ import { UserEditComponent } from './features/users/user-edit/user-edit.componen
 import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
 import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
 import { ValidationMessagesComponent } from './features/auth/register/register.component';
+import { NotificationComponent } from './shared/components/modals/notification/notification.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { ValidationMessagesComponent } from './features/auth/register/register.c
     UserEditComponent,
     LandingPageComponent,
     NotFoundComponent,
-    ValidationMessagesComponent
+    ValidationMessagesComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ import { ValidationMessagesComponent } from './features/auth/register/register.c
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule.forRoot()
   ],
   providers: [
     {

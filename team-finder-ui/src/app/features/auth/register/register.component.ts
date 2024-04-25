@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationMessagesComponent } from 'src/app/shared/components/errors/validation-messages/validation-messages.component';
+import { SharedService } from 'src/app/shared/shared.service';
 export {ValidationMessagesComponent}
 
 @Component({
@@ -24,6 +25,7 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService,
     private cookieService: CookieService,
+    private sharedService: SharedService,
     private router: Router,
     private formBuilder: FormBuilder) {
     this.model = {
@@ -62,6 +64,7 @@ export class RegisterComponent {
           });
 
           this.router.navigateByUrl('/');
+          this.sharedService.showNotification(true, "Account Created", "Your account has been created, have fun!")
         },
         error: error => {
           if(error.error.errors) {
