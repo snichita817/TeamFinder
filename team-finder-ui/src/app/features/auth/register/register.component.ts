@@ -49,8 +49,8 @@ export class RegisterComponent {
     this.submitted = true;
     this.errorMessages = [];
 
-   if(this.registerForm.valid)
-   {
+    if(this.registerForm.valid)
+    {
       this.registerSubscription = this.authService.register(this.registerForm.value)
       .subscribe({
         next: (response) => {
@@ -74,7 +74,7 @@ export class RegisterComponent {
           }
         }
       })
-    }
+      }
     
   }
 

@@ -190,7 +190,7 @@ namespace TeamFinder.Controllers
             var identityUser = await _userManager.FindByEmailAsync(request.Email);
             if(identityUser is null)
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("Invalid email or password");
             }
 
             if (identityUser.EmailConfirmed == false) return Unauthorized("Please check your email to confirm your account.");
@@ -198,7 +198,7 @@ namespace TeamFinder.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(identityUser, request.Password, false);
             if(!result.Succeeded)
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("Invalid email or password");
             }
 
             var roles = await _userManager.GetRolesAsync(identityUser);

@@ -18,6 +18,6 @@ export class SharedService {
       }
     };
 
-    this.bsModalRef = this.modalService.show(NotificationComponent, initialState)
+    this.bsModalRef = this.modalService.show(NotificationComponent, initialState);
   }
 }
