@@ -29,7 +29,6 @@ namespace TeamFinder.Repositories.Implementation
 
             // JWT Security Token parameters
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
             var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

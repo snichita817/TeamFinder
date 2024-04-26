@@ -91,3 +91,5 @@ D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\refint\TeamFinder.dll
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.pdb
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\TeamFinder.genruntimeconfig.cache
 D:\TeamFinder\API\TeamFinder\obj\Debug\net6.0\ref\TeamFinder.dll
+D:\TeamFinder\API\TeamFinder\bin\Debug\net6.0\Mailjet.Client.dll
+D:\TeamFinder\API\TeamFinder\bin\Debug\net6.0\Newtonsoft.Json.dll

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Claims;
+using System.Text;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO;
 using TeamFinder.Models.DTO.Auth;
@@ -20,16 +22,22 @@ namespace TeamFinder.Controllers
         private readonly ITokenRepository _tokenRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IConfiguration _configuration;
+        private readonly IEmailRepository _emailRepository;
 
         public AuthController(UserManager<ApplicationUser> userManager,
             ITokenRepository tokenRepository,
             ICategoryRepository categoryRepository,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration,
+            IEmailRepository emailRepository)
         {
             _userManager = userManager;
             _tokenRepository = tokenRepository;
             _categoryRepository = categoryRepository;
             _signInManager = signInManager;
+            _configuration = configuration;
+            _emailRepository = emailRepository;
         }
 
         private async Task<bool> CheckEmailTakenAsync(string email)
@@ -131,7 +139,6 @@ namespace TeamFinder.Controllers
             {
                 UserName = request.Email?.Trim(),
                 Email = request.Email?.Trim(),
-                EmailConfirmed = true
             };
 
             var identityResult = await _userManager.CreateAsync(user, request.Password);
@@ -156,7 +163,18 @@ namespace TeamFinder.Controllers
                         Roles = roles.ToList(),
                         Token = token
                     };
-                    return Ok(response);
+
+                    try
+                    {
+                        if(await SendConfirmationMail(request))
+                        {
+                            return Ok(response);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return BadRequest($"Failed with {ex.Message} when sending email.");
+                    }
                 }
                 else
                 {
@@ -363,6 +381,29 @@ namespace TeamFinder.Controllers
             }
 
             return Ok(new { message = "User updated successfully." });
+        }
+    
+        private async Task<bool> SendConfirmationMail(RegisterRequestDto request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var confirmationUrl = $"{_configuration["JWT:Audience"]}/{_configuration["Email:ConfirmEmailPath"]}?token={token}&email={user.Email}";
+            var body = $"<p>Hello: {user.UserName}</p>" +
+                       $"<p>Please confirm your email by clicking <a href='{confirmationUrl}'>here</a></p>" +
+                        "<p>Thank you,</p>" +
+                       $"<br>{_configuration["Email:ApplicationName"]}</br>";
+
+            var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { userId = user.Id, token }, Request.Scheme);
+
+            var emailSend = new EmailSendDto(user.Email, "Confirm your email", body);
+
+            return await _emailRepository.SendEmailAsync(emailSend);
         }
     }
 }
