@@ -166,7 +166,7 @@ namespace TeamFinder.Controllers
 
                     try
                     {
-                        if(await SendConfirmationMail(request))
+                        if(await SendConfirmationMail(request.Email))
                         {
                             return Ok(response);
                         }
@@ -382,10 +382,138 @@ namespace TeamFinder.Controllers
 
             return Ok(new { message = "User updated successfully." });
         }
-    
-        private async Task<bool> SendConfirmationMail(RegisterRequestDto request)
+
+        [HttpPut]
+        [Route("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDto model)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Unauthorized("Account does not exists with this email address.");
+            }
+
+            if(user.EmailConfirmed)
+            {
+                return BadRequest("Your email address was already confirmed. Plese login to your account.");
+            }
+
+            try
+            {
+                var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+                var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+                var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+                if (result.Succeeded)
+                {
+                    return Ok(new JsonResult(new { title = "Email confirmed successfully.", message = "You can now login to your account." }));
+                }
+
+                return BadRequest("Invalid token. Please try again.");
+            }
+            catch(Exception ex)    
+            {
+                return BadRequest($"Failed with {ex.Message}. Please try again later or contact support!");
+            }
+        }
+
+        [HttpPost]
+        [Route("resend-email-confirmation/{email}")]
+        public async Task<IActionResult> ResendEmailConfirmation(string email)
+        {
+            if(string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Invalid email!");
+            }
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user == null)
+            {
+                return Unauthorized("This email address has not been registered yet.");
+            }
+            if(user.EmailConfirmed == true)
+            {
+                return BadRequest("Your email address was already confirmed. Plese login to your account.");
+            }
+
+            try
+            {
+                if (await SendConfirmationMail(email))
+                {
+                    return Ok(new JsonResult(new { title = "Email confirmation sent.", message = "Please check your email to confirm your account." }));
+                }
+                return BadRequest($"Failed to send email. Please try again later or contact support!");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed with {ex.Message}. Please try again later or contact support!");
+            }
+        }
+
+        [HttpPost]
+        [Route("forgot-password/{email}")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Invalid email!");
+            }
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null) return Unauthorized("This email address has not been registered yet.");
+            if(user.EmailConfirmed == false) return Unauthorized("Please check your email to confirm your account.");
+
+            try
+            {
+                if(await SendForgotPasswordEmail(user))
+                {
+                    return Ok(new JsonResult(new {title = "Password reset email sent.", message = "Please check your email to reset your password." }));
+                }
+
+                return BadRequest($"Failed to send email. Please try again later or contact support!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed with {ex.Message}. Please try again later or contact support!");
+            }
+        }
+
+        [HttpPut]
+        [Route("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if(user == null)
+            {
+                return Unauthorized("Account does not exists with this email address.");
+            }
+            if(user.EmailConfirmed == false)
+            {
+                return Unauthorized("Please check your email to confirm your account.");
+            }
+
+            try
+            {
+                var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+                var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+                var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    return Ok(new JsonResult(new { title = "Password reset successfully.", message = "You can now login to your account with your new password." }));
+                }
+
+                return BadRequest("Invalid token. Please try again.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed with {ex.Message}. Please try again later or contact support!");
+            }
+        }
+
+        private async Task<bool> SendConfirmationMail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 return false;
@@ -399,9 +527,23 @@ namespace TeamFinder.Controllers
                         "<p>Thank you,</p>" +
                        $"<br>{_configuration["Email:ApplicationName"]}</br>";
 
-            var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { userId = user.Id, token }, Request.Scheme);
-
             var emailSend = new EmailSendDto(user.Email, "Confirm your email", body);
+
+            return await _emailRepository.SendEmailAsync(emailSend);
+        }
+    
+        private async Task<bool> SendForgotPasswordEmail(ApplicationUser user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var resetPasswordUrl = $"{_configuration["JWT:Audience"]}/{_configuration["Email:ResetPasswordPath"]}?token={token}&email={user.Email}";
+            
+            var body = $"<p>Hello: {user.UserName}</p>" +
+                       $"<p>Please reset your password by clicking <a href='{resetPasswordUrl}'>here</a></p>" +
+                        "<p>Thank you,</p>" +
+                       $"<br>{_configuration["Email:ApplicationName"]}</br>";
+
+            var emailSend = new EmailSendDto(user.Email, "Reset your password", body);
 
             return await _emailRepository.SendEmailAsync(emailSend);
         }
