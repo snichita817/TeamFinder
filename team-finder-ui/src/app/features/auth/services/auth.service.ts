@@ -8,6 +8,7 @@ import { User } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 import { RegisterRequest } from '../models/register-request.model';
 import { RegisterResponse } from '../models/register-response';
+import { ConfirmEmail } from '../models/confirm-email.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,10 @@ export class AuthService {
       email: request.email,
       password: request.password
     });
+  }
+
+  confirmEmail(request: ConfirmEmail): Observable<LoginResponse> {
+    return this.http.put<LoginResponse>(`${environment.apiBaseUrl}/auth/confirm-email`, request);
   }
 
   setUser(user: User): void {

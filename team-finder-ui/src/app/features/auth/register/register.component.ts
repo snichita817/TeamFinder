@@ -54,17 +54,17 @@ export class RegisterComponent {
       this.registerSubscription = this.authService.register(this.registerForm.value)
       .subscribe({
         next: (response) => {
-          this.cookieService.set('Authorization', `Bearer ${response.token}`,
-          undefined, '/', undefined, true, 'Strict');
+          // this.cookieService.set('Authorization', `Bearer ${response.token}`,
+          // undefined, '/', undefined, true, 'Strict');
 
-          this.authService.setUser({
-            id: response.id,
-            email: response.email,
-            roles: response.roles
-          });
+          // this.authService.setUser({
+          //   id: response.id,
+          //   email: response.email,
+          //   roles: response.roles
+          // });
 
           this.router.navigateByUrl('/');
-          this.sharedService.showNotification(true, "Account Created", "Your account has been created, have fun!")
+          this.sharedService.showNotification(true, "Account Created", "Your account has been created, check your email and then come back to login!")
         },
         error: error => {
           if(error.error.errors) {

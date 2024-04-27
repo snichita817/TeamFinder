@@ -35,6 +35,7 @@ import { NotFoundComponent } from './shared/components/errors/not-found/not-foun
 import { ValidationMessagesComponent } from './features/auth/register/register.component';
 import { NotificationComponent } from './shared/components/modals/notification/notification.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     NotFoundComponent,
     ValidationMessagesComponent,
     NotificationComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     BrowserModule,

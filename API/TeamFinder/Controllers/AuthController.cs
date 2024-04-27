@@ -211,7 +211,7 @@ namespace TeamFinder.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            if (identityUser.EmailConfirmed == false) return Unauthorized("Please check your email to confirm your account.");
+            if (identityUser.EmailConfirmed == false) return Unauthorized("Please check your email to login into your account.");
 
             var result = await _signInManager.CheckPasswordSignInAsync(identityUser, request.Password, false);
             if(!result.Succeeded)
@@ -406,7 +406,15 @@ namespace TeamFinder.Controllers
                 var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
                 if (result.Succeeded)
                 {
-                    return Ok(new JsonResult(new { title = "Email confirmed successfully.", message = "You can now login to your account." }));
+                    var response = new LoginResponseDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Roles = (List<string>)await _userManager.GetRolesAsync(user),
+                        Token = _tokenRepository.CreateJwtToken(user, (List<string>)await _userManager.GetRolesAsync(user))
+                    };
+                    return Ok(response);
+                    //return Ok(new JsonResult(new { title = "Email confirmed successfully.", message = "You can now login to your account." }));
                 }
 
                 return BadRequest("Invalid token. Please try again.");
