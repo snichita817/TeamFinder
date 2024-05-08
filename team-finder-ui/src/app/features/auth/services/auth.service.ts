@@ -37,6 +37,10 @@ export class AuthService {
     return this.http.put<LoginResponse>(`${environment.apiBaseUrl}/auth/confirm-email`, request);
   }
 
+  resendEmailConfirmationLink(email: string) {
+    return this.http.post(`${environment.apiBaseUrl}/auth/resend-email-confirmation/${email}`, {});
+  }
+
   setUser(user: User): void {
     this.$user.next(user);
     localStorage.setItem('user-id', user.id);

@@ -1,0 +1,35 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card border-0 shadow">
+                <div *ngIf="mode?.includes('resend-email-confirmation-link')" class="card-body p-4 p-sm-5">
+                    <h3 class="card-title text-center mb-4 fw-bold">Resend email confirmation link</h3>
+                    <form [formGroup]="emailForm" #form="ngForm" (ngSubmit)="sendEmail()">
+                        <div class="form-floating mb-3">
+                            <input formControlName="email" type="email" class="form-control" id="email" name="email"
+                                   placeholder="name@example.com" [class.is-invalid]="submitted && emailForm.get('email')?.errors" required>
+                            <label for="email">Email address</label>
+                            <span class="text-danger" *ngIf="submitted && emailForm.get('email')?.hasError('required')">
+                                Email is required
+                            </span>
+                            <span class="text-danger" *ngIf="submitted && emailForm.get('email')?.hasError('pattern')">
+                                Invalid email address
+                            </span>
+                        </div>
+
+                        <div class="form-floating" *ngIf="errorMessages.length > 0">
+                            <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
+                        </div>
+
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Resend email</button>
+                        </div>
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-danger btn-lg" (click)="cancel()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

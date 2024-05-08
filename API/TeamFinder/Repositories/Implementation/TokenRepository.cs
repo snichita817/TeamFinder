@@ -21,7 +21,6 @@ namespace TeamFinder.Repositories.Implementation
             // Create Claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
@@ -39,7 +38,7 @@ namespace TeamFinder.Repositories.Implementation
                 signingCredentials: signInCredentials
             );
 
-            // Return token
+            // Return encoded token
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

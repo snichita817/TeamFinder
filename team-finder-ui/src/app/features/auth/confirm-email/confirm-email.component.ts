@@ -54,7 +54,7 @@ export class ConfirmEmailComponent {
 
   resendEmailConfirmationLink()
   {
-
+    this.router.navigateByUrl('/account/send-email/resend-email-confirmation-link');
   }
 
   ngOnDestroy() {

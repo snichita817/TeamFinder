@@ -25,6 +25,7 @@ import { UserEditComponent } from './features/users/user-edit/user-edit.componen
 import { LandingPageComponent } from './features/landing-page/landing-page/landing-page.component';
 import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
 import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
+import { SendEmailComponent } from './features/auth/send-email/send-email.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,10 @@ const routes: Routes = [
   {
     path: 'account/confirm-email',
     component: ConfirmEmailComponent
+  },
+  {
+    path: 'account/send-email/:mode',
+    component: SendEmailComponent
   },
   {
     path: 'activities/add',

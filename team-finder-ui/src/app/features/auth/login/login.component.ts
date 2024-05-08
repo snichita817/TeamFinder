@@ -78,4 +78,7 @@ export class LoginComponent {
   ngOnDestroy(): void {
     this.loginSubscription?.unsubscribe();
   }
+  resendEmailConfirmationLink() {
+    this.router.navigateByUrl('/account/send-email/resend-email-confirmation-link');
+  }
 }
