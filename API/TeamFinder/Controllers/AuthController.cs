@@ -211,7 +211,7 @@ namespace TeamFinder.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            if (identityUser.EmailConfirmed == false) return Unauthorized("Please check your email to login into your account.");
+            if (identityUser.EmailConfirmed == false) return Unauthorized("Please confirm your email to login into your account.");
 
             var result = await _signInManager.CheckPasswordSignInAsync(identityUser, request.Password, false);
             if(!result.Succeeded)

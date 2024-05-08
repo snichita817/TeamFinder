@@ -25,7 +25,7 @@
                         <div class="form-floating" *ngIf="errorMessages.length > 0">
                             <app-validation-messages [errorMessages]="errorMessages"></app-validation-messages>
                             <a class="btn btn-link" (click)="resendEmailConfirmationLink()"
-                               *ngIf="errorMessages[0].includes('Please check your email to login into your account.')">
+                               *ngIf="errorMessages[0].includes('Please confirm your email to login into your account.')">
                                 Click Here to resend email confirmation link
                             </a>
                         </div>
