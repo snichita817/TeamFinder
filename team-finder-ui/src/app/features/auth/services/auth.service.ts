@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { RegisterRequest } from '../models/register-request.model';
 import { RegisterResponse } from '../models/register-response';
 import { ConfirmEmail } from '../models/confirm-email.model';
+import { ResetPassword } from '../models/reset-password.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,14 @@ export class AuthService {
 
   resendEmailConfirmationLink(email: string) {
     return this.http.post(`${environment.apiBaseUrl}/auth/resend-email-confirmation/${email}`, {});
+  }
+
+  forgotPassword(email: string) {
+    return this.http.post(`${environment.apiBaseUrl}/auth/forgot-password/${email}`, {});
+  }
+
+  resetPassword(model: ResetPassword) {
+    return this.http.put(`${environment.apiBaseUrl}/auth/reset-password`, model);
   }
 
   setUser(user: User): void {

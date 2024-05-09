@@ -26,6 +26,7 @@ import { LandingPageComponent } from './features/landing-page/landing-page/landi
 import { NotFoundComponent } from './shared/components/errors/not-found/not-found.component';
 import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
 import { SendEmailComponent } from './features/auth/send-email/send-email.component';
+import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,10 @@ const routes: Routes = [
   {
     path: 'account/send-email/:mode',
     component: SendEmailComponent
+  },
+  {
+    path: 'account/reset-password',
+    component: ResetPasswordComponent
   },
   {
     path: 'activities/add',

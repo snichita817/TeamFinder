@@ -35,9 +35,16 @@
                         </div>
                     </form>
                     <hr class="my-4">
-                    <div class="text-center">
-                        <p class="mb-2">Don't have an account?</p>
-                        <a [routerLink]="['/register']" class="btn btn-outline-primary">Sign Up</a>
+                    <div class="row text-center">
+                        <div class="col">
+                            <p class="mb-2">Don't have an account?</p>
+                            <a [routerLink]="['/register']" class="btn btn-outline-primary">Sign Up</a>
+                        </div>
+                        
+                        <div class="col">
+                            <p class="mb-2">Forgot password?</p>
+                            <a [routerLink]="['/account/send-email/forgot-password']" class="btn btn-outline-primary">Reset</a>
+                        </div>
                     </div>
                 </div>
             </div>

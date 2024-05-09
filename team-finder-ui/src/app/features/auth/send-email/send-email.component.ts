@@ -65,10 +65,29 @@ export class SendEmailComponent {
           }
         })
       }
+
+      else if(this.mode.includes('forgot-password')) {
+        this.authServiceSubscription = this.authService.forgotPassword(this.emailForm.get('email')?.value).subscribe({
+          next: (response: any) => {
+            this.sharedService.showNotification(true, response.value.title, response.value.message);
+            this.router.navigateByUrl('/login');
+          }, error: error => {
+            if(error.error.errors) {
+              this.errorMessages = error.error.errors; // this are the errors coming from Backend
+            } else {
+              this.errorMessages.push(error.error);
+            }
+          }
+        })
+      }
     }
   }
 
   cancel() {
     this.router.navigateByUrl('/login');
+  }
+
+  ngOnDestroy() {
+    this.authServiceSubscription?.unsubscribe();
   }
 }
