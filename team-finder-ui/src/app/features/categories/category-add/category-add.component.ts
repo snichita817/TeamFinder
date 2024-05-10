@@ -27,7 +27,7 @@ export class CategoryAddComponent {
     this.addCategorySubscription = this.categoryService.addCategory(this.model)
       .subscribe({
         next: (response) => {
-          this.router.navigateByUrl('admin/activities');
+          this.router.navigateByUrl('admin/categories');
         }
       })
   }

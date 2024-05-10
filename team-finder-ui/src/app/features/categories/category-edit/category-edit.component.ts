@@ -55,7 +55,7 @@ export class CategoryEditComponent {
     this.editCategoryServiceSubscription = this.categoryService.editCategory(this.id, this.model)
       .subscribe({
         next: (response) => {
-          this.router.navigateByUrl('');
+          this.router.navigateByUrl('/admin/categories');
         }
       })
   }

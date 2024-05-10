@@ -5,6 +5,7 @@ using TeamFinder.Models.DTO.Activities;
 using TeamFinder.Models.DTO.Updates;
 using TeamFinder.Models.DTO.Categories;
 using TeamFinder.Models.DTO.Auth;
+using TeamFinder.Models.DTO.Teams;
 using TeamFinder.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
@@ -44,7 +45,8 @@ public class ActivitiesController : Controller
             CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
             CreatedDate = DateTime.Now,
             Updates = new List<Update>(),
-            Categories = new List<Category>()
+            Categories = new List<Category>(),
+            Teams = new List<Team>()
         };
 
         foreach (var categoryId in request.Categories) 
@@ -60,32 +62,8 @@ public class ActivitiesController : Controller
         activity = await _activityRepository.CreateAsync(activity);
 
         // From Domain Model to DTO
-        var response = new ActivityDto
-        {
-            Id = activity.Id,
-            Title = activity.Title,
-            ShortDescription = activity.ShortDescription,
-            LongDescription = activity.LongDescription,
-            StartDate = activity.StartDate,
-            EndDate = activity.EndDate,
-            OpenRegistration = activity.OpenRegistration,
-            MaxParticipant = activity.MaxParticipant,
-            UrlHandle = activity.UrlHandle,
-            CreatedBy = new UserResponseDto
-            {
-                Id = activity.CreatedBy.Id,
-                UserName = activity.CreatedBy.UserName,
-                Email = activity.CreatedBy.Email,
-                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
-            },
-            CreatedDate = activity.CreatedDate,
-            Updates = new List<UpdateDto>(),
-            Categories = activity.Categories.Select(x => new CategoryDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-            }).ToList()
-        };
+        var response = await BuildActivityDto(activity);
+
         return Ok(response);
     }
 
@@ -101,39 +79,7 @@ public class ActivitiesController : Controller
             return NotFound();
         }
         
-        // Convert Domain Model to DTO
-        var response = new ActivityDto
-        {
-            Id = activity.Id,
-            Title = activity.Title,
-            ShortDescription = activity.ShortDescription,
-            LongDescription = activity.LongDescription,
-            StartDate = activity.StartDate,
-            EndDate = activity.EndDate,
-            OpenRegistration = activity.OpenRegistration,
-            MaxParticipant = activity.MaxParticipant,
-            UrlHandle = activity.UrlHandle,
-            CreatedBy = new UserResponseDto
-            {
-                Id = activity.CreatedBy.Id,
-                Email = activity.CreatedBy.Email,
-                UserName = activity.CreatedBy.UserName,
-                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
-            },
-            CreatedDate = activity.CreatedDate,
-            Updates = activity.Updates.Select(x => new UpdateDto
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Text = x.Text,
-                Date = x.Date
-            }).ToList(),
-            Categories = activity.Categories.Select(c => new CategoryDto
-            {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList()
-        };
+        var response = await BuildActivityDto(activity);
 
         return Ok(response);
     }
@@ -148,40 +94,7 @@ public class ActivitiesController : Controller
 
         foreach (var activity in activities)
         {
-            response.Add(
-            new ActivityDto
-            {
-                Id = activity.Id,
-                Title = activity.Title,
-                ShortDescription = activity.ShortDescription,
-                LongDescription = activity.LongDescription,
-                StartDate = activity.StartDate,
-                EndDate = activity.EndDate,
-                OpenRegistration = activity.OpenRegistration,
-                MaxParticipant = activity.MaxParticipant,
-                UrlHandle = activity.UrlHandle,
-                CreatedBy = new UserResponseDto
-                {
-                    Id = activity.CreatedBy.Id,
-                    Email = activity.CreatedBy.Email,
-                    UserName = activity.CreatedBy.UserName,
-                    Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
-                },
-                CreatedDate = activity.CreatedDate,
-                Updates = activity.Updates.Select(x => new UpdateDto
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Text = x.Text,
-                    Date = x.Date,
-                    ActivityId = x.Activity.Id
-                }).ToList(),
-                Categories = activity.Categories.Select(c => new CategoryDto
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                }).ToList()
-            });
+            response.Add(await BuildActivityDto(activity));
         }
 
         return Ok(response);
@@ -226,31 +139,7 @@ public class ActivitiesController : Controller
         }
         
         // Convert Domain Model to Dto
-        var response = new ActivityDto
-        {
-            Id = activity.Id,
-            Title = activity.Title,
-            ShortDescription = activity.ShortDescription,
-            LongDescription = activity.LongDescription,
-            StartDate = activity.StartDate,
-            EndDate = activity.EndDate,
-            OpenRegistration = activity.OpenRegistration,
-            MaxParticipant = activity.MaxParticipant,
-            UrlHandle = activity.UrlHandle,
-            CreatedBy = new UserResponseDto
-            {
-                Id = activity.CreatedBy.Id,
-                Email = activity.CreatedBy.Email,
-                UserName = activity.CreatedBy.UserName,
-                Roles = (List<string>)await _userManager.GetRolesAsync(activity.CreatedBy)
-            },
-            CreatedDate = activity.CreatedDate,
-            Categories = activity.Categories.Select(c => new CategoryDto
-            {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList()
-        };
+        var response = await BuildActivityDto(activity);
 
         return Ok(response);
     }
@@ -267,27 +156,57 @@ public class ActivitiesController : Controller
         }
         
         // Map from Domain Model to Dto
-        var activityDto = new ActivityDto
-        {
-            Id = deletedActivity.Id,
-            Title = deletedActivity.Title,
-            ShortDescription = deletedActivity.ShortDescription,
-            LongDescription = deletedActivity.LongDescription,
-            StartDate = deletedActivity.StartDate,
-            EndDate = deletedActivity.EndDate,
-            OpenRegistration = deletedActivity.OpenRegistration,
-            MaxParticipant = deletedActivity.MaxParticipant,
-            UrlHandle = deletedActivity.UrlHandle,
-            CreatedBy = new UserResponseDto
-            {
-                Id = deletedActivity.CreatedBy.Id,
-                Email = deletedActivity.CreatedBy.Email,
-                UserName = deletedActivity.CreatedBy.UserName,
-                Roles = (List<string>)await _userManager.GetRolesAsync(deletedActivity.CreatedBy)
-            },
-            CreatedDate = deletedActivity.CreatedDate
-        };
+        var activityDto = await BuildActivityDto(deletedActivity);
 
         return Ok(activityDto);
     }
+
+    #region Helper Methods
+    private async Task<ActivityDto> BuildActivityDto(Models.Activity activity)
+    {
+        var roles = (List<string>) await _userManager.GetRolesAsync(activity.CreatedBy);
+        var response = new ActivityDto
+        {
+            Id = activity.Id,
+            Title = activity.Title,
+            ShortDescription = activity.ShortDescription,
+            LongDescription = activity.LongDescription,
+            StartDate = activity.StartDate,
+            EndDate = activity.EndDate,
+            OpenRegistration = activity.OpenRegistration,
+            MaxParticipant = activity.MaxParticipant,
+            UrlHandle = activity.UrlHandle,
+            CreatedBy = new UserResponseDto
+            {
+                Id = activity.CreatedBy.Id,
+                UserName = activity.CreatedBy.UserName,
+                Email = activity.CreatedBy.Email,
+                Roles = roles,
+            },
+            CreatedDate = activity.CreatedDate,
+            Updates = activity.Updates.Select(x => new UpdateDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Text = x.Text,
+                Date = x.Date
+            }).ToList(),
+            Categories = activity.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList(),
+            Teams = activity.Teams.Select(c => new TeamDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                CreatedDate = c.CreatedDate,
+                AcceptedToActivity = c.AcceptedToActivity,
+                IsPrivate = c.IsPrivate,
+            }).ToList(),
+        };
+
+        return response;
+    }
+    #endregion
 }

@@ -42,7 +42,7 @@ export class ActivityAddComponent implements OnDestroy {
     this.addActivitySubscription = this.activityService.addActivity(this.model)
     .subscribe({
       next: (response) => {
-        this.router.navigateByUrl('');
+        this.router.navigateByUrl('/activities');
       }
     })
   }
