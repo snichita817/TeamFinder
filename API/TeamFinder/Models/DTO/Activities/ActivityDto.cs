@@ -18,7 +18,7 @@ public class ActivityDto
     public string UrlHandle { get; set; }
     public UserResponseDto CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
-    public List<UpdateDto> Updates { get; set; }
+    public List<UpdateDto>? Updates { get; set; }
     public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
-    public List<TeamDto> Teams { get; set; } = new List<TeamDto>();
+    public List<TeamDto>? Teams { get; set; } = new List<TeamDto>();
 }
