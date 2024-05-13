@@ -39,8 +39,13 @@
             </div>
 
             <!-- Register Button -->
-            <a href="#" class="btn btn-primary mt-2">Register</a>
-            <a class="btn btn-primary mt-2 ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
+            <div class="mb-3">
+                <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
+                <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
+            </div>
+            <div>
+                <a class="btn btn-primary" [routerLink]="['/activity/teams', model.id]" role="button">View teams</a>
+            </div>
         </div>
 
         <!-- Right Column -->

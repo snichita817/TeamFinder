@@ -25,5 +25,6 @@ namespace TeamFinder.Models.Domain
 
         public ICollection<Category> Categories { get; set; }
         public ICollection<ApplicationUser>? CreatedActivities { get; set; }
+        public ICollection<Team>? Teams { get; set; }
     }
 }

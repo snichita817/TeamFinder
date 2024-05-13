@@ -27,6 +27,8 @@ import { NotFoundComponent } from './shared/components/errors/not-found/not-foun
 import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
 import { SendEmailComponent } from './features/auth/send-email/send-email.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { TeamAddComponent } from './features/teams/team-add/team-add.component';
+import { ViewTeamsInActivityComponent } from './features/teams/view-teams-in-activity/view-teams-in-activity.component';
 
 const routes: Routes = [
   {
@@ -137,6 +139,14 @@ const routes: Routes = [
   {
     path: 'categories/add',
     component: CategoryAddComponent
+  },
+  {
+    path: 'activity/:activityId/teams/register',
+    component: TeamAddComponent
+  },
+  {
+    path: 'activity/teams/:activityId',
+    component: ViewTeamsInActivityComponent
   },
   {
     path: '**',

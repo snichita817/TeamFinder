@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240510151039_newTeamsMigration")]
-    partial class newTeamsMigration
+    [Migration("20240513145321_add teams to users")]
+    partial class addteamstousers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,21 @@ namespace TeamFinder.Migrations
                     b.HasIndex("CategoriesId");
 
                     b.ToTable("ApplicationUserCategory");
+                });
+
+            modelBuilder.Entity("ApplicationUserTeam", b =>
+                {
+                    b.Property<string>("MembersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("TeamsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MembersId", "TeamsId");
+
+                    b.HasIndex("TeamsId");
+
+                    b.ToTable("ApplicationUserTeam");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -313,9 +328,6 @@ namespace TeamFinder.Migrations
                     b.Property<string>("Skills")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -337,8 +349,6 @@ namespace TeamFinder.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -370,10 +380,6 @@ namespace TeamFinder.Migrations
                     b.Property<Guid>("ActivityRegisteredId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -387,8 +393,6 @@ namespace TeamFinder.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityRegisteredId");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Teams");
                 });
@@ -446,6 +450,21 @@ namespace TeamFinder.Migrations
                     b.HasOne("TeamFinder.Models.Domain.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ApplicationUserTeam", b =>
+                {
+                    b.HasOne("TeamFinder.Models.Domain.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TeamFinder.Models.Domain.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -515,10 +534,6 @@ namespace TeamFinder.Migrations
                     b.HasOne("TeamFinder.Models.Domain.ApplicationUser", null)
                         .WithMany("CreatedActivities")
                         .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TeamFinder.Models.Domain.Team", null)
-                        .WithMany("Members")
-                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Team", b =>
@@ -529,15 +544,7 @@ namespace TeamFinder.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TeamFinder.Models.Domain.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ActivityRegistered");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Update", b =>
@@ -561,11 +568,6 @@ namespace TeamFinder.Migrations
             modelBuilder.Entity("TeamFinder.Models.Domain.ApplicationUser", b =>
                 {
                     b.Navigation("CreatedActivities");
-                });
-
-            modelBuilder.Entity("TeamFinder.Models.Domain.Team", b =>
-                {
-                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

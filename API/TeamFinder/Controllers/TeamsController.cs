@@ -32,13 +32,13 @@ namespace TeamFinder.Controllers
             var team = new Team
             {
                 Name = request.Name,
+                Description = request.Description,
                 AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
-                CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
-                ActivityRegistered = await _activityRepository.GetActivityAsync(request.ActivityRegistered),
+                ActivityRegistered = await _activityRepository.GetActivityAsync(Guid.Parse(request.ActivityRegistered)),
                 Members = new List<ApplicationUser>(),
             };
-            team.Members.Add(team.CreatedBy);
+            team.Members.Add(await _userManager.FindByIdAsync(request.CreatedBy));
 
             team = await _teamRepository.CreateAsync(team);
 
@@ -97,9 +97,9 @@ namespace TeamFinder.Controllers
             {
                 Id = id,
                 Name = request.Name,
+                Description = request.Description,
                 AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
-                CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
                 ActivityRegistered = await _activityRepository.GetActivityAsync(request.ActivityRegistered),
                 Members = new List<ApplicationUser>(),
             };
@@ -157,16 +157,10 @@ namespace TeamFinder.Controllers
             {
                 Id = team.Id,
                 Name = team.Name,
+                Description = team.Description,
                 CreatedDate = team.CreatedDate,
                 AcceptedToActivity = team.AcceptedToActivity,
                 IsPrivate = team.IsPrivate,
-                CreatedBy = new UserResponseDto
-                {
-                    Id = team.CreatedBy.Id,
-                    UserName = team.CreatedBy.UserName,
-                    Email = team.CreatedBy.Email,
-                    Roles = (List<string>)await _userManager.GetRolesAsync(team.CreatedBy),
-                },
                 Members = users,
             };
 

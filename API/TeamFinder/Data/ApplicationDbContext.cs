@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using TeamFinder.Models;
 using TeamFinder.Models.Domain;
 
@@ -10,6 +11,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
+
+    
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Activity> Activities { get; set; }

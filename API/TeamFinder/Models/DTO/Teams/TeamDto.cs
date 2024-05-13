@@ -8,11 +8,11 @@ namespace TeamFinder.Models.DTO.Teams
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
 
-        public UserResponseDto? CreatedBy { get; set; }
         public List<UserResponseDto>? Members { get; set; }
     }
 }

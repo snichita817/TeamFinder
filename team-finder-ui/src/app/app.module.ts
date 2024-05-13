@@ -38,6 +38,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
 import { SendEmailComponent } from './features/auth/send-email/send-email.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { TeamAddComponent } from './features/teams/team-add/team-add.component';
+import { ViewTeamsInActivityComponent } from './features/teams/view-teams-in-activity/view-teams-in-activity.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,9 @@ import { ResetPasswordComponent } from './features/auth/reset-password/reset-pas
     NotificationComponent,
     ConfirmEmailComponent,
     SendEmailComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    TeamAddComponent,
+    ViewTeamsInActivityComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@
     public class EditTeamRequestDto
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public bool AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
 
