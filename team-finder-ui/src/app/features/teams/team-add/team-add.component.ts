@@ -60,7 +60,7 @@ export class TeamAddComponent {
         createdDate: new Date(),
         acceptedToActivity: false,
         isPrivate: this.teamForm.get('isPrivate')?.value,
-        createdBy: this.authService.getUser()?.id ?? '',
+        teamCaptainId: this.authService.getUser()?.id ?? '',
         activityRegistered: this.activityId,
         members: [this.authService.getUser()?.id ?? '']
       }

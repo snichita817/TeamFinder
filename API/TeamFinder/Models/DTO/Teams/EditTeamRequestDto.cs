@@ -7,8 +7,7 @@
         public bool AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
 
-        public string CreatedBy { get; set; }
-        public Guid ActivityRegistered { get; set; }
+        public string TeamCaptainId { get; set; }
         public string[] Members { get; set; }
     }
 }

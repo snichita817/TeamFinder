@@ -41,6 +41,7 @@ import { ResetPasswordComponent } from './features/auth/reset-password/reset-pas
 import { TeamAddComponent } from './features/teams/team-add/team-add.component';
 import { ViewTeamsInActivityComponent } from './features/teams/view-teams-in-activity/view-teams-in-activity.component';
 import { TeamGetComponent } from './features/teams/team-get/team-get.component';
+import { TeamEditComponent } from './features/teams/team-edit/team-edit.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { TeamGetComponent } from './features/teams/team-get/team-get.component';
     ResetPasswordComponent,
     TeamAddComponent,
     ViewTeamsInActivityComponent,
-    TeamGetComponent
+    TeamGetComponent,
+    TeamEditComponent
   ],
   imports: [
     BrowserModule,

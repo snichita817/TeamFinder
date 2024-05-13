@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Team } from '../models/team.model';
 import { TeamService } from '../services/team.service';
 import { ActivatedRoute } from '@angular/router';
+import { User } from '../../users/models/user.model';
 
 @Component({
   selector: 'app-view-teams-in-activity',
@@ -12,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 
 export class ViewTeamsInActivityComponent {
   activityId: string = '';
+  teamCaptainUsername: string = '';
 
   teams$?: Observable<Team[]>
 
@@ -38,6 +40,11 @@ export class ViewTeamsInActivityComponent {
         console.error('Error fetching teams:', error);
       }
     })
+  }
+
+  getCaptainName(members: User[], captainId: string) {
+    const captain = members.find(member => member.id === captainId);
+    return captain ? captain.userName : "Username not found"
   }
 
   ngOnDestroy() {

@@ -4,6 +4,7 @@ import { TeamAddRequest } from '../models/team-add-request.model';
 import { Observable } from 'rxjs';
 import { Team } from '../models/team.model';
 import { environment } from 'src/environments/environment';
+import { TeamEditRequest } from '../models/team-edit-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,11 @@ export class TeamService {
     return this.http.get<Team>(`${environment.apiBaseUrl}/teams/${id}`);
   }
 
+  editTeam(request: TeamEditRequest, id: string): Observable<void> {
+    return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}`, request)
+  }
+
   indexByActivity(activityId: string): Observable<Team[]> {
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`);
   }
-
 }

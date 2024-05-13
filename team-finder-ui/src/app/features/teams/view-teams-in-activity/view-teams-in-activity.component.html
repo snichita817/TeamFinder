@@ -8,14 +8,11 @@
             <div class="card border-0 shadow-sm custom-card" [routerLink]="['/team/view', team.id]">
                 <div class="card-body">
                     <h3 class="card-title text-primary">{{team.name}}</h3>
-                    <p class="card-text">{{team.description}}</p> 
-                    <!-- <span *ngFor="let category of activity.categories">
-                        <span class="badge bg-secondary">{{category.name}}</span>
-                    </span> -->
+                    <p class="card-text">{{team.description}}</p>
                     <div class="d-flex align-items-center gap-3">
                         <p class="card-text m-0">
                             <i class="bi bi-pencil-square"> </i>
-                            <a class="subtle-link ms-1" [routerLink]="['/user', team.members[0].id]">{{team.members[0].userName}}</a>
+                            <a class="subtle-link ms-1" [routerLink]="['/user', team.teamCaptainId]">{{ getCaptainName(team.members, team.teamCaptainId) }}</a>
                         </p>
                         <p class="card-text m-0">
                             <i class="bi bi-people-fill text-secondary"></i> 

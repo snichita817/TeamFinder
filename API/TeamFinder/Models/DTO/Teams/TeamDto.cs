@@ -12,6 +12,7 @@ namespace TeamFinder.Models.DTO.Teams
         public DateTime CreatedDate { get; set; }
         public bool AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
+        public string TeamCaptainId { get; set; }
 
         public List<UserResponseDto>? Members { get; set; }
     }

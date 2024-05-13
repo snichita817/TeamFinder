@@ -35,10 +35,11 @@ namespace TeamFinder.Controllers
                 Description = request.Description,
                 AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
+                TeamCaptainId = Guid.Parse(request.TeamCaptainId),
                 ActivityRegistered = await _activityRepository.GetActivityAsync(Guid.Parse(request.ActivityRegistered)),
                 Members = new List<ApplicationUser>(),
             };
-            team.Members.Add(await _userManager.FindByIdAsync(request.CreatedBy));
+            team.Members.Add(await _userManager.FindByIdAsync(request.TeamCaptainId));
 
             team = await _teamRepository.CreateAsync(team);
 
@@ -100,7 +101,7 @@ namespace TeamFinder.Controllers
                 Description = request.Description,
                 AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
-                ActivityRegistered = await _activityRepository.GetActivityAsync(request.ActivityRegistered),
+                TeamCaptainId = Guid.Parse(request.TeamCaptainId),
                 Members = new List<ApplicationUser>(),
             };
 
@@ -161,6 +162,7 @@ namespace TeamFinder.Controllers
                 CreatedDate = team.CreatedDate,
                 AcceptedToActivity = team.AcceptedToActivity,
                 IsPrivate = team.IsPrivate,
+                TeamCaptainId = team.TeamCaptainId.ToString(),
                 Members = users,
             };
 

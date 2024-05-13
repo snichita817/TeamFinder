@@ -10,6 +10,7 @@ namespace TeamFinder.Models.Domain
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
+        public Guid TeamCaptainId { get; set; }
 
         public Activity ActivityRegistered { get; set; }
         public ICollection<ApplicationUser> Members { get; set; }
