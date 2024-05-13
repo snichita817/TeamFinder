@@ -5,7 +5,7 @@
 
     <ng-container *ngIf="teams$ | async as teams">
         <div *ngFor="let team of teams" class="mb-3">
-            <div class="card border-0 shadow-sm custom-card">
+            <div class="card border-0 shadow-sm custom-card" [routerLink]="['/team/view', team.id]">
                 <div class="card-body">
                     <h3 class="card-title text-primary">{{team.name}}</h3>
                     <p class="card-text">{{team.description}}</p> 

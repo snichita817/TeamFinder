@@ -1,0 +1,62 @@
+<div *ngIf="team" class="container py-5">
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-sm-3">
+
+            <!-- Team Details Card -->
+            <div class="card border-0 shadow mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">Team Details</h5>
+                    <ul class="list-unstyled">
+                        <li class="border-top mb-2 pr-2">
+                            <span class="text-secondary">Created Date</span>
+                            <strong class="float-end">{{team.createdDate | date:'mediumDate'}}</strong>
+                        </li>
+                        <li class="mb-2">
+                            <span class="text-secondary">Accepted</span>
+                            <strong class="float-end">{{team.acceptedToActivity ? 'Yes' : 'No'}}</strong>
+                        </li>
+                        <li class="mb-2">
+                            <span class="text-secondary">Private</span>
+                            <strong class="float-end">{{team.isPrivate ? 'Yes' : 'No'}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Members Card -->
+            <div class="card border-0 shadow mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">Members</h5>
+                    <ul class="list-unstyled">
+                        <li *ngFor="let member of team.members" class="mb-2">
+                            <a class="text-primary" [routerLink]="['/user', member.id]">{{member.userName}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mb-3">
+                <a class="btn btn-primary" [routerLink]="['/team', team.id, 'edit']">Edit Team</a>
+                <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', team.id]" role="button">Add Update</a>
+            </div>
+            <div>
+                <a class="btn btn-secondary">Manage join requests</a>
+                <a class="btn btn-danger">Delete Team</a>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-sm-8 card border-0 shadow">
+            <div class="card-body">
+                <h4 class="card-title text-primary">{{team.name}}</h4>
+                <div class="border-top pt-3">
+                    <p class="card-text">{{team.description}}</p>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
