@@ -5,12 +5,17 @@ import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Category } from '../../categories/models/category.model';
 import { CategoryService } from '../../categories/services/category.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+
 @Component({
   selector: 'app-activity-add',
   templateUrl: './activity-add.component.html',
   styleUrls: ['./activity-add.component.css']
 })
 export class ActivityAddComponent implements OnDestroy {
+  public Editor = ClassicEditor;
+
   model: ActivityAddRequest;
   categories$?: Observable<Category[]>; 
 
@@ -31,6 +36,13 @@ export class ActivityAddComponent implements OnDestroy {
       createdBy: userId !== null ? userId : '',
       categories: []
     }
+  }
+
+  public onReady(editor: any) {
+    console.log("CKEditor5 Angular Component is ready to use!", editor);
+  }
+  public onChange({ editor }: ChangeEvent) {
+    const data = editor.getData();
   }
 
   ngOnInit(): void {

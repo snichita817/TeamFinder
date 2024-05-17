@@ -21,12 +21,19 @@
                         id="activityShortDescription" 
                         name="activityShortDescription"></textarea>
                     </div>
-                    <div class="mt-3">
+                    <div class="content mt-3">
                         <label class="form-label">Long Description for Your Activity</label>
                         
-                        <textarea class="form-control" [(ngModel)]="model.longDescription"
+                        <ckeditor [editor]="Editor"
+                        [(ngModel)]="model.longDescription"
+                        id="activityLongDescription"
+                        name="activityLongDescription"
+                        data="<p>Hello</p>"
+                        (ready)="onReady($event)"
+                        (change)="onChange($event)" />
+                        <!-- <textarea class="form-control" [(ngModel)]="model.longDescription"
                         id="activityLongDescription" 
-                        name="activityLongDescription"></textarea>
+                        name="activityLongDescription"></textarea> -->
                     </div>
                     <div class="mt-3">
                         <label for="startDate" class="form-label">Start Date</label>

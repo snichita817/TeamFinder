@@ -165,48 +165,56 @@ public class ActivitiesController : Controller
     private async Task<ActivityDto> BuildActivityDto(Models.Activity activity)
     {
         var roles = (List<string>) await _userManager.GetRolesAsync(activity.CreatedBy);
-        var response = new ActivityDto
+        try
         {
-            Id = activity.Id,
-            Title = activity.Title,
-            ShortDescription = activity.ShortDescription,
-            LongDescription = activity.LongDescription,
-            StartDate = activity.StartDate,
-            EndDate = activity.EndDate,
-            OpenRegistration = activity.OpenRegistration,
-            MaxParticipant = activity.MaxParticipant,
-            UrlHandle = activity.UrlHandle,
-            CreatedBy = new UserResponseDto
+            var response = new ActivityDto
             {
-                Id = activity.CreatedBy.Id,
-                UserName = activity.CreatedBy.UserName,
-                Email = activity.CreatedBy.Email,
-                Roles = roles,
-            },
-            CreatedDate = activity.CreatedDate,
-            Updates = activity.Updates.Select(x => new UpdateDto
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Text = x.Text,
-                Date = x.Date
-            }).ToList(),
-            Categories = activity.Categories.Select(c => new CategoryDto
-            {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList(),
-            Teams = activity.Teams.Select(c => new TeamDto
-            {
-                Id = c.Id,
-                Name = c.Name,
-                CreatedDate = c.CreatedDate,
-                AcceptedToActivity = c.AcceptedToActivity,
-                IsPrivate = c.IsPrivate,
-            }).ToList(),
-        };
+                Id = activity.Id,
+                Title = activity.Title,
+                ShortDescription = activity.ShortDescription,
+                LongDescription = activity.LongDescription,
+                StartDate = activity.StartDate,
+                EndDate = activity.EndDate,
+                OpenRegistration = activity.OpenRegistration,
+                MaxParticipant = activity.MaxParticipant,
+                UrlHandle = activity.UrlHandle,
+                CreatedBy = new UserResponseDto
+                {
+                    Id = activity.CreatedBy.Id,
+                    UserName = activity.CreatedBy.UserName,
+                    Email = activity.CreatedBy.Email,
+                    Roles = roles,
+                },
+                CreatedDate = activity.CreatedDate,
+                Updates = activity.Updates?.Select(x => new UpdateDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    Date = x.Date
+                }).ToList(),
+                Categories = activity.Categories?.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList(),
+                Teams = activity.Teams?.Select(c => new TeamDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CreatedDate = c.CreatedDate,
+                    AcceptedToActivity = c.AcceptedToActivity,
+                    IsPrivate = c.IsPrivate,
+                }).ToList(),
+            };
+            return response;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
 
-        return response;
+        return null;
     }
     #endregion
 }

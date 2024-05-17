@@ -7,6 +7,8 @@ import { ActivityEditRequest } from '../models/activity-edit-request.model';
 import { Category } from '../../categories/models/category.model';
 import { User } from '../../users/models/user.model';
 import { CategoryService } from '../../categories/services/category.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-activity-edit',
@@ -14,6 +16,8 @@ import { CategoryService } from '../../categories/services/category.service';
   styleUrls: ['./activity-edit.component.css']
 })
 export class ActivityEditComponent {
+  public Editor = ClassicEditor;
+
   id: string | null = null;
   model?: Activity;
   categories$?: Observable<Category[]>;
@@ -54,6 +58,13 @@ export class ActivityEditComponent {
     this.editActivitySubscription?.unsubscribe();
   }
 
+  public onReady(editor: any) {
+    console.log("CKEditor5 Angular Component is ready to use!", editor);
+  }
+  public onChange({ editor }: ChangeEvent) {
+    const data = editor.getData();
+  }
+
   onFormSubmit(): void {
     const editActivityRequest: ActivityEditRequest = {
       title: this.model?.title ?? '',
@@ -63,14 +74,14 @@ export class ActivityEditComponent {
       endDate: this.model?.endDate ?? new Date(),
       openRegistration: this.model?.openRegistration ?? true,
       maxParticipant: this.model?.maxParticipant ?? 0,
-      createdBy: this.model?.createdBy as User,
+      createdBy: this.model?.createdBy.id,
       categories: this.selectedCategories ?? []
     }
-
+    console.log(editActivityRequest)
     if(this.id) {
       this.editActivitySubscription = this.activityService.updateActivity(this.id, editActivityRequest).subscribe({
         next: (response) => {
-          this.router.navigateByUrl('');
+          this.router.navigateByUrl(`/activities/get/${this.id}`);
         },
       });
     }

@@ -55,7 +55,7 @@
                 <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
                 <div class="border-top pt-3">
                     <p class="card-text">{{model.shortDescription}}</p>
-                    <p class="card-text">{{model.longDescription}}</p>
+                    <p [innerHTML]="model.longDescription" class="card-text"></p>
                 </div>
             </div>
 
