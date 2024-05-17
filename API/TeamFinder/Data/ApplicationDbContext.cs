@@ -19,4 +19,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Update> Updates { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Team> Teams { get; set; }
+    public DbSet<TeamMembershipRequest> TeamMembershipRequests { get; set; }
 }

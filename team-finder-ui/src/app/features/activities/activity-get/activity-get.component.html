@@ -74,7 +74,7 @@
                                     <small class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
                                 </div>
                             </div>
-                            <p class="card-text">{{update.text}}</p>
+                            <p [innerHTML]="update.text" class="card-text"></p>
                             <!-- <button type="button" class="btn btn-primary" (click)="navigateToUpdate(update.id, $event)">Read More</button> -->
                         </div>
                     </div>

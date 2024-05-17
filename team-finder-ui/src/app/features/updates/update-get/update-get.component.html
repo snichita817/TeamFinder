@@ -3,7 +3,7 @@
       <div class="card-body">
         <h4 class="card-title">{{ model.title }}</h4>
         <div class="card-text mt-3">
-          <p>{{ model.text }}</p>
+          <p [innerHTML]="model.text"></p>
           <small class="text-muted">Created on: {{ model.date | date:'mediumDate' }}</small>
         </div>
       </div>

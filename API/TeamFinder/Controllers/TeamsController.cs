@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.Activities;
 using TeamFinder.Models.DTO.Auth;
+using TeamFinder.Models.DTO.TeamMembershipRequests;
 using TeamFinder.Models.DTO.Teams;
 using TeamFinder.Repositories.Implementation;
 using TeamFinder.Repositories.Interface;
@@ -16,13 +17,17 @@ namespace TeamFinder.Controllers
         private readonly ITeamRepository _teamRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITeamMembershipRequestRepository _teamMembershipRequestService;
+
         public TeamsController(ITeamRepository teamRepository,
             UserManager<ApplicationUser> userManager,
-            IActivityRepository activityRepository)
+            IActivityRepository activityRepository,
+            ITeamMembershipRequestRepository teamMembershipRequestService)
         {
             _teamRepository = teamRepository;
             _activityRepository = activityRepository;
             _userManager = userManager;
+            _teamMembershipRequestService = teamMembershipRequestService;
         }
 
         [HttpPost]
@@ -137,21 +142,74 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
+        #region Team Membership Requests
+        [HttpPost("{teamId}/team-membership-requests")]
+        public async Task<IActionResult> CreateMembershipRequest(Guid teamId, [FromBody] AddTeamMembershipRequestDto request)
+        {
+            var team = await _teamRepository.GetTeamByIdAsync(Guid.Parse(request.TeamId));
+            var teamMembershipRequest = new TeamMembershipRequest
+            {
+                Team = team,
+                User = await _userManager.FindByIdAsync(request.UserId),
+            };
+            var result = await _teamMembershipRequestService.CreateTeamMembershipRequestAsync(teamMembershipRequest);
+            if (result == null) return BadRequest("Unable to create membership request.");
+
+            return Ok();
+        }
+
+        [HttpGet("{teamId}/team-membership-requests")]
+        public async Task<IActionResult> GetMembershipRequests(Guid teamId)
+        {
+            var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, TeamMembershipRequest.RequestStatus.Pending);
+            
+            var response = new List<TeamMembershipRequestDto>();
+            foreach (var request in requests)
+            {
+                response.Add(await BuildTeamMembershipRequestDto(request));
+            }
+            
+            return Ok(response);
+        }
+
+        [HttpPost("team-membership-requests/{requestId}/accept")]
+        public async Task<IActionResult> AcceptMembershipRequest(Guid requestId)
+        {
+            var result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
+            if (!result) return BadRequest("Unable to accept membership request.");
+
+            return Ok();
+        }
+
+        [HttpPost("team-membership-requests/{requestId}/reject")]
+        public async Task<IActionResult> RejectMembershipRequest(Guid requestId)
+        {
+            var result = await _teamMembershipRequestService.RejectTeamMembershipRequestAsync(requestId);
+            if (!result) return BadRequest("Unable to reject membership request.");
+
+            return Ok();
+        }
+        #endregion
+
         #region Helper Methods
         private async Task<TeamDto> BuildTeamDto(Team team)
         {
             // Populate the users that are in the team
             List<UserResponseDto> users = new List<UserResponseDto>();
-            foreach (var m in team.Members)
+
+            if(team.Members != null)
             {
-                var roles = await _userManager.GetRolesAsync(m);
-                users.Add(new UserResponseDto
+                foreach (var m in team.Members)
                 {
-                    Id = m.Id,
-                    UserName = m.UserName,
-                    Email = m.Email,
-                    Roles = roles.ToList()
-                });
+                    var roles = await _userManager.GetRolesAsync(m);
+                    users.Add(new UserResponseDto
+                    {
+                        Id = m.Id,
+                        UserName = m.UserName,
+                        Email = m.Email,
+                        Roles = roles.ToList()
+                    });
+                }
             }
 
             var response = new TeamDto
@@ -163,7 +221,29 @@ namespace TeamFinder.Controllers
                 AcceptedToActivity = team.AcceptedToActivity,
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
+                ActivityId = team.ActivityRegistered == null ? null : team.ActivityRegistered.Id.ToString(),
                 Members = users,
+            };
+
+            return response;
+        }
+        
+        private async Task<TeamMembershipRequestDto> BuildTeamMembershipRequestDto(TeamMembershipRequest request)
+        {
+            var roles = await _userManager.GetRolesAsync(request.User);
+            var response = new TeamMembershipRequestDto
+            {
+                Id = request.Id,
+                User = new UserResponseDto
+                {
+                    Id = request.User.Id,
+                    UserName = request.User.UserName,
+                    Email = request.User.Email,
+                    Roles = roles.ToList()
+                },
+                Team = await BuildTeamDto(request.Team),
+                RequestDate = request.RequestDate,
+                Status = request.Status.ToString(),
             };
 
             return response;

@@ -32,6 +32,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ITeamMembershipRequestRepository, TeamMembershipRequestRepository>();
 
 /*builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()

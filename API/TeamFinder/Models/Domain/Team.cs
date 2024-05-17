@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TeamFinder.Models.Domain
 {
@@ -14,5 +15,6 @@ namespace TeamFinder.Models.Domain
 
         public Activity ActivityRegistered { get; set; }
         public ICollection<ApplicationUser> Members { get; set; }
+        public ICollection<TeamMembershipRequest>? TeamMembershipRequests { get; set; } = new List<TeamMembershipRequest>();
     }
 }

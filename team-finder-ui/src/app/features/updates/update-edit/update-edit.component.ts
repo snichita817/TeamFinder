@@ -3,6 +3,8 @@ import { EditUpdateRequest } from '../models/update-edit-request.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-update-edit',
@@ -10,6 +12,7 @@ import { UpdateService } from '../services/update.service';
   styleUrls: ['./update-edit.component.css']
 })
 export class UpdateEditComponent {
+  public Editor = ClassicEditor;
   model?: EditUpdateRequest; 
   
   routeSubscription?: Subscription;
@@ -36,6 +39,13 @@ export class UpdateEditComponent {
         }
       }
     })
+  }
+
+  public onReady(editor: any) {
+    console.log("CKEditor5 Angular Component is ready to use!", editor);
+  }
+  public onChange({ editor }: ChangeEvent) {
+    const data = editor.getData();
   }
 
   ngOnDestroy() {

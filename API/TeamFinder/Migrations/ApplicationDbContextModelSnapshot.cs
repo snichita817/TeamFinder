@@ -401,6 +401,34 @@ namespace TeamFinder.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("TeamFinder.Models.Domain.TeamMembershipRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TeamMembershipRequests");
+                });
+
             modelBuilder.Entity("TeamFinder.Models.Domain.Update", b =>
                 {
                     b.Property<Guid>("Id")
@@ -551,6 +579,25 @@ namespace TeamFinder.Migrations
                     b.Navigation("ActivityRegistered");
                 });
 
+            modelBuilder.Entity("TeamFinder.Models.Domain.TeamMembershipRequest", b =>
+                {
+                    b.HasOne("TeamFinder.Models.Domain.Team", "Team")
+                        .WithMany("TeamMembershipRequests")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TeamFinder.Models.Domain.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TeamFinder.Models.Domain.Update", b =>
                 {
                     b.HasOne("TeamFinder.Models.Activity", "Activity")
@@ -572,6 +619,11 @@ namespace TeamFinder.Migrations
             modelBuilder.Entity("TeamFinder.Models.Domain.ApplicationUser", b =>
                 {
                     b.Navigation("CreatedActivities");
+                });
+
+            modelBuilder.Entity("TeamFinder.Models.Domain.Team", b =>
+                {
+                    b.Navigation("TeamMembershipRequests");
                 });
 #pragma warning restore 612, 618
         }

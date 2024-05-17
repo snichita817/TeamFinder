@@ -14,9 +14,13 @@
     
                     <div class="mt-3">
                         <label class="form-label">What the update is about?</label>
-                        <textarea class="form-control" [(ngModel)]="model.text"
+                        <ckeditor [editor]="Editor"
+                        [(ngModel)]="model.text"
                         id="updateText"
-                        name="updateText"></textarea>
+                        name="updateText"
+                        data="<p>Some text...</p>"
+                        (ready)="onReady($event)"
+                        (change)="onChange($event)" />
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-secondary d-block mx-auto" style="width: 200px;">Edit</button>

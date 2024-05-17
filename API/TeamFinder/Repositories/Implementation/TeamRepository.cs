@@ -23,12 +23,12 @@ namespace TeamFinder.Repositories.Implementation
 
         public async Task<Team?> GetTeamByIdAsync(Guid id)
         {
-            return await _dbContext.Teams.Include(x => x.Members).FirstOrDefaultAsync(t => t.Id == id);
+            return await _dbContext.Teams.Include(x => x.Members).Include(x=>x.TeamMembershipRequests).Include(x=>x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<Team>> GetAllTeamsAsync()
         {
-            return await _dbContext.Teams.Include(x => x.Members).ToListAsync();
+            return await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).ToListAsync();
         }
 
         public async Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId)

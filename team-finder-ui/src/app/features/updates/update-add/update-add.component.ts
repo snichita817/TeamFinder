@@ -3,6 +3,8 @@ import { AddUpdateRequest } from '../models/update-add-request.model';
 import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-update-add',
@@ -10,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./update-add.component.css']
 })
 export class UpdateAddComponent {
+  public Editor = ClassicEditor;
   model: AddUpdateRequest;
   activityId: string | null = null;
 
@@ -25,6 +28,13 @@ export class UpdateAddComponent {
         date: new Date(),
         activityId: '',
       }
+  }
+
+  public onReady(editor: any) {
+    console.log("CKEditor5 Angular Component is ready to use!", editor);
+  }
+  public onChange({ editor }: ChangeEvent) {
+    const data = editor.getData();
   }
 
   onFormSubmit()
