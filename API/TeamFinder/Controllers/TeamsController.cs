@@ -143,19 +143,33 @@ namespace TeamFinder.Controllers
         }
 
         #region Team Membership Requests
-        [HttpPost("{teamId}/team-membership-requests")]
-        public async Task<IActionResult> CreateMembershipRequest(Guid teamId, [FromBody] AddTeamMembershipRequestDto request)
+        [HttpPost("team-membership-requests")]
+        public async Task<IActionResult> CreateMembershipRequest([FromBody] AddTeamMembershipRequestDto request)
         {
-            var team = await _teamRepository.GetTeamByIdAsync(Guid.Parse(request.TeamId));
-            var teamMembershipRequest = new TeamMembershipRequest
+            try
             {
-                Team = team,
-                User = await _userManager.FindByIdAsync(request.UserId),
-            };
-            var result = await _teamMembershipRequestService.CreateTeamMembershipRequestAsync(teamMembershipRequest);
-            if (result == null) return BadRequest("Unable to create membership request.");
+                var team = await _teamRepository.GetTeamByIdAsync(Guid.Parse(request.TeamId));
+                if (team == null) return BadRequest("Team not found.");
 
-            return Ok();
+                var user = await _userManager.FindByIdAsync(request.UserId);
+                if (user == null) return BadRequest("User not found.");
+
+                var teamMembershipRequest = new TeamMembershipRequest
+                {
+                    Team = team,
+                    User = user,
+                };
+
+                var result = await _teamMembershipRequestService.CreateTeamMembershipRequestAsync(teamMembershipRequest);
+                if (result == null) return BadRequest("Unable to create membership request.");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{teamId}/team-membership-requests")]
@@ -172,7 +186,7 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
-        [HttpPost("team-membership-requests/{requestId}/accept")]
+        [HttpPut("team-membership-requests/{requestId}/accept")]
         public async Task<IActionResult> AcceptMembershipRequest(Guid requestId)
         {
             var result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
@@ -181,7 +195,7 @@ namespace TeamFinder.Controllers
             return Ok();
         }
 
-        [HttpPost("team-membership-requests/{requestId}/reject")]
+        [HttpPut("team-membership-requests/{requestId}/reject")]
         public async Task<IActionResult> RejectMembershipRequest(Guid requestId)
         {
             var result = await _teamMembershipRequestService.RejectTeamMembershipRequestAsync(requestId);

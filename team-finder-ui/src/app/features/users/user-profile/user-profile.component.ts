@@ -27,7 +27,6 @@ export class UserProfileComponent {
         if(this.userId) {
           this.userServiceSubscription = this.userService.getUser(this.userId).subscribe({
             next: (response) => {
-              console.log(response);
               this.model = {
                 id: response.id,
                 email: response.email,
@@ -44,7 +43,6 @@ export class UserProfileComponent {
                 portfolioUrl: response.portfolioUrl ?? "",
                 categories: response.categories ?? [],
               };
-              console.log(this.model);
             }
           });
         }

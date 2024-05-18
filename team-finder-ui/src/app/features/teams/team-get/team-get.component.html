@@ -42,11 +42,11 @@
                 <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', team.id]" role="button">Add Update</a>
             </div>
             <div class="mb-3">
-                <a class="btn btn-secondary">Manage join requests</a>
+                <a class="btn btn-secondary" [routerLink]="['/team/membership-requests', team.id]">Manage join requests</a>
                 <a class="btn btn-danger">Delete Team</a>
             </div>
             <div>
-                <a class="btn btn-secondary">Apply for team</a>
+                <a class="btn btn-secondary" [routerLink]="['/team/membership-request', team.id]">Apply for team</a>
             </div>
         </div>
 

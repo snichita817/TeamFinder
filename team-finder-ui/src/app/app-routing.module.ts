@@ -31,6 +31,9 @@ import { TeamAddComponent } from './features/teams/team-add/team-add.component';
 import { ViewTeamsInActivityComponent } from './features/teams/view-teams-in-activity/view-teams-in-activity.component';
 import { TeamGetComponent } from './features/teams/team-get/team-get.component';
 import { TeamEditComponent } from './features/teams/team-edit/team-edit.component';
+import { TeamMembershipRequestsAddComponent } from './features/team-membership-requests/team-membership-requests-add/team-membership-requests-add.component';
+import { TeamMembershipRequestsViewComponent } from './features/team-membership-requests/team-membership-requests-view/team-membership-requests-view.component';
+import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
 
 const routes: Routes = [
   {
@@ -157,6 +160,18 @@ const routes: Routes = [
   {
     path: 'activity/teams/:activityId',
     component: ViewTeamsInActivityComponent
+  },
+  {
+    path: 'team/membership-request/:teamId',
+    component: TeamMembershipRequestsAddComponent
+  },
+  {
+    path: 'team/membership-requests/:teamId',
+    component: TeamMembershipRequestsViewComponent
+  },
+  {
+    path: 'team/membership-request/:memId/:res',
+    component: TeamMembershipRequestAcceptComponent
   },
   {
     path: '**',
