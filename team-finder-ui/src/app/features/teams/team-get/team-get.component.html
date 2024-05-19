@@ -9,6 +9,10 @@
                     <h5 class="card-title">Team Details</h5>
                     <ul class="list-unstyled">
                         <li class="border-top mb-2 pr-2">
+                            <span class="text-secondary">Registered for</span>
+                            <strong class="float-end"><a class="subtle-link" [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></strong>
+                        </li>
+                        <li class="mb-2">
                             <span class="text-secondary">Created Date</span>
                             <strong class="float-end">{{team.createdDate | date:'mediumDate'}}</strong>
                         </li>
@@ -30,7 +34,7 @@
                     <h5 class="card-title">Members</h5>
                     <ul class="list-unstyled">
                         <li *ngFor="let member of team.members" class="mb-2">
-                            <a class="text-primary" [routerLink]="['/user', member.id]">{{member.userName}}</a>
+                            <a class="subtle-link" [routerLink]="['/user', member.id]">{{member.userName}}</a>
                         </li>
                     </ul>
                 </div>

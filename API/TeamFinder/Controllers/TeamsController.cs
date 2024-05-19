@@ -235,7 +235,12 @@ namespace TeamFinder.Controllers
                 AcceptedToActivity = team.AcceptedToActivity,
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
-                ActivityId = team.ActivityRegistered == null ? null : team.ActivityRegistered.Id.ToString(),
+                ActivityRegistered = team.ActivityRegistered == null ? null : new ActivityDto
+                {
+                    Id = team.ActivityRegistered.Id,
+                    Title = team.ActivityRegistered.Title,
+                },
+               // ActivityId = team.ActivityRegistered == null ? null : team.ActivityRegistered.Id.ToString(),
                 Members = users,
             };
 

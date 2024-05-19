@@ -34,7 +34,7 @@ import { TeamEditComponent } from './features/teams/team-edit/team-edit.componen
 import { TeamMembershipRequestsAddComponent } from './features/team-membership-requests/team-membership-requests-add/team-membership-requests-add.component';
 import { TeamMembershipRequestsViewComponent } from './features/team-membership-requests/team-membership-requests-view/team-membership-requests-view.component';
 import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
-
+import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.component';
 const routes: Routes = [
   {
     path: '',
@@ -152,6 +152,10 @@ const routes: Routes = [
   {
     path: 'team/edit/:id',
     component: TeamEditComponent
+  },
+  {
+    path: 'teams',
+    component: TeamGetAllComponent
   },
   {
     path: 'activity/:activityId/teams/register',

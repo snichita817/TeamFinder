@@ -21,6 +21,10 @@ export class TeamService {
     return this.http.get<Team>(`${environment.apiBaseUrl}/teams/${id}`);
   }
 
+  getAllTeams(): Observable<Team[]> {
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams`);
+  }
+
   editTeam(request: TeamEditRequest, id: string): Observable<void> {
     return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}`, request)
   }

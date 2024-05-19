@@ -51,10 +51,10 @@
 }
 
 a.subtle-link {
-    color: inherit; /* Keeps the link color consistent with the text */
-    transition: color 0.3s; /* Smooth transition for color change */
+    color: inherit;
+    transition: color 0.3s;
 }
 
 a.subtle-link:hover, a.subtle-link:focus {
-    color: #0056b3; /* Subtle blue that’s not too bright */
+    color: #0056b3;
 }
