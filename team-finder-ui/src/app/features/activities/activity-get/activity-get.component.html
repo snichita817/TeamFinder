@@ -1,86 +1,96 @@
-<div *ngIf="model" class="container py-5">
-    <div class="row">
-        <!-- Left Column -->
-        <div class="col-sm-3">
-
-            <!-- Schedule Card -->
-            <div class="card border-0 shadow mb-2">
+<div class="container mt-5">
+    <div *ngIf="model">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{model.title}}</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-sm-3">
+    
+                <!-- Schedule Card -->
+                <div class="card border-0 shadow mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Schedule</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <span class="text-black">What?</span>
+                                <span class="float-end text-black">When?</span>
+                            </li>
+                            <li class="border-top mb-2 pr-2">
+                                <span class="text-secondary">Start Date</span>
+                                <strong class="float-end">{{model.startDate | date:'mediumDate'}}</strong>
+                            </li>
+                            <li class="mb-2">
+                                <span class="text-secondary">End Date</span>
+                                <strong class="float-end">{{model.endDate | date:'mediumDate'}}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card border-0 shadow mb-2">
+                    <!-- Registration Type -->
+                    <div class="card-body">
+                        <span>
+                            Registration: {{ model.openRegistration ? 'Open' : 'Closed' }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <span>
+                            Max Participants: {{model.maxParticipant}}
+                        </span>
+                    </div>
+                </div>
+    
+                <!-- Register Button -->
+                <div class="mb-3">
+                    <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
+                    <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
+                </div>
+                <div>
+                    <a class="btn btn-primary" [routerLink]="['/activity/teams', model.id]" role="button">View teams</a>
+                </div>
+            </div>
+    
+            <!-- Right Column -->
+            <div class="col-sm-8 card border-0 shadow">
                 <div class="card-body">
-                    <h5 class="card-title">Schedule</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <span class="text-black">What?</span>
-                            <span class="float-end text-black">When?</span>
-                        </li>
-                        <li class="border-top mb-2 pr-2">
-                            <span class="text-secondary">Start Date</span>
-                            <strong class="float-end">{{model.startDate | date:'mediumDate'}}</strong>
-                        </li>
-                        <li class="mb-2">
-                            <span class="text-secondary">End Date</span>
-                            <strong class="float-end">{{model.endDate | date:'mediumDate'}}</strong>
-                        </li>
-                    </ul>
+                    <h4 class="card-title text-primary">{{model.title}}</h4>
+                    <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
+                    <div class="border-top pt-3">
+                        <p class="card-text">{{model.shortDescription}}</p>
+                        <p [innerHTML]="model.longDescription" class="card-text"></p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="card border-0 shadow mb-2">
-                <!-- Registration Type -->
-                <div class="card-body">
-                    <span>
-                        Registration: {{ model.openRegistration ? 'Open' : 'Closed' }}
-                    </span>
-                </div>
-                <div class="card-body">
-                    <span>
-                        Max Participants: {{model.maxParticipant}}
-                    </span>
-                </div>
-            </div>
-
-            <!-- Register Button -->
-            <div class="mb-3">
-                <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
-                <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
-            </div>
-            <div>
-                <a class="btn btn-primary" [routerLink]="['/activity/teams', model.id]" role="button">View teams</a>
-            </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="col-sm-8 card border-0 shadow">
-            <div class="card-body">
-                <h4 class="card-title text-primary">{{model.title}}</h4>
-                <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
-                <div class="border-top pt-3">
-                    <p class="card-text">{{model.shortDescription}}</p>
-                    <p [innerHTML]="model.longDescription" class="card-text"></p>
-                </div>
-            </div>
-
-            <div *ngIf="model.updates && model.updates.length > 0" class="card-body">
-                <h4 class="card-title">Updates</h4>
-                <div class="border-top">
-                    <div *ngFor="let update of model.updates">
-                        <div class="card-body" (click)="navigateToUpdate(update.id)" tabindex="0">
-                            <!-- Flex container for title and action buttons -->
-                            <div class="d-flex justify-content-between">
-                                <h3 class="card-title text-primary mb-0">{{update.title}}</h3>
-                                <!-- Container for View and Delete -->
-                                <div>
-                                    <p class="text-primary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToUpdate(update.id, $event)">Read More</p>
-                                    <p class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
-                                    <small class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
+    
+                <div *ngIf="model.updates && model.updates.length > 0" class="card-body">
+                    <h4 class="card-title">Updates</h4>
+                    <div class="border-top">
+                        <div *ngFor="let update of model.updates">
+                            <div class="card-body" (click)="navigateToUpdate(update.id)" tabindex="0">
+                                <!-- Flex container for title and action buttons -->
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="card-title text-primary mb-0">{{update.title}}</h3>
+                                    <!-- Container for View and Delete -->
+                                    <div>
+                                        <p class="text-primary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToUpdate(update.id, $event)">Read More</p>
+                                        <p class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
+                                        <small class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
+                                    </div>
                                 </div>
+                                <p [innerHTML]="update.text" class="card-text"></p>
+                                <!-- <button type="button" class="btn btn-primary" (click)="navigateToUpdate(update.id, $event)">Read More</button> -->
                             </div>
-                            <p [innerHTML]="update.text" class="card-text"></p>
-                            <!-- <button type="button" class="btn btn-primary" (click)="navigateToUpdate(update.id, $event)">Read More</button> -->
                         </div>
                     </div>
                 </div>
+                  
             </div>
-              
         </div>
     </div>
 </div>
+

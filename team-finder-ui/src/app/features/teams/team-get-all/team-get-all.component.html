@@ -1,6 +1,12 @@
 <div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Teams</li>
+        </ol>
+    </nav>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Teams Looking for Group</h2>
+        <h2>Teams Looking for Group Across All Activities</h2>
     </div>
 
     <ng-container *ngIf="teams">
@@ -16,7 +22,7 @@
                         </p>
                         <p class="card-text m-0">
                             <i class="bi bi-people-fill text-secondary"></i> 
-                            {{team.members.length || 'N/A'}}
+                            {{team.members.length || 'N/A'}} / insertTotalHere
                         </p>
                         <!-- <p class="card-text m-0">
                             <i class="bi bi-calendar-range-fill text-secondary"></i> 

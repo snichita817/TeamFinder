@@ -33,7 +33,7 @@ namespace TeamFinder.Repositories.Implementation
 
         public async Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId)
         {
-            return await _dbContext.Teams.Include(x => x.Members).Where(t => t.ActivityRegistered.Id == activityId).ToListAsync();
+            return await _dbContext.Teams.Include(x => x.Members).Include(x=>x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId).ToListAsync();
         }
 
         public async Task<Team?> EditTeam(Team team)

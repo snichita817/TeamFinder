@@ -1,4 +1,13 @@
 <div *ngIf="team" class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['/activity/teams', team.activityRegistered.id]">Teams</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{team.name}}</li>
+        </ol>
+    </nav>
     <div class="row">
         <!-- Left Column -->
         <div class="col-sm-3">
