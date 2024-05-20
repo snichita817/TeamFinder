@@ -28,7 +28,7 @@ export class ActivityService {
     return this.http.put<void>(`${environment.apiBaseUrl}/activities/${id}?addAuth=true`, model);
   }
 
-  deleteActivity(id: string): Observable<void> {
-    return this.http.delete<void>(`${environment.apiBaseUrl}/activities/${id}?addAuth=true`);
+  deleteActivity(id: string): Observable<Activity> {
+    return this.http.delete<Activity>(`${environment.apiBaseUrl}/activities/${id}?addAuth=true`);
   }
 }

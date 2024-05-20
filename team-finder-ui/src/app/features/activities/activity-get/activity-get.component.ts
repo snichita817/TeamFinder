@@ -4,6 +4,7 @@ import { Activity } from '../models/activity.model';
 import { ActivityService } from '../services/activity.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Update } from '../../updates/models/update.model';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-activity-get',
@@ -15,11 +16,12 @@ export class ActivityGetComponent implements OnInit {
   model?: Activity;
 
   routeSubscription?: Subscription;
-  getActivitySubscription?: Subscription;
+  activityServiceSubscription?: Subscription;
 
   constructor(private activityService: ActivityService,
     private route:ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -28,7 +30,7 @@ export class ActivityGetComponent implements OnInit {
         this.activityId = params.get('id');
 
         if(this.activityId){
-          this.getActivitySubscription = this.activityService.getActivity(this.activityId).subscribe({
+          this.activityServiceSubscription = this.activityService.getActivity(this.activityId).subscribe({
             next: (result) => {
               this.model = result;
             }
@@ -40,7 +42,7 @@ export class ActivityGetComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
-    this.getActivitySubscription?.unsubscribe();
+    this.activityServiceSubscription?.unsubscribe();
   }
 
   navigateToUpdate(id: string, event?:MouseEvent) {
@@ -57,6 +59,20 @@ export class ActivityGetComponent implements OnInit {
     }
     
     this.router.navigate(['updates/edit', id]);
+  }
+
+  onDelete(id: string, event?:MouseEvent) {
+    if(event) {
+      event.stopPropagation();
+    }
+
+    this.activityServiceSubscription = this.activityService.deleteActivity(id).subscribe({
+      next: (response) => {
+        this.sharedService.showNotification(true, "Succcess!", `Activity ${response.title} deleted successfully!`);
+        this.router.navigateByUrl('/activities')
+      }
+    })
+
   }
 
   navigateToDeleteUpdate(id: string, event?:MouseEvent) { 
