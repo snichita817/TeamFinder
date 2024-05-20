@@ -29,6 +29,10 @@ export class TeamService {
     return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}`, request)
   }
 
+  deleteTeam(id: string) {
+    return this.http.delete<Team>(`${environment.apiBaseUrl}/teams/${id}`);
+  }
+
   indexByActivity(activityId: string): Observable<Team[]> {
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`);
   }

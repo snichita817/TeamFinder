@@ -45,21 +45,46 @@
                         </span>
                     </div>
                 </div>
-    
-                <!-- Register Button -->
-                <div class="mb-3">
-                    <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
-                    <a class="btn btn-primary ms-2" [routerLink]="['/updates/add', model.id]" role="button">Add Update to this activity</a>
-                </div>
-                <div>
-                    <a class="btn btn-primary" [routerLink]="['/activity/teams', model.id]" role="button">View teams</a>
+                
+                <!-- Action Buttons -->
+                <div class="card shadow mb-2">
+                    <div class="card-body">
+                        <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', model.id]" role="button">
+                                <i class="bi bi-plus-circle me-1"></i> Add Update
+                            </a>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/activity/edit', model.id]">
+                                <i class="bi bi-pencil-square me-1"></i> Edit Team
+                            </a>
+                        </div>
+                        <!-- <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(team.id, $event)">
+                                <i class="bi bi-trash me-1"></i> Delete Team
+                            </a>
+                        </div> -->
+                        <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-secondary" style="max-width: 230px;">
+                                <i class="bi bi-people me-1"></i> Manage Join Requests
+                            </a>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity/teams', model.id]" role="button">
+                                <i class="bi bi-people me-1"></i> View Teams
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
     
             <!-- Right Column -->
             <div class="col-sm-8 card border-0 shadow">
                 <div class="card-body">
-                    <h4 class="card-title text-primary">{{model.title}}</h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title text-primary">{{model.title}}</h4>
+                        <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
+                    </div>
                     <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
                     <div class="border-top pt-3">
                         <p class="card-text">{{model.shortDescription}}</p>

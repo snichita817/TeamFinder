@@ -53,7 +53,7 @@ namespace TeamFinder.Repositories.Implementation
 
         public async Task<Team?> DeleteTeam(Guid id)
         {
-            var existingTeam = await _dbContext.Teams.Include(x => x.Members).FirstOrDefaultAsync(t => t.Id == id);
+            var existingTeam = await _dbContext.Teams.Include(x => x.Members).Include(x=>x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == id);
 
             if (existingTeam == null)
             {
