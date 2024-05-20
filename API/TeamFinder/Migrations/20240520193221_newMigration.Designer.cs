@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240517144745_initMigration")]
-    partial class initMigration
+    [Migration("20240520193221_newMigration")]
+    partial class newMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -374,8 +374,8 @@ namespace TeamFinder.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AcceptedToActivity")
-                        .HasColumnType("bit");
+                    b.Property<int>("AcceptedToActivity")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ActivityRegisteredId")
                         .HasColumnType("uniqueidentifier");

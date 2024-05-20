@@ -203,7 +203,7 @@ public class ActivitiesController : Controller
                     Id = c.Id,
                     Name = c.Name,
                     CreatedDate = c.CreatedDate,
-                    AcceptedToActivity = c.AcceptedToActivity,
+                    AcceptedToActivity = c.AcceptedToActivity.ToString(),
                     IsPrivate = c.IsPrivate,
                 }).ToList(),
             };

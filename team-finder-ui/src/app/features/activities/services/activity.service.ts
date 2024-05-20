@@ -5,6 +5,7 @@ import { Activity } from '../models/activity.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ActivityEditRequest } from '../models/activity-edit-request.model';
+import { Team } from '../../teams/models/team.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +19,10 @@ export class ActivityService {
 
   getActivity(id: string): Observable<Activity> {
     return this.http.get<Activity>(`${environment.apiBaseUrl}/activities/${id}`);
+  }
+
+  getTeamsForReview(id: string): Observable<Team[]>{
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/review/activity/${id}`);
   }
 
   indexActivities(): Observable<Activity[]> {

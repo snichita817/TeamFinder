@@ -47,6 +47,7 @@ import { TeamMembershipRequestsAddComponent } from './features/team-membership-r
 import { TeamMembershipRequestsViewComponent } from './features/team-membership-requests/team-membership-requests-view/team-membership-requests-view.component';
 import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
 import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.component';
+import { ActivityTeamReviewComponent } from './features/activities/activity-team-review/activity-team-review.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.
     ActivityEditComponent,
     ActivityDeleteComponent,
     ActivityGetComponent,
+    ActivityTeamReviewComponent,
     UpdateAddComponent,
     UpdateListPrivateComponent,
     UpdateDeleteComponent,

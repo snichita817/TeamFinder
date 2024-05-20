@@ -6,7 +6,7 @@ export interface Team{
     name: string;
     description: string;
     createdDate: Date;
-    acceptedToActivity: boolean;
+    acceptedToActivity: string;
     isPrivate: boolean;
     teamCaptainId: string;
     activityRegistered: Activity;

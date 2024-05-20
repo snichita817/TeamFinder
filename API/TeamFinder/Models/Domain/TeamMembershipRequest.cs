@@ -8,12 +8,6 @@
         public Team Team { get; set; }
 
         public DateTime RequestDate { get; set; } = DateTime.UtcNow;
-        public enum RequestStatus
-        {
-            Pending,
-            Accepted,
-            Rejected
-        }
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
     }
 }

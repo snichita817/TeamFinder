@@ -10,12 +10,6 @@ namespace TeamFinder.Models.DTO.TeamMembershipRequests
         public UserResponseDto User { get; set; }
         public TeamDto Team { get; set; }
         public DateTime RequestDate { get; set; }
-        public enum RequestStatus
-        {
-            Pending,
-            Accepted,
-            Rejected
-        }
         public string Status { get; set; }
     }
 }

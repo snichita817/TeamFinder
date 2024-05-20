@@ -35,6 +35,7 @@ import { TeamMembershipRequestsAddComponent } from './features/team-membership-r
 import { TeamMembershipRequestsViewComponent } from './features/team-membership-requests/team-membership-requests-view/team-membership-requests-view.component';
 import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
 import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.component';
+import { ActivityTeamReviewComponent } from './features/activities/activity-team-review/activity-team-review.component';
 const routes: Routes = [
   {
     path: '',
@@ -101,6 +102,10 @@ const routes: Routes = [
     path: 'activities/delete/:id',
     component: ActivityDeleteComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'activity/:id/teams/review',
+    component: ActivityTeamReviewComponent
   },
   {
     path: 'activities/get/:id',

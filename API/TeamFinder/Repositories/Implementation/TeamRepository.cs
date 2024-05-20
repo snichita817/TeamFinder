@@ -36,6 +36,39 @@ namespace TeamFinder.Repositories.Implementation
             return await _dbContext.Teams.Include(x => x.Members).Include(x=>x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId).ToListAsync();
         }
 
+        public async Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId)
+        {
+            return await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId && t.AcceptedToActivity == RequestStatus.Pending).ToListAsync();
+        }
+
+        public async Task<Team> AcceptTeam(Guid teamId)
+        {
+            var team = await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == teamId);
+            
+            if (team == null)
+            {
+                throw new Exception("Team not found");
+            }
+            
+            team.AcceptedToActivity = RequestStatus.Accepted;
+            await _dbContext.SaveChangesAsync();
+            return team;
+        }
+
+        public async Task<Team> RejectTeam(Guid teamId)
+        {
+            var team = await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == teamId);
+
+            if (team == null)
+            {
+                throw new Exception("Team not found");
+            }
+
+            team.AcceptedToActivity = RequestStatus.Rejected;
+            await _dbContext.SaveChangesAsync();
+            return team;
+        }
+
         public async Task<Team?> EditTeam(Team team)
         {
             var existingTeam = await _dbContext.Teams.Include(x => x.Members).FirstOrDefaultAsync(t => t.Id == team.Id);

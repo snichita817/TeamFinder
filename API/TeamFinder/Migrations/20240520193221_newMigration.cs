@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigration : Migration
+    public partial class newMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -267,7 +267,7 @@ namespace TeamFinder.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AcceptedToActivity = table.Column<bool>(type: "bit", nullable: false),
+                    AcceptedToActivity = table.Column<int>(type: "int", nullable: false),
                     IsPrivate = table.Column<bool>(type: "bit", nullable: false),
                     TeamCaptainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ActivityRegisteredId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

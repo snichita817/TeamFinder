@@ -13,6 +13,12 @@ namespace TeamFinder.Repositories.Interface
 
         Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId);
 
+        Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId);
+
+        Task<Team> AcceptTeam(Guid teamId);
+
+        Task<Team> RejectTeam(Guid teamId);
+
         Task<Team?> EditTeam(Team team);
 
         Task<Team?> DeleteTeam(Guid id);

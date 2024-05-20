@@ -38,7 +38,6 @@ namespace TeamFinder.Controllers
             {
                 Name = request.Name,
                 Description = request.Description,
-                AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
                 TeamCaptainId = Guid.Parse(request.TeamCaptainId),
                 ActivityRegistered = await _activityRepository.GetActivityAsync(Guid.Parse(request.ActivityRegistered)),
@@ -96,6 +95,50 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
+        [HttpGet("review/activity/{activityId:Guid}")]
+        public async Task<IActionResult> ReviewTeams(Guid activityId)
+        {
+            var teams = await _teamRepository.GetActivityUreviewedTeams(activityId);
+
+            List<TeamDto> response = new List<TeamDto>();
+            foreach (var team in teams)
+            {
+                response.Add(await BuildTeamDto(team));
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPut("review/{teamId:Guid}/accept")]
+        public async Task<IActionResult> AcceptTeam(Guid teamId)
+        {
+            var team = await _teamRepository.AcceptTeam(teamId);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            var response = await BuildTeamDto(team);
+
+            return Ok(response);
+        }
+
+        [HttpPut("review/{teamId:Guid}/reject")]
+        public async Task<IActionResult> RejectTeam(Guid teamId)
+        {
+            var team = await _teamRepository.RejectTeam(teamId);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            var response = await BuildTeamDto(team);
+
+            return Ok(response);
+        }
+
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> EditTeam([FromRoute] Guid id, [FromBody] EditTeamRequestDto request)
         {
@@ -104,7 +147,6 @@ namespace TeamFinder.Controllers
                 Id = id,
                 Name = request.Name,
                 Description = request.Description,
-                AcceptedToActivity = request.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
                 TeamCaptainId = Guid.Parse(request.TeamCaptainId),
                 Members = new List<ApplicationUser>(),
@@ -175,7 +217,7 @@ namespace TeamFinder.Controllers
         [HttpGet("{teamId}/team-membership-requests")]
         public async Task<IActionResult> GetMembershipRequests(Guid teamId)
         {
-            var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, TeamMembershipRequest.RequestStatus.Pending);
+            var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, RequestStatus.Pending);
             
             var response = new List<TeamMembershipRequestDto>();
             foreach (var request in requests)
@@ -232,7 +274,7 @@ namespace TeamFinder.Controllers
                 Name = team.Name,
                 Description = team.Description,
                 CreatedDate = team.CreatedDate,
-                AcceptedToActivity = team.AcceptedToActivity,
+                AcceptedToActivity = team.AcceptedToActivity.ToString(),
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
                 ActivityRegistered = team.ActivityRegistered == null ? null : new ActivityDto

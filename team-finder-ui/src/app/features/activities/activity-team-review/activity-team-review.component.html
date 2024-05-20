@@ -1,0 +1,31 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Manage Join Requests</h1>
+    
+    <div *ngIf="teams" class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0">Pending Requests</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Team Name</th>
+                        <th scope="col">Request Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let team of teams">
+                        <td><a [routerLink]="['/team/view', team.id]">{{team.name}}</a></td>
+                        <td>{{team.createdDate| date:'yyyy-MM-dd HH:mm'}}</td>
+                        <td>
+                            <button class="btn btn-success btn-sm" (click)="onAccept(team.id, $event)">Approve</button>
+                            <button class="btn btn-danger btn-sm" (click)="onReject(team.id, $event)">Reject</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

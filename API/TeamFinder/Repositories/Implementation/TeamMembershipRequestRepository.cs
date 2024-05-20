@@ -19,7 +19,7 @@ namespace TeamFinder.Repositories.Implementation
             var request = await _context.TeamMembershipRequests.Include(x=>x.Team).Include(x=>x.User).FirstOrDefaultAsync(mem => mem.Id == requestId);
             if (request == null) return false;
 
-            request.Status = TeamMembershipRequest.RequestStatus.Accepted;
+            request.Status = RequestStatus.Accepted;
             _context.TeamMembershipRequests.Update(request);
 
             // Add the user to the team
@@ -65,7 +65,7 @@ namespace TeamFinder.Repositories.Implementation
             return request;
         }
 
-        public async Task<IEnumerable<TeamMembershipRequest>> GetTeamMembershipRequestAsync(Guid teamId, TeamMembershipRequest.RequestStatus requestStatus)
+        public async Task<IEnumerable<TeamMembershipRequest>> GetTeamMembershipRequestAsync(Guid teamId, RequestStatus requestStatus)
         {
             return await _context.TeamMembershipRequests
                 .Where(mr => mr.Team.Id == teamId && mr.Status == requestStatus)
@@ -79,7 +79,7 @@ namespace TeamFinder.Repositories.Implementation
             var request = await _context.TeamMembershipRequests.FindAsync(requestId);
             if (request == null) return false;
 
-            request.Status = TeamMembershipRequest.RequestStatus.Rejected;
+            request.Status = RequestStatus.Rejected;
             _context.TeamMembershipRequests.Update(request);
             await _context.SaveChangesAsync();
             return true;

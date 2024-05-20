@@ -12,8 +12,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    
-
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Update> Updates { get; set; }

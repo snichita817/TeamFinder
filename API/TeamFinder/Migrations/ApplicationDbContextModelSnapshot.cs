@@ -371,8 +371,8 @@ namespace TeamFinder.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AcceptedToActivity")
-                        .HasColumnType("bit");
+                    b.Property<int>("AcceptedToActivity")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ActivityRegisteredId")
                         .HasColumnType("uniqueidentifier");

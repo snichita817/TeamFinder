@@ -36,4 +36,12 @@ export class TeamService {
   indexByActivity(activityId: string): Observable<Team[]> {
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`);
   }
+
+  acceptTeam(teamId: string): Observable<Team> {
+    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/accept`, {});
+  }
+
+  rejectTeam(teamId: string): Observable<Team> {
+    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/reject`, {});
+  }
 }
