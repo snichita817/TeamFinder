@@ -16,6 +16,8 @@ export class UserProfileComponent {
   routeSubscription?: Subscription;
   userServiceSubscription?: Subscription;
 
+  imageUrl: string = 'https://bootdey.com/img/Content/avatar/avatar7.png';
+
   constructor(private userService: UserService,
     private route: ActivatedRoute) {}
 
@@ -42,7 +44,12 @@ export class UserProfileComponent {
                 skills: response.skills ?? "",
                 portfolioUrl: response.portfolioUrl ?? "",
                 categories: response.categories ?? [],
+                courseOfStudy: 0
               };
+
+              if(response.profilePictureUrl) {
+                this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${response.profilePictureUrl}`;
+              }
             }
           });
         }

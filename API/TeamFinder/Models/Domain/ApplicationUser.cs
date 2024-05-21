@@ -12,6 +12,7 @@ namespace TeamFinder.Models.Domain
         public string? University { get; set; } // Or Institution
         public string? CourseOfStudy { get; set; } // e.g., Computer Science
         public int? GraduationYear { get; set; }
+        public string? ProfilePictureUrl { get; set; }
 
         // Professional Info
         public string? Bio { get; set; } // A short bio about the student

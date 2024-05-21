@@ -94,6 +94,7 @@ namespace TeamFinder.Controllers
                     University = user.University,
                     CourseOfStudy = user.CourseOfStudy,
                     GraduationYear = user.GraduationYear,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
                     Bio = user.Bio,
                     LinkedInUrl = user.LinkedInUrl,
                     GitHubUrl = user.GitHubUrl,
@@ -352,6 +353,7 @@ namespace TeamFinder.Controllers
             userToUpdate.CourseOfStudy = request.CourseOfStudy;
             userToUpdate.GraduationYear = request.GraduationYear;
             userToUpdate.Bio = request.Bio;
+            userToUpdate.ProfilePictureUrl = request.ProfilePictureUrl;
             userToUpdate.LinkedInUrl = request.LinkedInUrl;
             userToUpdate.GitHubUrl = request.GitHubUrl;
             userToUpdate.Skills = request.Skills;

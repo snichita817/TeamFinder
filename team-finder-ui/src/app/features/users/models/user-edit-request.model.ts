@@ -6,6 +6,7 @@ export interface UserEditRequest {
     lastName: string;
     university: string;
     graduationYear: number;
+    profilePictureUrl?: string;
     bio: string;
     linkedinUrl: string;
     githubUrl: string;

@@ -8,11 +8,13 @@ export interface UserProfile {
     firstName: string;
     lastName: string;
     university: string;
-    categories: Category[];
+    courseOfStudy: number;
     graduationYear: number;
+    profilePictureUrl?: string;
     bio: string;
     linkedinUrl: string;
     githubUrl: string;
     skills: string;
+    categories: Category[];
     portfolioUrl: string;
 }

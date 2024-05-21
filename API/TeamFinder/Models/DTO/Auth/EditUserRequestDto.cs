@@ -9,6 +9,7 @@
         public string? University { get; set; }
         public string? CourseOfStudy { get; set; }
         public int? GraduationYear { get; set; }
+        public string? ProfilePictureUrl { get; set; }
         public string? Bio { get; set; }
         public string? LinkedInUrl { get; set; }
         public string? GitHubUrl { get; set; }
