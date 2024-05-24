@@ -1,36 +1,59 @@
 <div class="container mt-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Teams</li>
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Teams</li>
         </ol>
     </nav>
+    
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Teams Looking for Group Across All Activities</h2>
     </div>
+    
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Welcome to the Teams Page!</h5>
+            <p class="card-text">Here you can find teams that are looking for members to join them across various activities such as hackathons, workshops, and conferences. Joining a team can help you collaborate with others, build your portfolio, and increase your chances of employment in the industry.</p>
+            <p class="card-text">To join a team, simply click on the team name to view more details and reach out to the team captain. You can also see the number of members currently in each team. If you have any questions, feel free to contact the team captain.</p>
+        </div>
+    </div>
 
-    <ng-container *ngIf="teams">
-        <div *ngFor="let team of teams" class="mb-3">
-            <div class="card border-0 shadow-sm custom-card" [routerLink]="['/team/view', team.id]">
-                <div class="card-body">
-                    <h3 class="card-title text-primary">{{team.name}}</h3>
-                    <p class="card-text">{{team.description}}</p>
-                    <div class="d-flex align-items-center gap-3">
-                        <p class="card-text m-0">
-                            <i class="bi bi-pencil-square"> </i>
-                            <a class="subtle-link ms-1" [routerLink]="['/user', team.teamCaptainId]">{{ getCaptainName(team.members, team.teamCaptainId) }}</a>
-                        </p>
-                        <p class="card-text m-0">
-                            <i class="bi bi-people-fill text-secondary"></i> 
-                            {{team.members.length || 'N/A'}} / insertTotalHere
-                        </p>
-                        <!-- <p class="card-text m-0">
-                            <i class="bi bi-calendar-range-fill text-secondary"></i> 
-                            <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>
-                        </p> -->
+    <ng-container *ngIf="teams; else loading">
+        <ng-container *ngIf="teams.length > 0; else noTeams">
+            <div *ngFor="let team of teams" class="mb-3">
+                <div class="card border-0 shadow-sm custom-card" [routerLink]="['/team/view', team.id]">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">{{team.name}}</h3>
+                        <p class="card-text">{{team.description}}</p>
+                        <div class="d-flex align-items-center gap-3">
+                            <p class="card-text m-0">
+                                <i class="bi bi-pencil-square"></i>
+                                <a class="subtle-link ms-1" [routerLink]="['/user', team.teamCaptainId]">{{ getCaptainName(team.members, team.teamCaptainId) }}</a>
+                            </p>
+                            <p class="card-text m-0">
+                                <i class="bi bi-people-fill text-secondary"></i> 
+                                {{team.members.length || 'N/A'}} / insertTotalHere
+                            </p>
+                            <!-- <p class="card-text m-0">
+                                <i class="bi bi-calendar-range-fill text-secondary"></i> 
+                                <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>
+                            </p> -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
+        <ng-template #noTeams>
+            <div class="alert alert-warning" role="alert">
+                There are no teams available at the moment. Please check back later or create a new team.
+            </div>
+        </ng-template>
     </ng-container>
+    <ng-template #loading>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </ng-template>
 </div>

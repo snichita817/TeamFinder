@@ -9,32 +9,54 @@
         <h2>Activities</h2>
         <a class="btn btn-primary" [routerLink]="['/activities/add']" role="button">Create New Activity</a>
     </div>
+    
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Explore Our Activities</h5>
+            <p class="card-text">Find various activities such as hackathons, workshops, and conferences. Participating in these activities can help you develop your skills, collaborate with others, and enhance your portfolio. Click on any activity to view more details or to join.</p>
+            <p class="card-text">To create a new activity, click the "Create New Activity" button above.</p>
+        </div>
+    </div>
 
-    <ng-container *ngIf="activities$ | async as activities">
-        <div *ngFor="let activity of activities" class="mb-3">
-            <div class="card border-0 shadow-sm custom-card" [routerLink]="['/activities/get', activity.id]">
-                <div class="card-body">
-                    <h3 class="card-title text-primary">{{activity.title}}</h3>
-                    <p class="card-text">{{activity.shortDescription}}</p>
-                    <span *ngFor="let category of activity.categories">
-                        <span class="badge bg-secondary">{{category.name}}</span>
-                    </span>
-                    <div class="d-flex align-items-center gap-3">
-                        <p class="card-text m-0">
-                            <i class="bi bi-pencil-square"> </i>
-                            <a class="subtle-link ms-1" [routerLink]="['/user', activity.createdBy.id]">{{activity.createdBy.userName}}</a>
-                        </p>
-                        <p class="card-text m-0">
-                            <i class="bi bi-people-fill text-secondary"></i> 
-                            {{activity.maxParticipant || 'N/A'}}
-                        </p>
-                        <p class="card-text m-0">
-                            <i class="bi bi-calendar-range-fill text-secondary"></i> 
-                            <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>
-                        </p>
+    <ng-container *ngIf="activities$ | async as activities; else loading">
+        <ng-container *ngIf="activities.length > 0; else noActivities">
+            <div *ngFor="let activity of activities" class="mb-3">
+                <div class="card border-0 shadow-sm custom-card" [routerLink]="['/activities/get', activity.id]">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">{{activity.title}}</h3>
+                        <p class="card-text">{{activity.shortDescription}}</p>
+                        <span *ngFor="let category of activity.categories">
+                            <span class="badge bg-secondary">{{category.name}}</span>
+                        </span>
+                        <div class="d-flex align-items-center gap-3">
+                            <p class="card-text m-0">
+                                <i class="bi bi-pencil-square"></i>
+                                <a class="subtle-link ms-1" [routerLink]="['/user', activity.createdBy.id]">{{activity.createdBy.userName}}</a>
+                            </p>
+                            <p class="card-text m-0">
+                                <i class="bi bi-people-fill text-secondary"></i> 
+                                {{activity.maxParticipant || 'N/A'}}
+                            </p>
+                            <p class="card-text m-0">
+                                <i class="bi bi-calendar-range-fill text-secondary"></i> 
+                                <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
+        <ng-template #noActivities>
+            <div class="alert alert-warning" role="alert">
+                There are no activities available at the moment. Please check back later or create a new activity.
+            </div>
+        </ng-template>
     </ng-container>
+    <ng-template #loading>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </ng-template>
 </div>
