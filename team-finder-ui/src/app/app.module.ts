@@ -48,7 +48,9 @@ import { TeamMembershipRequestsViewComponent } from './features/team-membership-
 import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
 import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.component';
 import { ActivityTeamReviewComponent } from './features/activities/activity-team-review/activity-team-review.component';
-
+import { ApplyOrganizerComponent } from './features/organizer-applications/apply-organizer/apply-organizer.component';
+import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
+import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,7 +92,10 @@ import { ActivityTeamReviewComponent } from './features/activities/activity-team
     TeamGetAllComponent,
     TeamMembershipRequestsAddComponent,
     TeamMembershipRequestsViewComponent,
-    TeamMembershipRequestAcceptComponent
+    TeamMembershipRequestAcceptComponent,
+    ApplyOrganizerComponent,
+    ApplicationStatusComponent,
+    AdminApplicationReviewComponent
   ],
   imports: [
     BrowserModule,

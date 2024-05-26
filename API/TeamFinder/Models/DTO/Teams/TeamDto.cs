@@ -13,6 +13,8 @@ namespace TeamFinder.Models.DTO.Teams
         public string AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
         public string TeamCaptainId { get; set; }
+        public string? SubmissionUrl { get; set; }
+
         public ActivityDto? ActivityRegistered { get; set; }
         public List<UserResponseDto>? Members { get; set; }
     }

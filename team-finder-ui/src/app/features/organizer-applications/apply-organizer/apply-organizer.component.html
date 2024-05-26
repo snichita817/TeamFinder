@@ -1,0 +1,31 @@
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="shadow p-4 rounded" style="max-width: 600px;">
+      <h2>Apply to Become an Organizer</h2>
+      <form [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason for Applying</label>
+          <ckeditor 
+            [editor]="editor"
+            id="reason" 
+            formControlName="reason" 
+            class="form-control" 
+            required
+            rows="5"
+            (ready)="onReady($event)"
+            (change)="onChange($event)"
+            [class.is-invalid]="applicationForm.get('reason')?.errors"
+          >
+          </ckeditor>
+          <div *ngIf="applicationForm.get('reason')?.invalid && (applicationForm.get('reason')?.dirty || applicationForm.get('reason')?.touched)" class="invalid-feedback">
+            <span class="text-danger" *ngIf="applicationForm.get('reason')?.hasError('required')">Reason is required.</span>
+            <span class="text-danger" *ngIf="applicationForm.get('reason')?.hasError('minlength')">Reason must be at least 10 characters long.</span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="applicationForm.invalid">Submit Application</button>
+      </form>
+    </div>
+  </div>
+    
+</div>
+  

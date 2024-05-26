@@ -12,6 +12,7 @@ namespace TeamFinder.Models.Domain
         public RequestStatus AcceptedToActivity { get; set; } = RequestStatus.Pending;
         public bool IsPrivate { get; set; }
         public Guid TeamCaptainId { get; set; }
+        public string? SubmissionUrl { get; set; }
 
         public Activity ActivityRegistered { get; set; }
         public ICollection<ApplicationUser> Members { get; set; }

@@ -36,6 +36,9 @@ import { TeamMembershipRequestsViewComponent } from './features/team-membership-
 import { TeamMembershipRequestAcceptComponent } from './features/team-membership-requests/team-membership-request-accept/team-membership-request-accept.component';
 import { TeamGetAllComponent } from './features/teams/team-get-all/team-get-all.component';
 import { ActivityTeamReviewComponent } from './features/activities/activity-team-review/activity-team-review.component';
+import { ApplyOrganizerComponent } from './features/organizer-applications/apply-organizer/apply-organizer.component';
+import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
+import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
 const routes: Routes = [
   {
     path: '',
@@ -93,6 +96,10 @@ const routes: Routes = [
     path: 'admin/activities',
     component: ActivityListPrivateComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'admin/applications-review',
+    component: AdminApplicationReviewComponent,
   },
   {
     path: 'activities/edit/:id',
@@ -181,6 +188,13 @@ const routes: Routes = [
   {
     path: 'team/membership-request/:memId/:res',
     component: TeamMembershipRequestAcceptComponent
+  },
+  { path: 'apply-organizer', 
+    component: ApplyOrganizerComponent
+  },
+  {
+    path: 'application-status',
+    component: ApplicationStatusComponent
   },
   {
     path: '**',

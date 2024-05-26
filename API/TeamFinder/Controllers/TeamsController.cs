@@ -184,6 +184,22 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
+        #region File Uploads
+        [HttpPut("{teamId:Guid}/upload/{submissionUrl}")]
+        public async Task<IActionResult> ChangeSubmissionLink([FromRoute] Guid teamId, [FromRoute] string submissionUrl)
+        {
+            var team = await _teamRepository.GetTeamByIdAsync(teamId);
+            if (team == null) return BadRequest("Team not found.");
+
+            team.SubmissionUrl = submissionUrl;
+
+            var result = await _teamRepository.EditTeam(team);
+            if (result == null) return BadRequest("Unable to change submission link.");
+
+            return Ok();
+        }
+        #endregion
+
         #region Team Membership Requests
         [HttpPost("team-membership-requests")]
         public async Task<IActionResult> CreateMembershipRequest([FromBody] AddTeamMembershipRequestDto request)
@@ -277,6 +293,7 @@ namespace TeamFinder.Controllers
                 AcceptedToActivity = team.AcceptedToActivity.ToString(),
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
+                SubmissionUrl = team.SubmissionUrl,
                 ActivityRegistered = team.ActivityRegistered == null ? null : new ActivityDto
                 {
                     Id = team.ActivityRegistered.Id,

@@ -1,0 +1,27 @@
+<div class="container mt-5">
+    <h2>Review Organizer Applications</h2>
+    <div *ngIf="applications.length > 0">
+      <div *ngFor="let application of applications" class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title"><a class="subtle-link" [routerLink]="['/user', application.user.id]">{{application.user.userName}}</a></h5>
+          <p class="card-text"><strong>Reason:</strong> 
+            <span *ngIf="!isReasonExpanded(application.id) && application.reason.length > 50" [innerHTML]="application.reason.slice(0, 50) + '...'"></span>
+            <span *ngIf="isReasonExpanded(application.id) || application.reason.length <= 50" [innerHTML]="application.reason"></span>
+            <button *ngIf="application.reason.length > 50" class="btn btn-link p-0" (click)="toggleReason(application.id)">
+              {{ isReasonExpanded(application.id) ? 'Read less' : 'Read more' }}
+            </button>
+          </p>
+
+          <p class="card-text"><strong>Status:</strong> {{application.status}}</p>
+          <div *ngIf="application.status == 'Pending'">
+            <button class="btn btn-success me-2" (click)="approve(application.id); $event.stopPropagation();">Approve</button>
+            <button class="btn btn-danger" (click)="reject(application.id); $event.stopPropagation();">Reject</button>
+          </div>
+          </div>
+      </div>
+    </div>
+    <div *ngIf="applications.length === 0">
+      <p>No applications to review at the moment.</p>
+    </div>
+  </div>
+  

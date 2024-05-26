@@ -60,6 +60,7 @@ export class LoginComponent {
             email: response.email,
             roles: response.roles
           });
+          console.log(response.token);
 
           this.router.navigateByUrl('/');
           this.sharedService.showNotification(true, "Welcome Back!", "We glad to have you back with us!");

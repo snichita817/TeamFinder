@@ -1,95 +1,102 @@
 <div *ngIf="team" class="container py-5">
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
-          <li class="breadcrumb-item"><a [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></li>
-          <li class="breadcrumb-item"><a [routerLink]="['/activity/teams', team.activityRegistered.id]">Teams</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{team.name}}</li>
-        </ol>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/activity/teams', team.activityRegistered.id]">Teams</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{team.name}}</li>
+      </ol>
     </nav>
     <div class="row">
-        <!-- Left Column -->
-        <div class="col-sm-3">
-
-            <!-- Team Details Card -->
-            <div class="card border-0 shadow mb-2">
-                <div class="card-body">
-                    <h5 class="card-title">Team Details</h5>
-                    <ul class="list-unstyled">
-                        <li class="border-top mb-2 pr-2">
-                            <span class="text-secondary">Registered for</span>
-                            <strong class="float-end"><a class="subtle-link" [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></strong>
-                        </li>
-                        <li class="mb-2">
-                            <span class="text-secondary">Created Date</span>
-                            <strong class="float-end">{{team.createdDate | date:'mediumDate'}}</strong>
-                        </li>
-                        <li class="mb-2">
-                            <span class="text-secondary">Status</span>
-                            <strong class="float-end">{{team.acceptedToActivity}}</strong>
-                        </li>
-                        <li class="mb-2">
-                            <span class="text-secondary">Private</span>
-                            <strong class="float-end">{{team.isPrivate ? 'Yes' : 'No'}}</strong>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Members Card -->
-            <div class="card border-0 shadow mb-2">
-                <div class="card-body">
-                    <h5 class="card-title">Members</h5>
-                    <ul class="list-unstyled">
-                        <li *ngFor="let member of team.members" class="mb-2">
-                            <a class="subtle-link" [routerLink]="['/user', member.id]">{{member.userName}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="card shadow mb-2">
-                <div class="card-body">
-                    <div class="row mb-3 justify-content-center">
-                        <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', team.id]" role="button">
-                            <i class="bi bi-plus-circle me-1"></i> Add Update
-                        </a>
-                    </div>
-                    <div class="row mb-3 justify-content-center">
-                        <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/team/edit', team.id]">
-                            <i class="bi bi-pencil-square me-1"></i> Edit Team
-                        </a>
-                    </div>
-                    <div class="row mb-3 justify-content-center">
-                        <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/team/membership-requests', team.id]">
-                            <i class="bi bi-people me-1"></i> Manage Join Requests
-                        </a>
-                    </div>
-                    <div class="row mb-3 justify-content-center">
-                        <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(team.id, $event)">
-                            <i class="bi bi-trash me-1"></i> Delete Team
-                        </a>
-                    </div>
-                </div>
-            </div>            
-         
+      <!-- Left Column -->
+      <div class="col-sm-3">
+        <!-- Team Details Card -->
+        <div class="card border-0 shadow mb-2">
+          <div class="card-body">
+            <h5 class="card-title">Team Details</h5>
+            <ul class="list-unstyled">
+              <li class="border-top mb-2 pr-2">
+                <span class="text-secondary">Registered for</span>
+                <strong class="float-end"><a class="subtle-link" [routerLink]="['/activities/get', team.activityRegistered.id]">{{team.activityRegistered.title}}</a></strong>
+              </li>
+              <li class="mb-2">
+                <span class="text-secondary">Created Date</span>
+                <strong class="float-end">{{team.createdDate | date:'mediumDate'}}</strong>
+              </li>
+              <li class="mb-2">
+                <span class="text-secondary">Status</span>
+                <strong class="float-end">{{team.acceptedToActivity}}</strong>
+              </li>
+              <li class="mb-2">
+                <span class="text-secondary">Private</span>
+                <strong class="float-end">{{team.isPrivate ? 'Yes' : 'No'}}</strong>
+              </li>
+              <li *ngIf="submissionUrl" class="mb-2">
+                <span class="text-secondary"><a href="{{submissionUrl}}">Your submission</a></span>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <!-- Right Column -->
-        <div class="col-sm-8 card border-0 shadow">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title text-primary">{{team.name}}</h4>
-                    <a class="btn btn-secondary custom-btn" [routerLink]="['/team/membership-request', team.id]">
-                        <i class="bi bi-person-plus me-1"></i> Apply for Team
-                    </a>
-                </div>
-                <div class="border-top pt-3">
-                    <p class="card-text">{{team.description}}</p>
-                </div>
+  
+        <!-- Members Card -->
+        <div class="card border-0 shadow mb-2">
+          <div class="card-body">
+            <h5 class="card-title">Members</h5>
+            <ul class="list-unstyled">
+              <li *ngFor="let member of team.members" class="mb-2">
+                <a class="subtle-link" [routerLink]="['/user', member.id]">{{member.userName}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+  
+        <!-- Action Buttons -->
+        <div class="card shadow mb-2">
+          <div class="card-body">
+            <div class="row mb-3 justify-content-center">
+              <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', team.id]" role="button">
+                <i class="bi bi-plus-circle me-1"></i> Add Update
+              </a>
             </div>
-        </div>        
+            <div class="row mb-3 justify-content-center">
+              <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/team/edit', team.id]">
+                <i class="bi bi-pencil-square me-1"></i> Edit Team
+              </a>
+            </div>
+            <div class="row mb-3 justify-content-center">
+              <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/team/membership-requests', team.id]">
+                <i class="bi bi-people me-1"></i> Manage Join Requests
+              </a>
+            </div>
+            <div class="row mb-3 justify-content-center">
+              <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(team.id, $event)">
+                <i class="bi bi-trash me-1"></i> Delete Team
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Right Column -->
+      <div class="col-sm-8 card border-0 shadow">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title text-primary">{{team.name}}</h4>
+            <a class="btn btn-secondary custom-btn" [routerLink]="['/team/membership-request', team.id]">
+              <i class="bi bi-person-plus me-1"></i> Apply for Team
+            </a>
+          </div>
+          <div class="border-top pt-3">
+            <p class="card-text">{{team.description}}</p>
+          </div>
+          <div class="mt-4">
+            <h5>Upload Files</h5>
+            <input type="file" (change)="handleFileInput($event)" accept=".zip" class="form-control mb-2"/>
+            <button class="btn btn-primary" (click)="uploadFileToActivity()">Upload</button>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
+  

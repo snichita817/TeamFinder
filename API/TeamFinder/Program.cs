@@ -7,6 +7,7 @@ using TeamFinder.Repositories.Interface;
 using Microsoft.IdentityModel.Tokens;
 using TeamFinder.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using TeamFinder.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamMembershipRequestRepository, TeamMembershipRequestRepository>();
+builder.Services.AddScoped<IOrganizerApplicationRepository, OrganizerApplicationRepository>();
 
 /*builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()

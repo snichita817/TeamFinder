@@ -18,4 +18,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Category> Categories { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamMembershipRequest> TeamMembershipRequests { get; set; }
+    public DbSet<OrganizerApplication> OrganizerApplications { get; set; }
 }

@@ -48,6 +48,8 @@ export class UserProfileComponent {
               };
 
               if(response.profilePictureUrl) {
+              console.log(response.profilePictureUrl)
+
                 this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${response.profilePictureUrl}`;
               }
             }

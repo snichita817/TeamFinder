@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class newMigration : Migration
+    public partial class initMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace TeamFinder.Migrations
                     University = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseOfStudy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GraduationYear = table.Column<int>(type: "int", nullable: true),
+                    ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LinkedInUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GitHubUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -212,6 +213,27 @@ namespace TeamFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrganizerApplications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganizerApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrganizerApplications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ApplicationUserCategory",
                 columns: table => new
                 {
@@ -270,6 +292,7 @@ namespace TeamFinder.Migrations
                     AcceptedToActivity = table.Column<int>(type: "int", nullable: false),
                     IsPrivate = table.Column<bool>(type: "bit", nullable: false),
                     TeamCaptainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubmissionUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ActivityRegisteredId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -420,6 +443,11 @@ namespace TeamFinder.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrganizerApplications_UserId",
+                table: "OrganizerApplications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TeamMembershipRequests_TeamId",
                 table: "TeamMembershipRequests",
                 column: "TeamId");
@@ -466,6 +494,9 @@ namespace TeamFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "OrganizerApplications");
 
             migrationBuilder.DropTable(
                 name: "TeamMembershipRequests");

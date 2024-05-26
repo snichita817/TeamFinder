@@ -9,6 +9,7 @@ export interface Team{
     acceptedToActivity: string;
     isPrivate: boolean;
     teamCaptainId: string;
+    submissionUrl: string;
     activityRegistered: Activity;
     members: User[];
 }

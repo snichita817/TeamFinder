@@ -44,4 +44,8 @@ export class TeamService {
   rejectTeam(teamId: string): Observable<Team> {
     return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/reject`, {});
   }
+
+  changeSubmissionUrl(teamId: string, submissionUrl: string) {
+    return this.http.put(`${environment.apiBaseUrl}/teams/${teamId}/upload/${submissionUrl}`, {})
+  }
 }

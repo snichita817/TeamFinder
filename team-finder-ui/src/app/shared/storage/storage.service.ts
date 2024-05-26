@@ -10,7 +10,7 @@ export class StorageService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addFile(formData: FormData): Observable<string> {
-    return this.httpClient.post(`${environment.apiBaseUrl}/storage/upload`, formData, { responseType: 'text' });
+  addFile(formData: FormData, bucket: string): Observable<string> {
+    return this.httpClient.post(`${environment.apiBaseUrl}/storage/upload?bucket=${bucket}`, formData, { responseType: 'text' });
   }
 }

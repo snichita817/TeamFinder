@@ -94,9 +94,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
     if (this.selectedFile) {
       const formData = new FormData();
-      formData.append('file', this.selectedFile, this.selectedFile.name);
+      var str = new Date().setSeconds(0,0);
+      var dt = new Date(str).toISOString();
+      formData.append('file', this.selectedFile, 'profile-picture-'+this.id+'-'+dt);
 
-      this.storageServiceSubscription = this.storageService.addFile(formData).subscribe({
+      this.storageServiceSubscription = this.storageService.addFile(formData, "profile-picture-uploads").subscribe({
         next: (fileName: string) => {
           editUserRequest.profilePictureUrl = fileName;
           this.updateUser(editUserRequest);

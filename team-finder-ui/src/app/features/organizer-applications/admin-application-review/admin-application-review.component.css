@@ -1,0 +1,8 @@
+a.subtle-link {
+    color: inherit;
+    transition: color 0.3s;
+}
+
+a.subtle-link:hover, a.subtle-link:focus {
+    color: #0056b3;
+}

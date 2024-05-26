@@ -15,6 +15,24 @@
 				<li class="nav-item">
 					<a class="nav-link active text-white" aria-current="page" routerLink="/teams">Looking For Group?</a>
 				</li>
+				<ng-container *ngIf="user !== undefined">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle text-white" role="button"
+							data-bs-toggle="dropdown" aria-expanded="false">
+							My applications
+						</a>
+						<ul class="dropdown-menu navbar-custom">
+							<li>
+								<a class="dropdown-item text-white" [routerLink]="['/my-teams']">My teams</a>
+								<a class="dropdown-item text-white" [routerLink]="['/my-team-requests']">Team applications</a>
+								<a class="dropdown-item text-white" [routerLink]="['/my-applications']">Organizer applications</a>
+							</li>
+						</ul>
+					</li>
+				</ng-container>
+				<li *ngIf="user != undefined && !user?.roles?.includes('Organizer')" class="nav-item">
+					<a class="nav-link active text-white" aria-current="page" routerLink="/apply-organizer">Become an Organizer</a>
+				</li>
 				<ng-container *ngIf="user !== undefined && user?.roles?.includes('Admin')">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle text-white" role="button"
@@ -27,6 +45,7 @@
 								<a class="dropdown-item text-white" [routerLink]="['/admin/categories']">Categories</a>
 								<a class="dropdown-item text-white" [routerLink]="['/admin/activities']">Activities</a>
 								<a class="dropdown-item text-white" [routerLink]="['/admin/updates']">Updates</a>
+								<a class="dropdown-item text-white" [routerLink]="['/admin/applications-review']">Review Organizer Applications</a>
 							</li>
 						</ul>
 					</li>
