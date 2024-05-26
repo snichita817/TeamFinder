@@ -16,6 +16,6 @@
         public string? Skills { get; set; }
         public string? PortfolioUrl { get; set; }
 
-        public List<Guid> Categories { get; set; }
+        public List<Guid>? Categories { get; set; }
     }
 }

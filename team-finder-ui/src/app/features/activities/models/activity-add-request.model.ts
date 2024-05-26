@@ -5,6 +5,7 @@ export interface ActivityAddRequest {
     startDate: Date;
     endDate: Date;
     openRegistration: boolean;
+    maxTeams: number;
     maxParticipant: number;
     createdBy: string;
     categories: string[];

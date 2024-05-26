@@ -167,9 +167,18 @@
                                 placeholder="https://your-portfolio.com/" 
                                 name="portfolioUrl">
                             </div>
+                            <div class="mt-4">
+                                <h5>Upload your CV</h5>
+                                <input type="file" (change)="handleFileInput($event)" accept=".pdf" class="form-control mb-2"/>
+                                <div class="small text-muted mb-1">Only PDFs accepted!</div>
+                                <button type="button" class="btn btn-primary" (click)="uploadCv()">Upload</button>
                             
+                                <div *ngIf="isProcessing" class="spinner-border text-primary mt-3" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>                                                     
                             <!-- Save changes button-->
-                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <button class="btn btn-primary mt-3" type="submit">Save changes</button>
                     </div>
                 </div>
             </div>

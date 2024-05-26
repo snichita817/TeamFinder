@@ -73,6 +73,7 @@ export class ActivityEditComponent {
       startDate: this.model?.startDate ?? new Date(),
       endDate: this.model?.endDate ?? new Date(),
       openRegistration: this.model?.openRegistration ?? true,
+      maxTeams: this.model?.maxTeams ?? 0,
       maxParticipant: this.model?.maxParticipant ?? 0,
       createdBy: this.model?.createdBy.id,
       categories: this.selectedCategories ?? []

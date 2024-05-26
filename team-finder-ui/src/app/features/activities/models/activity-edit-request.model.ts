@@ -7,6 +7,7 @@ export interface ActivityEditRequest {
     startDate: Date;
     endDate: Date;
     openRegistration: boolean;
+    maxTeams: number;
     maxParticipant: number;
     createdBy: string | undefined;
     categories: string[];

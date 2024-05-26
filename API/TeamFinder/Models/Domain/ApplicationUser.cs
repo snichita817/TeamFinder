@@ -25,7 +25,7 @@ namespace TeamFinder.Models.Domain
         // Consider a separate table for project links if they are numerous
         public string? PortfolioUrl { get; set; } // Optional
 
-        public ICollection<Category> Categories { get; set; }
+        public ICollection<Category>? Categories { get; set; }
         public ICollection<ApplicationUser>? CreatedActivities { get; set; }
         public ICollection<Team>? Teams { get; set; }
         public ICollection<OrganizerApplication>? OrganizerApplications { get; set; }

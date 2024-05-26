@@ -9,7 +9,7 @@ namespace TeamFinder.Models.Domain
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public RequestStatus AcceptedToActivity { get; set; } = RequestStatus.Pending;
+        public RequestStatus AcceptedToActivity { get; set; }
         public bool IsPrivate { get; set; }
         public Guid TeamCaptainId { get; set; }
         public string? SubmissionUrl { get; set; }

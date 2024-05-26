@@ -32,6 +32,7 @@ export class ActivityAddComponent implements OnDestroy {
       startDate: new Date(),
       endDate: new Date(),
       openRegistration: true,
+      maxTeams: 0,
       maxParticipant: 0,
       createdBy: userId !== null ? userId : '',
       categories: []

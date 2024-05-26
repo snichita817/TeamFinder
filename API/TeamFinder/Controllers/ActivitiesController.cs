@@ -114,6 +114,7 @@ public class ActivitiesController : Controller
             StartDate = request.StartDate,
             EndDate = request.EndDate,
             OpenRegistration = request.OpenRegistration,
+            MaxTeams = request.MaxTeams,
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "exampleHandle",
             CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
@@ -176,6 +177,7 @@ public class ActivitiesController : Controller
                 StartDate = activity.StartDate,
                 EndDate = activity.EndDate,
                 OpenRegistration = activity.OpenRegistration,
+                MaxTeams = activity.MaxTeams,
                 MaxParticipant = activity.MaxParticipant,
                 UrlHandle = activity.UrlHandle,
                 CreatedBy = new UserResponseDto

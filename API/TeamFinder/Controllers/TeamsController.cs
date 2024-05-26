@@ -45,6 +45,14 @@ namespace TeamFinder.Controllers
             };
             team.Members.Add(await _userManager.FindByIdAsync(request.TeamCaptainId));
 
+            if(team.ActivityRegistered.OpenRegistration)
+            {
+                team.AcceptedToActivity = RequestStatus.Accepted;
+            } else
+            {
+                team.AcceptedToActivity = RequestStatus.Pending;
+            }
+
             team = await _teamRepository.CreateAsync(team);
 
             var response = await BuildTeamDto(team);
@@ -220,6 +228,8 @@ namespace TeamFinder.Controllers
 
                 var result = await _teamMembershipRequestService.CreateTeamMembershipRequestAsync(teamMembershipRequest);
                 if (result == null) return BadRequest("Unable to create membership request.");
+
+                if(!team.IsPrivate) await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(result.Id);
 
                 return Ok();
             }

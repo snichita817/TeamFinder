@@ -7,6 +7,9 @@ import { UserEditRequest } from '../models/user-edit-request.model';
 import { CategoryService } from '../../categories/services/category.service';
 import { Category } from '../../categories/models/category.model';
 import { StorageService } from 'src/app/shared/storage/storage.service';
+import { ProcessCvService } from 'src/app/shared/process-cv/process-cv.service';
+import { SharedService } from 'src/app/shared/shared.service';
+import { CvInfo } from '../models/cv-info.model';
 
 @Component({
   selector: 'app-user-edit',
@@ -23,16 +26,21 @@ export class UserEditComponent implements OnInit, OnDestroy {
   getUserSubscription?: Subscription;
   editUserSubscription?: Subscription;
   storageServiceSubscription?: Subscription;
+  cvServiceSubscription?: Subscription;
 
+  cv: File | null = null;
   selectedFile: File | null = null;
   imageUrl: string = 'https://bootdey.com/img/Content/avatar/avatar7.png';
+  isProcessing: boolean = false; // Spinner control variable
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private categoryService: CategoryService,
     private router: Router,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private sharedService: SharedService,
+    private cvService: ProcessCvService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +51,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
       if (this.id) {
         this.getUserSubscription = this.userService.getUser(this.id).subscribe(result => {
           this.model = result;
-          console.log(this.model)
+          console.log(this.model);
 
           if (this.model.profilePictureUrl) {
             this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${this.model.profilePictureUrl}`;
@@ -59,6 +67,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.getUserSubscription?.unsubscribe();
     this.editUserSubscription?.unsubscribe();
     this.storageServiceSubscription?.unsubscribe();
+    this.cvServiceSubscription?.unsubscribe();
   }
 
   onFileSelected(event: any): void {
@@ -70,6 +79,53 @@ export class UserEditComponent implements OnInit, OnDestroy {
       };
       reader.readAsDataURL(this.selectedFile);
     }
+  }
+
+  handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.cv = input.files[0];
+    }
+  }
+
+  uploadCv() {
+    if (!this.cv) {
+      this.sharedService.showNotification(false, 'Error!', 'Please select a file to upload.');
+      return;
+    }
+
+    this.isProcessing = true; // Show spinner
+
+    const formData: FormData = new FormData();
+    formData.append('file', this.cv, this.cv.name);
+
+    this.cvServiceSubscription = this.cvService.uploadCv(formData).subscribe({
+      next: (cvInfo: CvInfo) => {
+        this.updateModelWithCvInfo(cvInfo);
+        this.sharedService.showNotification(true, 'Success!', 'File uploaded and processed successfully.');
+        this.isProcessing = false; // Hide spinner
+      },
+      error: (err) => {
+        console.error('Error uploading file', err);
+        this.sharedService.showNotification(false, 'Error!', 'Error uploading file.');
+        this.isProcessing = false; // Hide spinner
+      }
+    });
+  }
+
+  private updateModelWithCvInfo(cvInfo: CvInfo) {
+    if (!this.model) return;
+
+    this.model.firstName = cvInfo.firstName;
+    this.model.lastName = cvInfo.lastName;
+    this.model.email = cvInfo.email;
+    this.model.university = cvInfo.university;
+    this.model.graduationYear = cvInfo.graduationYear;
+    this.model.skills = cvInfo.skills;
+    this.model.linkedinUrl = cvInfo.linkedinUrl;
+    this.model.githubUrl = cvInfo.githubUrl;
+    this.model.portfolioUrl = cvInfo.portfolioUrl;
+    this.model.bio = cvInfo.bio;
   }
 
   onFormSubmit(): void {
