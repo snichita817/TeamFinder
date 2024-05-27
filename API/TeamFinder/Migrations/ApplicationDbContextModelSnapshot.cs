@@ -222,6 +222,12 @@ namespace TeamFinder.Migrations
                     b.Property<int>("MaxParticipant")
                         .HasColumnType("int");
 
+                    b.Property<int>("MaxTeams")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinParticipant")
+                        .HasColumnType("int");
+
                     b.Property<bool>("OpenRegistration")
                         .HasColumnType("bit");
 
@@ -254,9 +260,6 @@ namespace TeamFinder.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
@@ -340,8 +343,6 @@ namespace TeamFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -416,6 +417,12 @@ namespace TeamFinder.Migrations
 
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("bit");
+
+                    b.Property<int>("MaxParticipant")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinParticipant")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -588,17 +595,10 @@ namespace TeamFinder.Migrations
             modelBuilder.Entity("TeamFinder.Models.Activity", b =>
                 {
                     b.HasOne("TeamFinder.Models.Domain.ApplicationUser", "CreatedBy")
-                        .WithMany()
+                        .WithMany("CreatedActivities")
                         .HasForeignKey("CreatedById");
 
                     b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("TeamFinder.Models.Domain.ApplicationUser", b =>
-                {
-                    b.HasOne("TeamFinder.Models.Domain.ApplicationUser", null)
-                        .WithMany("CreatedActivities")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.OrganizerApplication", b =>
@@ -632,7 +632,7 @@ namespace TeamFinder.Migrations
                         .IsRequired();
 
                     b.HasOne("TeamFinder.Models.Domain.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("TeamMembershipRequests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -665,6 +665,8 @@ namespace TeamFinder.Migrations
                     b.Navigation("CreatedActivities");
 
                     b.Navigation("OrganizerApplications");
+
+                    b.Navigation("TeamMembershipRequests");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.Team", b =>

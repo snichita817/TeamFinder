@@ -10,6 +10,8 @@ export interface Team{
     isPrivate: boolean;
     teamCaptainId: string;
     submissionUrl: string;
+    minParticipant: number;
+    maxParticipant: number;
     activityRegistered: Activity;
     members: User[];
 }

@@ -36,15 +36,25 @@
                     <!-- Registration Type -->
                     <div class="card-body">
                         <span>
-                            Registration: {{ model.openRegistration ? 'Open' : 'Closed' }}
+                            Registration Status: <strong>{{ model.openRegistration ? 'Open' : 'Closed' }}</strong>
                         </span>
                     </div>
                     <div class="card-body">
                         <span>
-                            Max Participants: {{model.maxParticipant}}
+                            Minimum Participants per Team: <strong>{{model.minParticipant}}</strong>
                         </span>
                     </div>
-                </div>
+                    <div class="card-body">
+                        <span>
+                            Maximum Participants per Team: <strong>{{model.maxParticipant}}</strong>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <span>
+                            Maximum Number of Teams Allowed: <strong>{{model.maxTeams}}</strong>
+                        </span>
+                    </div>
+                </div>                  
                 
                 <!-- Action Buttons -->
                 <div class="card shadow mb-2">

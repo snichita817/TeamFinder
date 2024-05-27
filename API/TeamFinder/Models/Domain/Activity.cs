@@ -13,6 +13,7 @@ public class Activity
     public DateTime EndDate { get; set; }
     public bool OpenRegistration { get; set; }
     public int MaxTeams { get; set; }
+    public int MinParticipant { get; set; }
     public int MaxParticipant { get; set; }
     public string UrlHandle { get; set; }
     // Here will be the user that created the Activity

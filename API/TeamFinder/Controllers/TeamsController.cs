@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TeamFinder.Models;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.Activities;
 using TeamFinder.Models.DTO.Auth;
@@ -33,6 +34,12 @@ namespace TeamFinder.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTeam([FromBody] CreateTeamRequestDto request)
         {
+            Activity? activityRegistered = await _activityRepository.GetActivityAsync(Guid.Parse(request.ActivityRegistered));
+            if(activityRegistered == null)
+            {
+                return BadRequest("Activity not found.");
+            }
+
             // Map request to domain model
             var team = new Team
             {
@@ -40,12 +47,15 @@ namespace TeamFinder.Controllers
                 Description = request.Description,
                 IsPrivate = request.IsPrivate,
                 TeamCaptainId = Guid.Parse(request.TeamCaptainId),
-                ActivityRegistered = await _activityRepository.GetActivityAsync(Guid.Parse(request.ActivityRegistered)),
+                ActivityRegistered = activityRegistered,
+                MinParticipant = activityRegistered.MinParticipant,
+                MaxParticipant = activityRegistered.MaxParticipant,
                 Members = new List<ApplicationUser>(),
             };
             team.Members.Add(await _userManager.FindByIdAsync(request.TeamCaptainId));
 
-            if(team.ActivityRegistered.OpenRegistration)
+
+            if(activityRegistered.OpenRegistration)
             {
                 team.AcceptedToActivity = RequestStatus.Accepted;
             } else
@@ -304,6 +314,8 @@ namespace TeamFinder.Controllers
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
                 SubmissionUrl = team.SubmissionUrl,
+                MinParticipant = team.MinParticipant,
+                MaxParticipant = team.MaxParticipant,
                 ActivityRegistered = team.ActivityRegistered == null ? null : new ActivityDto
                 {
                     Id = team.ActivityRegistered.Id,

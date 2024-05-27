@@ -14,7 +14,8 @@ namespace TeamFinder.Models.DTO.Teams
         public bool IsPrivate { get; set; }
         public string TeamCaptainId { get; set; }
         public string? SubmissionUrl { get; set; }
-
+        public int MinParticipant { get; set; }
+        public int MaxParticipant { get; set; }
         public ActivityDto? ActivityRegistered { get; set; }
         public List<UserResponseDto>? Members { get; set; }
     }

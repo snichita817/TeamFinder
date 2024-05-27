@@ -37,7 +37,7 @@ export class UserProfileComponent {
                 firstName: response.firstName ?? "Your",
                 lastName: response.lastName ?? "Name",
                 university: response.university ?? "",
-                graduationYear: response.graduationYear ?? Date.now,
+                graduationYear: response.graduationYear,
                 bio: response.bio ?? "No bio yet...",
                 linkedinUrl: response.linkedinUrl ?? "",
                 githubUrl: response.githubUrl ?? "",
@@ -46,7 +46,6 @@ export class UserProfileComponent {
                 categories: response.categories ?? [],
                 courseOfStudy: 0
               };
-
               if(response.profilePictureUrl) {
               console.log(response.profilePictureUrl)
 

@@ -10,6 +10,7 @@ export interface Activity {
     endDate: Date;
     openRegistration: boolean;
     maxTeams: number;
+    minParticipant: number;
     maxParticipant: number;
     urlHandle: string;
     createdBy: User;

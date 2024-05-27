@@ -13,7 +13,8 @@ namespace TeamFinder.Models.Domain
         public bool IsPrivate { get; set; }
         public Guid TeamCaptainId { get; set; }
         public string? SubmissionUrl { get; set; }
-
+        public int MinParticipant { get; set; }
+        public int MaxParticipant { get; set; }
         public Activity ActivityRegistered { get; set; }
         public ICollection<ApplicationUser> Members { get; set; }
         public ICollection<TeamMembershipRequest>? TeamMembershipRequests { get; set; } = new List<TeamMembershipRequest>();

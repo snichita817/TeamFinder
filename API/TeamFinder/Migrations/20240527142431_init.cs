@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigration : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +42,6 @@ namespace TeamFinder.Migrations
                     GitHubUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Skills = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PortfolioUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -61,11 +60,6 @@ namespace TeamFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +106,8 @@ namespace TeamFinder.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OpenRegistration = table.Column<bool>(type: "bit", nullable: false),
+                    MaxTeams = table.Column<int>(type: "int", nullable: false),
+                    MinParticipant = table.Column<int>(type: "int", nullable: false),
                     MaxParticipant = table.Column<int>(type: "int", nullable: false),
                     UrlHandle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -293,6 +289,8 @@ namespace TeamFinder.Migrations
                     IsPrivate = table.Column<bool>(type: "bit", nullable: false),
                     TeamCaptainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubmissionUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MinParticipant = table.Column<int>(type: "int", nullable: false),
+                    MaxParticipant = table.Column<int>(type: "int", nullable: false),
                     ActivityRegisteredId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -429,11 +427,6 @@ namespace TeamFinder.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ApplicationUserId",
-                table: "AspNetUsers",
-                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

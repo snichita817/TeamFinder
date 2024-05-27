@@ -15,6 +15,7 @@ public class ActivityDto
     public DateTime? EndDate { get; set; }
     public bool? OpenRegistration { get; set; }
     public int? MaxTeams { get; set; }
+    public int? MinParticipant { get; set; }
     public int? MaxParticipant { get; set; }
     public string? UrlHandle { get; set; }
     public UserResponseDto? CreatedBy { get; set; }

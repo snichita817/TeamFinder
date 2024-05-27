@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivityService } from '../services/activity.service';
 import { Activity } from '../models/activity.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { ActivityEditRequest } from '../models/activity-edit-request.model';
 import { Category } from '../../categories/models/category.model';
-import { User } from '../../users/models/user.model';
 import { CategoryService } from '../../categories/services/category.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
@@ -15,41 +15,62 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
   templateUrl: './activity-edit.component.html',
   styleUrls: ['./activity-edit.component.css']
 })
-export class ActivityEditComponent {
+export class ActivityEditComponent implements OnInit, OnDestroy {
   public Editor = ClassicEditor;
-
-  id: string | null = null;
-  model?: Activity;
+  
+  activityForm: FormGroup;
   categories$?: Observable<Category[]>;
-  selectedCategories?: string[];
+  private routeSubscription?: Subscription;
+  private getActivitySubscription?: Subscription;
+  private editActivitySubscription?: Subscription;
+  submitted = false;
 
-  routeSubscription?: Subscription;
-  getActivitySubscription?: Subscription;
-  editActivitySubscription?: Subscription;
-
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
     private activityService: ActivityService,
     private categoryService: CategoryService,
-    private router: Router) { 
+    private router: Router
+  ) {
+    this.activityForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(5)]],
+      shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
+      longDescription: [''],
+      startDate: ['', [Validators.required, this.futureDateValidator]],
+      endDate: ['', [Validators.required, this.futureDateValidator]],
+      openRegistration: [true],
+      minParticipant: ['', [Validators.required, Validators.min(1)]],
+      maxParticipant: ['', [Validators.required, Validators.min(1)]],
+      maxTeams: ['', [Validators.required, Validators.min(1)]],
+      categories: [[]]
+    }, { validators: this.dateRangeValidator });
   }
 
   ngOnInit(): void {
     this.categories$ = this.categoryService.indexCategories();
-
     this.routeSubscription = this.route.paramMap.subscribe({
       next: (params) => {
-        this.id = params.get('id');
-
-        if(this.id){
-          this.getActivitySubscription = this.activityService.getActivity(this.id).subscribe({
+        const id = params.get('id');
+        if (id) {
+          this.getActivitySubscription = this.activityService.getActivity(id).subscribe({
             next: (result) => {
-              this.model = result;
-              this.selectedCategories = result.categories.map(x => x.id)
+              this.activityForm.patchValue({
+                title: result.title,
+                shortDescription: result.shortDescription,
+                longDescription: result.longDescription,
+                startDate: result.startDate,
+                endDate: result.endDate,
+                openRegistration: result.openRegistration,
+                minParticipant: result.minParticipant,
+                maxParticipant: result.maxParticipant,
+                maxTeams: result.maxTeams,
+                categories: result.categories.map(category => category.id)
+              });
             }
           });
         }
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -58,34 +79,49 @@ export class ActivityEditComponent {
     this.editActivitySubscription?.unsubscribe();
   }
 
-  public onReady(editor: any) {
+  futureDateValidator(control: AbstractControl): ValidationErrors | null {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const controlDate = new Date(control.value).setHours(0, 0, 0, 0);
+    return controlDate >= today ? null : { pastDate: true };
+  }
+
+  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const startDate = group.get('startDate')?.value;
+    const endDate = group.get('endDate')?.value;
+    if (startDate && endDate) {
+      return new Date(startDate) < new Date(endDate) ? null : { dateRange: true };
+    }
+    return null;
+  }
+
+  public onReady(editor: any): void {
     console.log("CKEditor5 Angular Component is ready to use!", editor);
   }
-  public onChange({ editor }: ChangeEvent) {
+
+  public onChange({ editor }: ChangeEvent): void {
     const data = editor.getData();
+    this.activityForm.get('longDescription')?.setValue(data);
   }
 
   onFormSubmit(): void {
-    const editActivityRequest: ActivityEditRequest = {
-      title: this.model?.title ?? '',
-      shortDescription: this.model?.shortDescription ?? '',
-      longDescription: this.model?.longDescription ?? '',
-      startDate: this.model?.startDate ?? new Date(),
-      endDate: this.model?.endDate ?? new Date(),
-      openRegistration: this.model?.openRegistration ?? true,
-      maxTeams: this.model?.maxTeams ?? 0,
-      maxParticipant: this.model?.maxParticipant ?? 0,
-      createdBy: this.model?.createdBy.id,
-      categories: this.selectedCategories ?? []
-    }
-    console.log(editActivityRequest)
-    if(this.id) {
-      this.editActivitySubscription = this.activityService.updateActivity(this.id, editActivityRequest).subscribe({
-        next: (response) => {
-          this.router.navigateByUrl(`/activities/get/${this.id}`);
-        },
-      });
+    this.submitted = true;
+    if (this.activityForm.invalid) {
+      return;
     }
 
+    const formValue = this.activityForm.value;
+    const editActivityRequest: ActivityEditRequest = {
+      ...formValue,
+      createdBy: localStorage.getItem('user-id') || ''
+    };
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editActivitySubscription = this.activityService.updateActivity(id, editActivityRequest).subscribe({
+        next: (response) => {
+          this.router.navigateByUrl(`/activities/get/${id}`);
+        }
+      });
+    }
   }
 }

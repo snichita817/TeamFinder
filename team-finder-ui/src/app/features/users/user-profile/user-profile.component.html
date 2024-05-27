@@ -12,7 +12,7 @@
                   <p class="text-secondary mb-1">{{model.skills}}</p>
                   <p class="text-muted font-size-sm">
                     <ng-container *ngIf="model.university">{{model.university}}, </ng-container>
-                    <ng-container *ngIf="model.graduationYear">Graduation: {{model.graduationYear}}</ng-container>
+                    <ng-container *ngIf="model.graduationYear != null">Graduation: {{model.graduationYear}}</ng-container>
                   </p>                  
                   <button class="btn btn-primary me-2">Follow</button>
                   <button class="btn btn-outline-primary">Message</button>
