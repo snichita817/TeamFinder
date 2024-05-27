@@ -79,6 +79,9 @@
                     <div class="invalid-feedback" *ngIf="submitted && activityForm.get('minParticipant')?.errors?.['min']">
                       Minimum participants must be at least 1
                     </div>
+                    <div class="invalid-feedback" *ngIf="submitted && activityForm.get('minParticipant')?.errors?.['minValue']">
+                      New minimum value of participants should be lower than previous <span>({{previousValues.minParticipant}})</span>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -92,6 +95,9 @@
                     <div class="invalid-feedback" *ngIf="submitted && activityForm.get('maxParticipant')?.errors?.['min']">
                       Maximum participants must be at least equal to minimum participants
                     </div>
+                    <div class="invalid-feedback" *ngIf="submitted && activityForm.get('maxParticipant')?.errors?.['maxValue']">
+                      New maximum value of participants should be higher than previous <span>({{previousValues.maxParticipant}})</span>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-4">
@@ -104,6 +110,9 @@
                     </div>
                     <div class="invalid-feedback" *ngIf="submitted && activityForm.get('maxTeams')?.errors?.['min']">
                       Maximum teams must be at least 1
+                    </div>
+                    <div class="invalid-feedback" *ngIf="submitted && activityForm.get('maxTeams')?.errors?.['maxTeamsValue']">
+                      New maximum value of teams should be higher than previous <span>({{previousValues.maxTeams}})</span>
                     </div>
                   </div>
                 </div>
@@ -128,4 +137,4 @@
         </div>
       </div>
     </div>
-</div>  
+</div>

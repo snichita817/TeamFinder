@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivityService } from '../services/activity.service';
-import { Activity } from '../models/activity.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ActivityEditRequest } from '../models/activity-edit-request.model';
 import { Category } from '../../categories/models/category.model';
 import { CategoryService } from '../../categories/services/category.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { ActivityEditRequest } from '../models/activity-edit-request.model';
 
 @Component({
   selector: 'app-activity-edit',
@@ -25,6 +24,12 @@ export class ActivityEditComponent implements OnInit, OnDestroy {
   private editActivitySubscription?: Subscription;
   submitted = false;
 
+  previousValues = {
+    minParticipant: undefined as number | undefined,
+    maxParticipant: undefined as number | undefined,
+    maxTeams: undefined as number | undefined,
+  };
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -39,11 +44,11 @@ export class ActivityEditComponent implements OnInit, OnDestroy {
       startDate: ['', [Validators.required, this.futureDateValidator]],
       endDate: ['', [Validators.required, this.futureDateValidator]],
       openRegistration: [true],
-      minParticipant: ['', [Validators.required, Validators.min(1)]],
-      maxParticipant: ['', [Validators.required, Validators.min(1)]],
-      maxTeams: ['', [Validators.required, Validators.min(1)]],
+      minParticipant: ['', [Validators.required, Validators.min(1), this.minimumValueValidator.bind(this)]],
+      maxParticipant: ['', [Validators.required, Validators.min(1), this.maximumValueValidator.bind(this)]],
+      maxTeams: ['', [Validators.required, Validators.min(1), this.maximumTeamsValidator.bind(this)]],
       categories: [[]]
-    }, { validators: this.dateRangeValidator });
+    }, { validators: [this.dateRangeValidator] });
   }
 
   ngOnInit(): void {
@@ -66,6 +71,10 @@ export class ActivityEditComponent implements OnInit, OnDestroy {
                 maxTeams: result.maxTeams,
                 categories: result.categories.map(category => category.id)
               });
+
+              this.previousValues.minParticipant = result.minParticipant;
+              this.previousValues.maxParticipant = result.maxParticipant;
+              this.previousValues.maxTeams = result.maxTeams;
             }
           });
         }
@@ -92,6 +101,30 @@ export class ActivityEditComponent implements OnInit, OnDestroy {
       return new Date(startDate) < new Date(endDate) ? null : { dateRange: true };
     }
     return null;
+  }
+
+  minimumValueValidator(control: AbstractControl): ValidationErrors | null {
+    const minValue = control.value;
+    if (this.previousValues.minParticipant === undefined || minValue <= this.previousValues.minParticipant) {
+      return null;
+    }
+    return { minValue: true };
+  }
+
+  maximumValueValidator(control: AbstractControl): ValidationErrors | null {
+    const maxValue = control.value;
+    if (this.previousValues.maxParticipant === undefined || maxValue >= this.previousValues.maxParticipant) {
+      return null;
+    }
+    return { maxValue: true };
+  }
+
+  maximumTeamsValidator(control: AbstractControl): ValidationErrors | null {
+    const maxValue = control.value;
+    if (this.previousValues.maxTeams === undefined || maxValue >= this.previousValues.maxTeams) {
+      return null;
+    }
+    return { maxTeamsValue: true };
   }
 
   public onReady(editor: any): void {
