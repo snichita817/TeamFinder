@@ -1,7 +1,9 @@
-<div class="container mt-3">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="shadow p-4 rounded" style="max-width: 600px;">
-            <h2>Team Registration</h2>
+      <div class="col-lg-8 col-md-10">
+        <div class="card border-0 shadow">
+          <div class="card-body p-4 p-sm-5">
+            <h3 class="card-title text-center mb-4 fw-bold">Team Registration</h3>
     
             <form [formGroup]="teamForm" (ngSubmit)="onFormSubmit()">
                 <div class="mt-2">
@@ -36,6 +38,8 @@
                     </div>
                 </div>
             </form>
+        </div>
+        </div>
         </div>
     </div>
 </div>

@@ -79,23 +79,26 @@
       </div>
   
       <!-- Right Column -->
-      <div class="col-sm-8 card border-0 shadow">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-title text-primary">{{team.name}}</h4>
-            <a class="btn btn-secondary custom-btn" [routerLink]="['/team/membership-request', team.id]">
-              <i class="bi bi-person-plus me-1"></i> Apply for Team
-            </a>
-          </div>
-          <div class="border-top pt-3">
-            <p class="card-text">{{team.description}}</p>
-          </div>
-          <div class="mt-4">
-            <h5>Upload Files</h5>
-            <input type="file" (change)="handleFileInput($event)" accept=".zip" class="form-control mb-2"/>
-            <button class="btn btn-primary" (click)="uploadFileToActivity()">Upload</button>
+      <div class="col-sm-8">
+        <div class="card border-0 shadow mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="card-title text-primary">{{team.name}}</h4>
+              <a class="btn btn-secondary custom-btn" [routerLink]="['/team/membership-request', team.id]">
+                <i class="bi bi-person-plus me-1"></i> Apply for Team
+              </a>
+            </div>
+            <div class="border-top pt-3">
+              <p class="card-text">{{team.description}}</p>
+            </div>
+            <div class="mt-4">
+              <h5>Upload Files</h5>
+              <input type="file" (change)="handleFileInput($event)" accept=".zip" class="form-control mb-2"/>
+              <button class="btn btn-primary" (click)="uploadFileToActivity()">Upload</button>
+            </div>
           </div>
         </div>
+        
       </div>
     </div>
 </div>

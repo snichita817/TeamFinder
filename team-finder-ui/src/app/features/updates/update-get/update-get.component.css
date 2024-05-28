@@ -6,18 +6,11 @@
     border-radius: 8px; /* Soften the corners for a modern look */
 }
 
-.card-title {
-    font-size: 1.5rem; /* Make the title stand out */
-    margin-bottom: 0.5rem;
+a.subtle-link {
+    color: inherit; /* Keeps the link color consistent with the text */
+    transition: color 0.3s; /* Smooth transition for color change */
 }
 
-.card-text p {
-    font-size: 1rem; /* Optimize readability */
-    line-height: 1.6; /* Improve text spacing */
-}
-
-.small {
-    display: block; /* Ensure the date is prominently displayed */
-    margin-top: 1rem; /* Add space between the content and the date */
-    font-weight: 400; /* Optional: Adjust the font weight for visual hierarchy */
+a.subtle-link:hover, a.subtle-link:focus {
+    color: #0056b3; /* Subtle blue that’s not too bright */
 }

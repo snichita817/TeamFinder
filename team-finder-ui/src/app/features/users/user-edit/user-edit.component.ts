@@ -118,7 +118,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
     this.model.firstName = cvInfo.firstName;
     this.model.lastName = cvInfo.lastName;
-    this.model.email = cvInfo.email;
     this.model.university = cvInfo.university;
     this.model.graduationYear = cvInfo.graduationYear;
     this.model.skills = cvInfo.skills;

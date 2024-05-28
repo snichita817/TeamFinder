@@ -30,10 +30,18 @@
                                 <i class="bi bi-pencil-square"></i>
                                 <a class="subtle-link ms-1" [routerLink]="['/user', team.teamCaptainId]">{{ getCaptainName(team.members, team.teamCaptainId) }}</a>
                             </p>
-                            <p class="card-text m-0">
-                                <i class="bi bi-people-fill text-secondary"></i> 
-                                {{team.members.length || 'N/A'}} / insertTotalHere
-                            </p>
+                            <ng-container *ngIf="team.members.length < team.minParticipant; else displayMax">
+                                <p class="card-text m-0" style="color: red;">
+                                    <i class="bi bi-people-fill text-secondary"></i> 
+                                    {{team.members.length || 'N/A'}} / {{team.minParticipant}}
+                                </p>
+                            </ng-container>
+                            <ng-template #displayMax>
+                                <p class="card-text m-0" style="color: green;">
+                                    <i class="bi bi-people-fill text-secondary"></i> 
+                                    {{team.members.length || 'N/A'}} / {{team.maxParticipant}}
+                                </p>
+                            </ng-template>
                             <!-- <p class="card-text m-0">
                                 <i class="bi bi-calendar-range-fill text-secondary"></i> 
                                 <small class="text-muted"> {{activity.startDate | date:'shortDate'}} - {{activity.endDate | date:'shortDate'}}</small>

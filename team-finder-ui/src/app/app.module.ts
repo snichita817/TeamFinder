@@ -51,6 +51,7 @@ import { ActivityTeamReviewComponent } from './features/activities/activity-team
 import { ApplyOrganizerComponent } from './features/organizer-applications/apply-organizer/apply-organizer.component';
 import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent,
@@ -99,6 +100,7 @@ import { AdminApplicationReviewComponent } from './features/organizer-applicatio
   ],
   imports: [
     BrowserModule,
+    FontAwesomeModule,
     CKEditorModule,
     AppRoutingModule,
     FormsModule,

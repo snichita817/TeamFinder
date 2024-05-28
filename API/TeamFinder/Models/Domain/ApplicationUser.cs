@@ -30,5 +30,6 @@ namespace TeamFinder.Models.Domain
         public ICollection<TeamMembershipRequest>? TeamMembershipRequests { get; set; }
         public ICollection<Team>? Teams { get; set; }
         public ICollection<OrganizerApplication>? OrganizerApplications { get; set; }
+        public ICollection<Review>? Reviews { get; set; }
     }
 }

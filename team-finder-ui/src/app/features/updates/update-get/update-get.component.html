@@ -1,12 +1,33 @@
 <div class="container py-5">
-    <div class="card border-0 shadow mb-4" *ngIf="model">
-      <div class="card-body">
-        <h4 class="card-title">{{ model.title }}</h4>
-        <div class="card-text mt-3">
-          <p [innerHTML]="model.text"></p>
-          <small class="text-muted">Created on: {{ model.date | date:'mediumDate' }}</small>
-        </div>
+  <div class="card border-0 shadow mb-4" *ngIf="model">
+    <div class="card-body">
+      <h4 class="card-title">{{ model.title }}</h4>
+      <div class="card-text mt-3">
+        <p [innerHTML]="model.text"></p>
+        <small class="text-muted">Created on: {{ model.date | date:'mediumDate' }}</small>
       </div>
     </div>
+  </div>
+
+  <div class="card border-0 shadow mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Comments</h5>
+      <div class="card-text">
+        <div *ngFor="let comment of comments" class="mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <a class="subtle-link" [routerLink]="['/user', comment.user.id]"><strong>{{ comment.user.userName }}</strong></a> 
+              <small class="ms-2 text-muted">{{ comment.date | date:'medium' }}</small>
+            </div>
+            <p class="text-danger" style="cursor: pointer;" (click)="deleteComment(comment.id)">Delete</p>
+          </div>
+          <p>{{ comment.text }}</p>
+        </div>
+        <div class="form-group">
+          <textarea [(ngModel)]="newCommentText" class="form-control" placeholder="Add a comment..."></textarea>
+        </div>
+        <button (click)="postComment()" class="btn btn-primary mt-2">Post Comment</button>
+      </div>
+    </div>
+  </div>
 </div>
-  

@@ -19,4 +19,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamMembershipRequest> TeamMembershipRequests { get; set; }
     public DbSet<OrganizerApplication> OrganizerApplications { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 }

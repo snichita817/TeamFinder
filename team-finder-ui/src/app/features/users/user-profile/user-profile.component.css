@@ -2,3 +2,14 @@
     pointer-events: none;
     opacity: 0.65;
 }
+
+fa-icon {
+    color: gray;
+    cursor: pointer;
+    margin-right: 5px;
+}
+  
+fa-icon.checked {
+    color: gold;
+}
+  
