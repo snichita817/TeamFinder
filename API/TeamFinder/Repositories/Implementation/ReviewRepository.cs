@@ -29,5 +29,18 @@ namespace TeamFinder.Repositories.Implementation
             await _context.SaveChangesAsync();
             return review;
         }
+
+        public async Task<bool> DeleteReviewAsync(Guid reviewId)
+        {
+            var review = await _context.Reviews.FindAsync(reviewId);
+            if (review == null)
+            {
+                return false;
+            }
+
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

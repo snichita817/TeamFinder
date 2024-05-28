@@ -54,6 +54,15 @@ public class ReviewsController : Controller
         return Ok(response);
     }
 
+    [HttpDelete("{reviewId:Guid}")]
+    public async Task<IActionResult> DeleteReview(Guid reviewId)
+    {
+        var result = await _reviewRepository.DeleteReviewAsync(reviewId);
+        if (!result)
+            return BadRequest("Failed to delete review");
+        return Ok(result);
+    }
+
     #region Helper Methods
     private async Task<ReviewDto> BuildReviewDto(Review review)
     {

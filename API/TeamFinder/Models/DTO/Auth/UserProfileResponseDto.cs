@@ -20,5 +20,6 @@ namespace TeamFinder.Models.DTO.Auth
         public string? Skills { get; set; }
         public List<CategoryDto>? Categories { get; set; } = new List<CategoryDto>();
         public string? PortfolioUrl { get; set; }
+        public float? Rating { get; set; }
     }
 }

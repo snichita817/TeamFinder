@@ -13,8 +13,7 @@
                   <ng-container *ngIf="model.university">{{model.university}}, </ng-container>
                   <ng-container *ngIf="model.graduationYear != null">Graduation: {{model.graduationYear}}</ng-container>
                 </p>                  
-                <button class="btn btn-primary me-2">Follow</button>
-                <button class="btn btn-outline-primary">Message</button>
+                <p>Rating: {{model.rating}}</p>
               </div>
             </div>
           </div>
@@ -104,7 +103,11 @@
             <h5>Reviews</h5>
             <div *ngFor="let review of reviews" class="card mb-2">
               <div class="card-body">
-                <h6>Anonymous</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6>Anonymous</h6>
+                  <p class="text-danger" style="cursor: pointer;" (click)="deleteReview(review.id)">Delete</p>
+
+                </div>
                 <p>{{ review.content }}</p>
                 <small class="text-muted">Rating: {{ review.rating }} stars</small>
                 <small class="text-muted d-block">Date: {{ review.date | date:'mediumDate' }}</small>

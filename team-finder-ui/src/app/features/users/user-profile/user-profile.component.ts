@@ -39,6 +39,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if(this.userId) {
           this.userServiceSubscription = this.userService.getUser(this.userId).subscribe({
             next: (response) => {
+              console.log(response);
               this.model = {
                 id: response.id,
                 email: response.email,
@@ -54,7 +55,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
                 skills: response.skills ?? "",
                 portfolioUrl: response.portfolioUrl ?? "",
                 categories: response.categories ?? [],
-                courseOfStudy: 0
+                courseOfStudy: 0,
+                rating: response.rating ?? 0,
               };
               if(response.profilePictureUrl) {
                 this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${response.profilePictureUrl}`;
@@ -86,6 +88,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.ngOnInit();
       });
     }
+  }
+
+  deleteReview(id: string) {
+    this.reviewService.deleteReview(id).subscribe(review => {
+      this.ngOnInit();
+    })
   }
 
   setRating(rating: number): void {

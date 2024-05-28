@@ -5,6 +5,7 @@ import { ActivityService } from '../services/activity.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Update } from '../../updates/models/update.model';
 import { SharedService } from 'src/app/shared/shared.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-activity-get',
@@ -21,10 +22,15 @@ export class ActivityGetComponent implements OnInit {
   constructor(private activityService: ActivityService,
     private route:ActivatedRoute,
     private router: Router,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    if(!this.authService.getUser()) {
+      this.sharedService.showNotification(false, "Error!", "You should login first before accessing this page!");
+      this.router.navigateByUrl('/login');
+    }
     this.routeSubscription = this.route.paramMap.subscribe({
       next: (params) => {
         this.activityId = params.get('id');

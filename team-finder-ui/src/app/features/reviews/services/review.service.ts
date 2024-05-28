@@ -19,4 +19,8 @@ export class ReviewService {
   postReview(review: AddReviewDto): Observable<Review> {
     return this.http.post<Review>(`${environment.apiBaseUrl}/reviews`, review);
   }
+
+  deleteReview(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${environment.apiBaseUrl}/reviews/${id}`);
+  }
 }

@@ -74,7 +74,7 @@ namespace TeamFinder.Controllers
         [Route("users/{id:Guid}")]
         public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            var user = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
+            var user = await _userManager.Users.Include(x => x.Categories).Include(x => x.Reviews).FirstOrDefaultAsync(x => x.Id == id.ToString());
             
             if(user is null)
             {
@@ -106,6 +106,11 @@ namespace TeamFinder.Controllers
                     }).ToList(),
                     PortfolioUrl = user.PortfolioUrl
                 };
+
+                if(roles.Contains("Organizer") && user.Reviews?.Count != 0 && user.Reviews != null)
+                {
+                    response.Rating = (float?)(user.Reviews?.Average(x => x.Rating));
+                }
 
                 return Ok(response);
             }

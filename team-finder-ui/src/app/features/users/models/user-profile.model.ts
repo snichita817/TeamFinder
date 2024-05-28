@@ -17,4 +17,5 @@ export interface UserProfile {
     skills: string;
     categories: Category[];
     portfolioUrl: string;
+    rating: number;
 }

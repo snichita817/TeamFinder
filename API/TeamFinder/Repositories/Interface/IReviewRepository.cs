@@ -6,5 +6,6 @@ namespace TeamFinder.Repositories.Interface
     {
         Task<IEnumerable<Review>> GetReviewsByOrganizerIdAsync(string organizerId);
         Task<Review> AddReviewAsync(Review review);
+        Task<bool> DeleteReviewAsync(Guid reviewId);
     }
 }
