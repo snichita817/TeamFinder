@@ -16,7 +16,6 @@ import { CategoryDeleteComponent } from './features/categories/category-delete/c
 import { CategoryEditComponent } from './features/categories/category-edit/category-edit.component';
 import { CategoryAddComponent } from './features/categories/category-add/category-add.component';
 import { LoginComponent } from './features/auth/login/login.component';
-import { authGuard } from './features/auth/guards/auth.guard';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { UsersListPrivateComponent } from './features/users/users-list-private/users-list-private.component';
 import { UserDeleteComponent } from './features/users/user-delete/user-delete.component';
@@ -39,168 +38,49 @@ import { ActivityTeamReviewComponent } from './features/activities/activity-team
 import { ApplyOrganizerComponent } from './features/organizer-applications/apply-organizer/apply-organizer.component';
 import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
+import { adminAuthGuard } from './features/auth/guards/auth.guard';
+import { organizerAuthGuard } from './features/auth/guards/auth.guard';
+
 const routes: Routes = [
-  {
-    path: '',
-    component: LandingPageComponent
-  },
-  {
-    path: 'not-found',
-    component: NotFoundComponent
-  },
-  {
-    path: 'activities',
-    component: ActivityListComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
-  },
-  {
-    path: 'admin/users',
-    component: UsersListPrivateComponent
-  },
-  {
-    path: 'users/delete/:id',
-    component: UserDeleteComponent
-  },
-  {
-    path: 'user/:id',
-    component: UserProfileComponent
-  },
-  {
-    path: 'user/edit/:id',
-    component: UserEditComponent
-  },
-  {
-    path: 'account/confirm-email',
-    component: ConfirmEmailComponent
-  },
-  {
-    path: 'account/send-email/:mode',
-    component: SendEmailComponent
-  },
-  {
-    path: 'account/reset-password',
-    component: ResetPasswordComponent
-  },
-  {
-    path: 'activities/add',
-    component: ActivityAddComponent
-  },
-  {
-    path: 'admin/activities',
-    component: ActivityListPrivateComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'admin/applications-review',
-    component: AdminApplicationReviewComponent,
-  },
-  {
-    path: 'activities/edit/:id',
-    component: ActivityEditComponent,
-  },
-  {
-    path: 'activities/delete/:id',
-    component: ActivityDeleteComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'activity/:id/teams/review',
-    component: ActivityTeamReviewComponent
-  },
-  {
-    path: 'activities/get/:id',
-    component: ActivityGetComponent
-  },
-  {
-    path: 'updates/add/:activityId',
-    component: UpdateAddComponent
-  },
-  {
-    path: 'updates/delete/:id',
-    component: UpdateDeleteComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'updates/get/:id',
-    component: UpdateGetComponent
-  },
-  {
-    path: 'updates/edit/:id',
-    component: UpdateEditComponent
-  },
-  {
-    path: 'admin/updates',
-    component: UpdateListPrivateComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'admin/categories',
-    component: CategoriesListPrivateComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'categories/delete/:id',
-    component: CategoryDeleteComponent
-  },
-  {
-    path: 'categories/edit/:id',
-    component: CategoryEditComponent
-  },
-  {
-    path: 'categories/add',
-    component: CategoryAddComponent
-  },
-  {
-    path: 'team/view/:id',
-    component: TeamGetComponent
-  },
-  {
-    path: 'team/edit/:id',
-    component: TeamEditComponent
-  },
-  {
-    path: 'teams',
-    component: TeamGetAllComponent
-  },
-  {
-    path: 'activity/:activityId/teams/register',
-    component: TeamAddComponent
-  },
-  {
-    path: 'activity/teams/:activityId',
-    component: ViewTeamsInActivityComponent
-  },
-  {
-    path: 'team/membership-request/:teamId',
-    component: TeamMembershipRequestsAddComponent
-  },
-  {
-    path: 'team/membership-requests/:teamId',
-    component: TeamMembershipRequestsViewComponent
-  },
-  {
-    path: 'team/membership-request/:memId/:res',
-    component: TeamMembershipRequestAcceptComponent
-  },
-  { path: 'apply-organizer', 
-    component: ApplyOrganizerComponent
-  },
-  {
-    path: 'application-status',
-    component: ApplicationStatusComponent
-  },
-  {
-    path: '**',
-    component: NotFoundComponent,
-    pathMatch: 'full'
-  },
+  { path: '', component: LandingPageComponent },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: 'activities', component: ActivityListComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'admin/users', component: UsersListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'users/delete/:id', component: UserDeleteComponent, canActivate: [adminAuthGuard] },
+  { path: 'user/:id', component: UserProfileComponent },
+  { path: 'user/edit/:id', component: UserEditComponent },
+  { path: 'account/confirm-email', component: ConfirmEmailComponent },
+  { path: 'account/send-email/:mode', component: SendEmailComponent },
+  { path: 'account/reset-password', component: ResetPasswordComponent },
+  { path: 'activities/add', component: ActivityAddComponent, canActivate: [organizerAuthGuard] },
+  { path: 'admin/activities', component: ActivityListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/applications-review', component: AdminApplicationReviewComponent, canActivate: [adminAuthGuard] },
+  { path: 'activities/edit/:id', component: ActivityEditComponent, canActivate: [organizerAuthGuard] },
+  { path: 'activities/delete/:id', component: ActivityDeleteComponent, canActivate: [adminAuthGuard] },
+  { path: 'activity/:id/teams/review', component: ActivityTeamReviewComponent, canActivate: [organizerAuthGuard] },
+  { path: 'activities/get/:id', component: ActivityGetComponent },
+  { path: 'updates/add/:activityId', component: UpdateAddComponent, canActivate: [organizerAuthGuard] },
+  { path: 'updates/delete/:id', component: UpdateDeleteComponent },
+  { path: 'updates/get/:id', component: UpdateGetComponent },
+  { path: 'updates/edit/:id', component: UpdateEditComponent, canActivate: [organizerAuthGuard] },
+  { path: 'admin/updates', component: UpdateListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/categories', component: CategoriesListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'categories/delete/:id', component: CategoryDeleteComponent, canActivate: [adminAuthGuard] },
+  { path: 'categories/edit/:id', component: CategoryEditComponent, canActivate: [adminAuthGuard] },
+  { path: 'categories/add', component: CategoryAddComponent, canActivate: [adminAuthGuard] },
+  { path: 'team/view/:id', component: TeamGetComponent },
+  { path: 'team/edit/:id', component: TeamEditComponent, canActivate: [organizerAuthGuard] },
+  { path: 'teams', component: TeamGetAllComponent },
+  { path: 'activity/:activityId/teams/register', component: TeamAddComponent, canActivate: [organizerAuthGuard] },
+  { path: 'activity/teams/:activityId', component: ViewTeamsInActivityComponent },
+  { path: 'team/membership-request/:teamId', component: TeamMembershipRequestsAddComponent },
+  { path: 'team/membership-requests/:teamId', component: TeamMembershipRequestsViewComponent },
+  { path: 'team/membership-request/:memId/:res', component: TeamMembershipRequestAcceptComponent, canActivate: [organizerAuthGuard] },
+  { path: 'apply-organizer', component: ApplyOrganizerComponent },
+  { path: 'application-status', component: ApplicationStatusComponent },
+  { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
