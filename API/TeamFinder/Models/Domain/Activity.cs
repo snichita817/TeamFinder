@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TeamFinder.Models.Domain;
 
 namespace TeamFinder.Models;
@@ -16,7 +17,6 @@ public class Activity
     public int MinParticipant { get; set; }
     public int MaxParticipant { get; set; }
     public string UrlHandle { get; set; }
-    // Here will be the user that created the Activity
     public ApplicationUser CreatedBy { get; set; }
     public DateTime CreatedDate { get; set; }
 

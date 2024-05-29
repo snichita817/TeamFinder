@@ -38,7 +38,7 @@ import { ActivityTeamReviewComponent } from './features/activities/activity-team
 import { ApplyOrganizerComponent } from './features/organizer-applications/apply-organizer/apply-organizer.component';
 import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
-import { adminAuthGuard } from './features/auth/guards/auth.guard';
+import { adminAuthGuard, userAuthGuard } from './features/auth/guards/auth.guard';
 import { organizerAuthGuard } from './features/auth/guards/auth.guard';
 
 const routes: Routes = [
@@ -48,6 +48,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'admin/users', component: UsersListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/updates', component: UpdateListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/categories', component: CategoriesListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/activities', component: ActivityListPrivateComponent, canActivate: [adminAuthGuard] },
+  { path: 'admin/applications-review', component: AdminApplicationReviewComponent, canActivate: [adminAuthGuard] },
   { path: 'users/delete/:id', component: UserDeleteComponent, canActivate: [adminAuthGuard] },
   { path: 'user/:id', component: UserProfileComponent },
   { path: 'user/edit/:id', component: UserEditComponent },
@@ -55,28 +59,24 @@ const routes: Routes = [
   { path: 'account/send-email/:mode', component: SendEmailComponent },
   { path: 'account/reset-password', component: ResetPasswordComponent },
   { path: 'activities/add', component: ActivityAddComponent, canActivate: [organizerAuthGuard] },
-  { path: 'admin/activities', component: ActivityListPrivateComponent, canActivate: [adminAuthGuard] },
-  { path: 'admin/applications-review', component: AdminApplicationReviewComponent, canActivate: [adminAuthGuard] },
   { path: 'activities/edit/:id', component: ActivityEditComponent, canActivate: [organizerAuthGuard] },
   { path: 'activities/delete/:id', component: ActivityDeleteComponent, canActivate: [adminAuthGuard] },
   { path: 'activity/:id/teams/review', component: ActivityTeamReviewComponent, canActivate: [organizerAuthGuard] },
   { path: 'activities/get/:id', component: ActivityGetComponent },
   { path: 'updates/add/:activityId', component: UpdateAddComponent, canActivate: [organizerAuthGuard] },
-  { path: 'updates/delete/:id', component: UpdateDeleteComponent },
+  { path: 'updates/delete/:id', component: UpdateDeleteComponent, canActivate: [organizerAuthGuard] },
   { path: 'updates/get/:id', component: UpdateGetComponent },
   { path: 'updates/edit/:id', component: UpdateEditComponent, canActivate: [organizerAuthGuard] },
-  { path: 'admin/updates', component: UpdateListPrivateComponent, canActivate: [adminAuthGuard] },
-  { path: 'admin/categories', component: CategoriesListPrivateComponent, canActivate: [adminAuthGuard] },
   { path: 'categories/delete/:id', component: CategoryDeleteComponent, canActivate: [adminAuthGuard] },
   { path: 'categories/edit/:id', component: CategoryEditComponent, canActivate: [adminAuthGuard] },
   { path: 'categories/add', component: CategoryAddComponent, canActivate: [adminAuthGuard] },
   { path: 'team/view/:id', component: TeamGetComponent },
   { path: 'team/edit/:id', component: TeamEditComponent, canActivate: [organizerAuthGuard] },
   { path: 'teams', component: TeamGetAllComponent },
-  { path: 'activity/:activityId/teams/register', component: TeamAddComponent, canActivate: [organizerAuthGuard] },
+  { path: 'activity/:activityId/teams/register', component: TeamAddComponent, canActivate: [userAuthGuard] },
   { path: 'activity/teams/:activityId', component: ViewTeamsInActivityComponent },
   { path: 'team/membership-request/:teamId', component: TeamMembershipRequestsAddComponent },
-  { path: 'team/membership-requests/:teamId', component: TeamMembershipRequestsViewComponent },
+  { path: 'team/membership-requests/:teamId', component: TeamMembershipRequestsViewComponent, canActivate: [organizerAuthGuard] },
   { path: 'team/membership-request/:memId/:res', component: TeamMembershipRequestAcceptComponent, canActivate: [organizerAuthGuard] },
   { path: 'apply-organizer', component: ApplyOrganizerComponent },
   { path: 'application-status', component: ApplicationStatusComponent },

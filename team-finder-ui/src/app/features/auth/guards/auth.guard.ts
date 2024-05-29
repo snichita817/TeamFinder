@@ -27,7 +27,10 @@ const validateUserRole = (roles: string[], route: ActivatedRouteSnapshot, state:
       if (roles.some(role => user.roles.includes(role))) {
         return true;
       } else {
-        
+        // snackBar.open('Unauthorized!', 'Close', {
+        //   duration: 3000,
+        // });
+        sharedService.showNotification(false, "Error", "Unauthorized!");
         return false;
       }
     }
@@ -53,3 +56,11 @@ export const organizerAuthGuard: CanActivateFn = (route, state) => {
   const cookieService = inject(CookieService);
   return validateUserRole(['Organizer', 'Admin'], route, state, router, authService, cookieService);
 };
+
+// Auth Guard for being logged in
+export const userAuthGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
+  const cookieService = inject(CookieService);
+  return validateUserRole(['User'], route, state, router, authService, cookieService);
+}

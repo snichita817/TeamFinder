@@ -4,6 +4,7 @@ using TeamFinder.Models.Domain;
 using TeamFinder.Repositories.Interface;
 using TeamFinder.Models;
 using TeamFinder.Models.DTO.Updates;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TeamFinder.Controllers
 {
@@ -21,6 +22,7 @@ namespace TeamFinder.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> CreateUpdate([FromBody] CreateUpdateRequestDto request)
         {
             // mapping dto to domain model
@@ -72,6 +74,7 @@ namespace TeamFinder.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> DeleteUpdate([FromRoute] Guid id)
         {
             var updateToDelete = await _updateRepository.DeleteAsync(id);
@@ -119,6 +122,7 @@ namespace TeamFinder.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> EditUpdate([FromRoute] Guid id, [FromBody] EditUpdateRequestDto request)
         {
             var update = new Update

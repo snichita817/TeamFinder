@@ -24,9 +24,6 @@
                 <div class="invalid-feedback" *ngIf="submitted && activityForm.get('shortDescription')?.errors?.['required']">
                   Short description is required
                 </div>
-                <div class="invalid-feedback" *ngIf="submitted && activityForm.get('shortDescription')?.errors?.['maxlength']">
-                  Short description cannot exceed 255 characters
-                </div>
               </div>
   
               <div class="mb-3">

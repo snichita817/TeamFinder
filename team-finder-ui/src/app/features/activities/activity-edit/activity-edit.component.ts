@@ -39,7 +39,7 @@ export class ActivityEditComponent implements OnInit, OnDestroy {
   ) {
     this.activityForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
-      shortDescription: ['', [Validators.required, Validators.maxLength(255)]],
+      shortDescription: ['', [Validators.required]],
       longDescription: [''],
       startDate: ['', [Validators.required, this.futureDateValidator]],
       endDate: ['', [Validators.required, this.futureDateValidator]],

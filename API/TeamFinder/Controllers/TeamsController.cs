@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TeamFinder.Models;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.Activities;
@@ -130,6 +131,11 @@ namespace TeamFinder.Controllers
         [HttpPut("review/{teamId:Guid}/accept")]
         public async Task<IActionResult> AcceptTeam(Guid teamId)
         {
+            if (!await IsCurrentUserActivityCreator(teamId))
+            {
+                return Forbid();
+            }
+
             var team = await _teamRepository.AcceptTeam(teamId);
 
             if (team == null)
@@ -145,6 +151,11 @@ namespace TeamFinder.Controllers
         [HttpPut("review/{teamId:Guid}/reject")]
         public async Task<IActionResult> RejectTeam(Guid teamId)
         {
+            if (!await IsCurrentUserActivityCreator(teamId))
+            {
+                return Forbid();
+            }
+
             var team = await _teamRepository.RejectTeam(teamId);
 
             if (team == null)
@@ -321,7 +332,6 @@ namespace TeamFinder.Controllers
                     Id = team.ActivityRegistered.Id,
                     Title = team.ActivityRegistered.Title,
                 },
-               // ActivityId = team.ActivityRegistered == null ? null : team.ActivityRegistered.Id.ToString(),
                 Members = users,
             };
 
@@ -347,6 +357,26 @@ namespace TeamFinder.Controllers
             };
 
             return response;
+        }
+
+        private async Task<bool> IsCurrentUserActivityCreator(Guid teamId)
+        {
+            // Get the current user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return false;
+            }
+
+            var team = await _teamRepository.GetTeamByIdAsync(teamId);
+            if (team == null)
+            {
+                return false;
+            }
+
+            var activity = await _activityRepository.GetActivityAsync(team.ActivityRegistered.Id);
+
+            return activity != null && activity.CreatedBy.Id == userId;
         }
         #endregion
     }

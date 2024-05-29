@@ -59,22 +59,22 @@
                 <!-- Action Buttons -->
                 <div class="card shadow mb-2">
                     <div class="card-body">
-                        <div class="row mb-3 justify-content-center">
+                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
                             <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', model.id]" role="button">
                                 <i class="bi bi-plus-circle me-1"></i> Add Update
                             </a>
                         </div>
-                        <div class="row mb-3 justify-content-center">
+                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
                             <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/activities/edit', model.id]">
                                 <i class="bi bi-pencil-square me-1"></i> Edit Activity
                             </a>
                         </div>
-                        <div class="row mb-3 justify-content-center">
+                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
                             <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(model.id, $event)">
                                 <i class="bi bi-trash me-1"></i> Delete Activity
                             </a>
                         </div>
-                        <div class="row mb-3 justify-content-center">
+                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
                             <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity', model.id, 'teams', 'review']">
                                 <i class="bi bi-people me-1"></i> Manage Join Requests
                             </a>
@@ -116,8 +116,8 @@
                                         <!-- Container for View and Delete -->
                                         <div>
                                             <p class="text-primary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToUpdate(update.id, $event)">Read More</p>
-                                            <p class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
-                                            <small class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
+                                            <p *ngIf="canShow()" class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
+                                            <small *ngIf="canShow()" class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
                                         </div>
                                     </div>
                                     <p [innerHTML]="update.text" class="card-text"></p>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivityService } from '../services/activity.service';
 import { Activity } from '../models/activity.model';
 import { Observable } from 'rxjs';
+import { AuthService } from '../../auth/services/auth.service';
 
 
 @Component({
@@ -12,7 +13,9 @@ import { Observable } from 'rxjs';
 export class ActivityListComponent implements OnInit {
   activities$?: Observable<Activity[]>;
   
-  constructor(private activityService: ActivityService) {
+  constructor(private activityService: ActivityService,
+    private authService: AuthService
+  ) {
   }
 
   ngOnInit(): void {
@@ -26,6 +29,14 @@ export class ActivityListComponent implements OnInit {
         console.error('Error fetching activities:', error);
       }
     });
+  }
+
+  verifyOrganizer(): boolean {
+    const user = this.authService.getUser();
+    if (!user || !user.roles) {
+      return false;
+    }
+    return user.roles.includes("Organizer") || user.roles.includes("Admin");
   }
 
 }

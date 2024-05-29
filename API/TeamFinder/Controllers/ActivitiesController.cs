@@ -9,6 +9,7 @@ using TeamFinder.Models.DTO.Teams;
 using TeamFinder.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TeamFinder.Controllers;
 [Route("api/[controller]")]
@@ -29,6 +30,7 @@ public class ActivitiesController : Controller
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin, Organizer")]
     public async Task<IActionResult> CreateActivity([FromBody] CreateActivityRequestDto request)
     {
         // Map DTO to Domain Model
@@ -104,6 +106,7 @@ public class ActivitiesController : Controller
 
     [HttpPut]
     [Route("{id:Guid}")]
+    [Authorize(Roles = "Admin, Organizer")]
     public async Task<IActionResult> EditActivity([FromRoute] Guid id, EditActivityRequestDto request)
     {
         // From DTO to Domain Model
@@ -150,6 +153,7 @@ public class ActivitiesController : Controller
 
     [HttpDelete]
     [Route("{id:Guid}")]
+    [Authorize(Roles = "Admin, Organizer")]
     public async Task<IActionResult> DeleteActivity([FromRoute] Guid id)
     {
         var deletedActivity = await _activityRepository.DeleteActivity(id);

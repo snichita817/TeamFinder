@@ -36,7 +36,7 @@ export class ActivityTeamReviewComponent {
             next: (response) => {
               this.teams = response;
 
-              console.log(this.teams)
+              console.log(this.teams[0].activityRegistered)
             }
           })
         }

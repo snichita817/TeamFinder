@@ -78,7 +78,14 @@ export class ActivityGetComponent implements OnInit {
         this.router.navigateByUrl('/activities')
       }
     })
+  }
 
+  canShow(): boolean {
+    const user = this.authService.getUser();
+    if (!user || !user.roles) {
+      return false;
+    }
+    return (user.roles.includes("Organizer") && user.id === this.model?.createdBy.id) || user.roles.includes("Admin");
   }
 
   navigateToDeleteUpdate(id: string, event?:MouseEvent) { 
