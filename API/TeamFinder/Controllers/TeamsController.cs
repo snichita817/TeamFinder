@@ -40,6 +40,15 @@ namespace TeamFinder.Controllers
             {
                 return BadRequest("Activity not found.");
             }
+            if(activityRegistered.StartDate < DateTime.Now)
+            {
+                return BadRequest("Activity has already started.");
+            }
+
+            if(activityRegistered.Teams.Count >= activityRegistered.MaxTeams)
+            {
+                return BadRequest("Activity has reached the maximum number of teams.");
+            }
 
             // Map request to domain model
             var team = new Team
@@ -53,10 +62,19 @@ namespace TeamFinder.Controllers
                 MaxParticipant = activityRegistered.MaxParticipant,
                 Members = new List<ApplicationUser>(),
             };
-            team.Members.Add(await _userManager.FindByIdAsync(request.TeamCaptainId));
+            var user = await _userManager.FindByIdAsync(request.TeamCaptainId);
+            team.Members.Add(user);
 
+            var activityTeams = await _teamRepository.GetTeamsByActivityId(activityRegistered.Id);
+            foreach (var teams in activityTeams)
+            {
+                if (teams.Members.Contains(user))
+                {
+                    return BadRequest("User is already a member of a team in this activity.");
+                }
+            }
 
-            if(activityRegistered.OpenRegistration)
+            if (activityRegistered.OpenRegistration)
             {
                 team.AcceptedToActivity = RequestStatus.Accepted;
             } else
@@ -133,7 +151,7 @@ namespace TeamFinder.Controllers
         {
             if (!await IsCurrentUserActivityCreator(teamId))
             {
-                return Forbid();
+                return Unauthorized("You are not authorized!");
             }
 
             var team = await _teamRepository.AcceptTeam(teamId);
@@ -153,7 +171,7 @@ namespace TeamFinder.Controllers
         {
             if (!await IsCurrentUserActivityCreator(teamId))
             {
-                return Forbid();
+                return Unauthorized("You are not authorized!");
             }
 
             var team = await _teamRepository.RejectTeam(teamId);
@@ -171,6 +189,11 @@ namespace TeamFinder.Controllers
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> EditTeam([FromRoute] Guid id, [FromBody] EditTeamRequestDto request)
         {
+            if(await IsCurrentUserTeamLeader(id) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             var team = new Team
             {
                 Id = id,
@@ -201,6 +224,11 @@ namespace TeamFinder.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam(Guid id)
         {
+            if (await IsCurrentUserTeamLeader(id) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             var team = await _teamRepository.DeleteTeam(id);
 
             if (team == null)
@@ -217,8 +245,15 @@ namespace TeamFinder.Controllers
         [HttpPut("{teamId:Guid}/upload/{submissionUrl}")]
         public async Task<IActionResult> ChangeSubmissionLink([FromRoute] Guid teamId, [FromRoute] string submissionUrl)
         {
+            if(await IsCurrentUserTeamLeader(teamId) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             var team = await _teamRepository.GetTeamByIdAsync(teamId);
             if (team == null) return BadRequest("Team not found.");
+            if(team.ActivityRegistered.StartDate > DateTime.Now) return BadRequest("Activity has not started yet.");
+            if (team.ActivityRegistered.EndDate < DateTime.Now) return BadRequest("Activity has ended.");
 
             team.SubmissionUrl = submissionUrl;
 
@@ -241,6 +276,35 @@ namespace TeamFinder.Controllers
                 var user = await _userManager.FindByIdAsync(request.UserId);
                 if (user == null) return BadRequest("User not found.");
 
+                // Verify if team has reached the maximum number of participants
+                if (team.Members.Count >= team.MaxParticipant) 
+                    return BadRequest("Team has reached the maximum number of participants.");
+
+                // Verify if the activity has already started or ended
+                var activity = team.ActivityRegistered;
+                if(activity.StartDate < DateTime.Now) return BadRequest("Activity has already started.");
+                if (activity.EndDate < DateTime.Now) return BadRequest("Activity has ended.");
+
+                // Verify if the user is already a member of a team in the activity
+                activity = await _activityRepository.GetActivityAsync(activity.Id);
+                if(activity == null)
+                {
+                    return BadRequest("Activity not found.");
+                }
+
+                var activityTeams = activity.Teams;
+                foreach(var t in activityTeams)
+                {
+                    var activityTeam = await _teamRepository.GetTeamByIdAsync(t.Id);
+                    
+                    if(activityTeam == null) continue;
+                    if (activityTeam.Members.Contains(user))
+                    {
+                        return BadRequest("User is already a member of a team in this activity.");
+                    }
+                }
+
+                // Create Request
                 var teamMembershipRequest = new TeamMembershipRequest
                 {
                     Team = team,
@@ -256,7 +320,6 @@ namespace TeamFinder.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception details
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
@@ -264,6 +327,10 @@ namespace TeamFinder.Controllers
         [HttpGet("{teamId}/team-membership-requests")]
         public async Task<IActionResult> GetMembershipRequests(Guid teamId)
         {
+            if(await IsCurrentUserTeamLeader(teamId) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
             var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, RequestStatus.Pending);
             
             var response = new List<TeamMembershipRequestDto>();
@@ -278,6 +345,26 @@ namespace TeamFinder.Controllers
         [HttpPut("team-membership-requests/{requestId}/accept")]
         public async Task<IActionResult> AcceptMembershipRequest(Guid requestId)
         {
+            if (!await IsCurrentUserMembershipRequestTeamLeader(requestId))
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
+            var request = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(requestId);
+            var team = await _teamRepository.GetTeamByIdAsync(request.Team.Id);
+            if(team == null) return BadRequest("Team not found.");
+
+            if(team.Members.Count >= team.MaxParticipant)
+            {
+                return BadRequest("Team has reached the maximum number of participants.");
+            }
+            var activity = await _activityRepository.GetActivityAsync(team.ActivityRegistered.Id);
+            if(activity == null)
+            {
+                return BadRequest("Activity not found.");
+            }
+            if(activity.StartDate < DateTime.Now) return BadRequest("Activity has already started.");
+
             var result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
             if (!result) return BadRequest("Unable to accept membership request.");
 
@@ -287,6 +374,11 @@ namespace TeamFinder.Controllers
         [HttpPut("team-membership-requests/{requestId}/reject")]
         public async Task<IActionResult> RejectMembershipRequest(Guid requestId)
         {
+            if (!await IsCurrentUserMembershipRequestTeamLeader(requestId))
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             var result = await _teamMembershipRequestService.RejectTeamMembershipRequestAsync(requestId);
             if (!result) return BadRequest("Unable to reject membership request.");
 
@@ -324,7 +416,7 @@ namespace TeamFinder.Controllers
                 AcceptedToActivity = team.AcceptedToActivity.ToString(),
                 IsPrivate = team.IsPrivate,
                 TeamCaptainId = team.TeamCaptainId.ToString(),
-                SubmissionUrl = team.SubmissionUrl,
+                //SubmissionUrl = team.SubmissionUrl,
                 MinParticipant = team.MinParticipant,
                 MaxParticipant = team.MaxParticipant,
                 ActivityRegistered = team.ActivityRegistered == null ? null : new ActivityDto
@@ -334,6 +426,11 @@ namespace TeamFinder.Controllers
                 },
                 Members = users,
             };
+
+            if(await IsCurrentUserTeamLeader(team.Id) || await IsCurrentUserActivityCreator(team.Id))
+            {
+                response.SubmissionUrl = team.SubmissionUrl;
+            }
 
             return response;
         }
@@ -367,6 +464,7 @@ namespace TeamFinder.Controllers
             {
                 return false;
             }
+            var isAdmin = User.IsInRole("Admin");
 
             var team = await _teamRepository.GetTeamByIdAsync(teamId);
             if (team == null)
@@ -376,8 +474,45 @@ namespace TeamFinder.Controllers
 
             var activity = await _activityRepository.GetActivityAsync(team.ActivityRegistered.Id);
 
-            return activity != null && activity.CreatedBy.Id == userId;
+            return activity != null && (activity.CreatedBy.Id == userId || isAdmin);
         }
+        
+        private async Task<bool> IsCurrentUserTeamLeader(Guid teamId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return false;
+            }
+            var isAdmin = User.IsInRole("Admin");
+
+            var team = await _teamRepository.GetTeamByIdAsync(teamId);
+            if (team == null)
+            {
+                return false;
+            }
+
+            return team.TeamCaptainId.ToString() == userId || isAdmin;
+        }
+        
+        private async Task<bool> IsCurrentUserMembershipRequestTeamLeader(Guid requestId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return false;
+            }
+            var isAdmin = User.IsInRole("Admin");
+            var request = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(requestId);
+            if (request == null)
+            {
+                return false;
+            }
+
+            return request.Team.TeamCaptainId.ToString() == userId || isAdmin;
+        }
+        
+        
         #endregion
     }
 }

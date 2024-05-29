@@ -10,6 +10,7 @@ using TeamFinder.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace TeamFinder.Controllers;
 [Route("api/[controller]")]
@@ -80,7 +81,7 @@ public class ActivitiesController : Controller
 
         if (activity is null)
         {
-            return NotFound();
+            return NotFound("Activity no more exists!");
         }
         
         var response = await BuildActivityDto(activity);
@@ -109,6 +110,11 @@ public class ActivitiesController : Controller
     [Authorize(Roles = "Admin, Organizer")]
     public async Task<IActionResult> EditActivity([FromRoute] Guid id, EditActivityRequestDto request)
     {
+        if(await IsCurrentUserActivityCreatorOrAdmin(id) == false)
+        {
+            return Unauthorized("You are not authorized!");
+        }
+
         // From DTO to Domain Model
         var activity = new Models.Activity
         {
@@ -124,7 +130,7 @@ public class ActivitiesController : Controller
             MaxParticipant = request.MaxParticipant,
             UrlHandle = "exampleHandle",
             CreatedBy = await _userManager.FindByIdAsync(request.CreatedBy),
-            CreatedDate = new DateTime(),
+            CreatedDate = DateTime.UtcNow,
             Categories = new List<Category>()
         };
 
@@ -156,6 +162,11 @@ public class ActivitiesController : Controller
     [Authorize(Roles = "Admin, Organizer")]
     public async Task<IActionResult> DeleteActivity([FromRoute] Guid id)
     {
+        if (await IsCurrentUserActivityCreatorOrAdmin(id) == false)
+        {
+            return Unauthorized("You are not authorized!");
+        }
+
         var deletedActivity = await _activityRepository.DeleteActivity(id);
 
         if (deletedActivity == null)
@@ -225,6 +236,26 @@ public class ActivitiesController : Controller
         }
 
         return null;
+    }
+    
+    private async Task<bool> IsCurrentUserActivityCreatorOrAdmin(Guid activityId)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+        {
+            return false;
+        }
+
+        var isAdmin = User.IsInRole("Admin");
+
+        var activity = await _activityRepository.GetActivityAsync(activityId);
+        if (activity == null)
+        {
+            return false;
+        }
+
+        return activity != null && (activity.CreatedBy.Id == userId || isAdmin);
+
     }
     #endregion
 }

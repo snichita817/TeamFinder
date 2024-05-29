@@ -6,6 +6,7 @@ import { Team } from '../models/team.model';
 import { TeamService } from '../services/team.service';
 import { TeamEditRequest } from '../models/team-edit-request.model';
 import { User } from '../../users/models/user.model';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-team-edit',
@@ -23,7 +24,8 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private teamService: TeamService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
@@ -69,6 +71,12 @@ export class TeamEditComponent implements OnInit, OnDestroy {
       this.teamServiceSubscription = this.teamService.editTeam(updatedTeam, this.team.id).subscribe({
         next: (response) => {
           this.router.navigateByUrl(`/team/view/${this.teamId}`);
+        },
+        error: (error) => {
+          console.log(error)
+          if(error.error) {
+            this.sharedService.showNotification(false, 'Error!', error.error);
+          }
         }
       });
     }

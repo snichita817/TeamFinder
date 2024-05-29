@@ -35,6 +35,13 @@ export class TeamMembershipRequestsViewComponent {
           this.teamMembershipServiceSubscription = this.teamMembershipService.getTeamMembershipRequests(this.teamId).subscribe({
             next: (response) => {
               this.teamMembershipRequests = response;
+            },
+            error: (error) => {
+              console.log(error)
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
+              this.router.navigateByUrl(`/team/view/${this.teamId}`)
             }
           })
         }
@@ -50,6 +57,11 @@ export class TeamMembershipRequestsViewComponent {
       next: (response) => {
         window.location.reload();
         this.sharedService.showNotification(true, 'Success!', `User ${userName} accepted successfully!`);
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
       }
     })
   }
@@ -62,6 +74,11 @@ export class TeamMembershipRequestsViewComponent {
       next: (response) => {
         window.location.reload();
         this.sharedService.showNotification(true, 'Success!', `User ${userName} declined successfully!`);
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
       }
     })
   }

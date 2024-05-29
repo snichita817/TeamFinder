@@ -51,7 +51,7 @@ export class TeamMembershipRequestsAddComponent {
             error: (error: any) => {
               if(error.error) {
                 this.sharedService.showNotification(false, 'Error!', error.error);
-                this.router.navigateByUrl('/');
+                this.router.navigateByUrl(`/team/view/${this.teamId}`);
               }
             }
           })

@@ -15,7 +15,7 @@ export class UpdateService {
   }
 
   addUpdate(model: AddUpdateRequest): Observable<void> {
-    return this.http.post<void>(`${environment.apiBaseUrl}/updates`, model);
+    return this.http.post<void>(`${environment.apiBaseUrl}/updates?addAuth=true`, model);
   }
 
   indexUpdates(): Observable<Update[]> {
@@ -23,7 +23,7 @@ export class UpdateService {
   }
 
   deleteUpdate(id: string): Observable<void>{
-    return this.http.delete<void>(`${environment.apiBaseUrl}/updates/${id}`);
+    return this.http.delete<void>(`${environment.apiBaseUrl}/updates/${id}?addAuth=true`);
   }
 
   getUpdate(id: string): Observable<Update> {
@@ -31,6 +31,6 @@ export class UpdateService {
   }
 
   editUpdate(id: string | null, editedUpdate: EditUpdateRequest | undefined): Observable<Update> {
-    return this.http.put<Update>(`${environment.apiBaseUrl}/updates/${id}`, editedUpdate);
+    return this.http.put<Update>(`${environment.apiBaseUrl}/updates/${id}?addAuth=true`, editedUpdate);
   }
 }

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-update-edit',
@@ -23,7 +24,8 @@ export class UpdateEditComponent {
 
   constructor(private route : ActivatedRoute,
     private updateService: UpdateService,
-    private router: Router) {}
+    private router: Router,
+    private sharedService: SharedService) {}
 
   ngOnInit() {
     this.routeSubscription = this.route.paramMap.subscribe({
@@ -34,6 +36,12 @@ export class UpdateEditComponent {
           this.updateServiceSubscription = this.updateService.getUpdate(this.id).subscribe({
             next: (response) => {
               this.model = response;
+            },
+            error: (error) => {
+              console.log(error)
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
             }
           })
         }
@@ -68,6 +76,12 @@ export class UpdateEditComponent {
       .subscribe({
         next: (response) => {
           this.router.navigateByUrl(`/activities/get/${this.model?.activityId}`);
+        },
+        error: (error) => {
+          console.log(error)
+          if(error.error) {
+            this.sharedService.showNotification(false, 'Error!', error.error);
+          }
         }
       })
   }

@@ -5,6 +5,8 @@ using TeamFinder.Repositories.Interface;
 using TeamFinder.Models;
 using TeamFinder.Models.DTO.Updates;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using TeamFinder.Repositories.Implementation;
 
 namespace TeamFinder.Controllers
 {
@@ -25,6 +27,11 @@ namespace TeamFinder.Controllers
         [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> CreateUpdate([FromBody] CreateUpdateRequestDto request)
         {
+            if(await IsCurrentUserActivityCreatorOrAdmin(request.ActivityId) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             // mapping dto to domain model
             var update = new Update
             {
@@ -77,6 +84,10 @@ namespace TeamFinder.Controllers
         [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> DeleteUpdate([FromRoute] Guid id)
         {
+            if (await IsCurrentUserActivityCreatorOrAdmin(id) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
             var updateToDelete = await _updateRepository.DeleteAsync(id);
 
             if(updateToDelete == null)
@@ -125,6 +136,11 @@ namespace TeamFinder.Controllers
         [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> EditUpdate([FromRoute] Guid id, [FromBody] EditUpdateRequestDto request)
         {
+            if(await IsCurrentUserActivityCreatorOrAdmin(id) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
             var update = new Update
             {
                 Id = id,
@@ -152,5 +168,38 @@ namespace TeamFinder.Controllers
 
             return Ok(response);
         }
+
+        #region Helper Methods
+        private async Task<bool> IsCurrentUserActivityCreatorOrAdmin(Guid activityId)
+        {
+            // Get the current user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return false;
+            }
+            var isAdmin = User.IsInRole("Admin");
+
+            Activity? activity = null;
+
+            var update = await _updateRepository.GetAsync(activityId);
+            if(update == null)
+            {
+                activity = await _activityRepository.GetActivityAsync(activityId);
+            }
+            else
+            {
+                activity = await _activityRepository.GetActivityAsync(update.Activity.Id);
+            }
+            if (activity == null)
+            {
+                return false;
+            }
+
+            return activity != null && (activity.CreatedBy.Id == userId || isAdmin);
+        }
+
+
+        #endregion
     }
 }

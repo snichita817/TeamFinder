@@ -18,7 +18,7 @@ export class TeamService {
   }
 
   getTeam(id: string): Observable<Team> {
-    return this.http.get<Team>(`${environment.apiBaseUrl}/teams/${id}`);
+    return this.http.get<Team>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`);
   }
 
   getAllTeams(): Observable<Team[]> {
@@ -26,11 +26,11 @@ export class TeamService {
   }
 
   editTeam(request: TeamEditRequest, id: string): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}`, request)
+    return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`, request)
   }
 
   deleteTeam(id: string) {
-    return this.http.delete<Team>(`${environment.apiBaseUrl}/teams/${id}`);
+    return this.http.delete<Team>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`);
   }
 
   indexByActivity(activityId: string): Observable<Team[]> {
@@ -38,14 +38,14 @@ export class TeamService {
   }
 
   acceptTeam(teamId: string): Observable<Team> {
-    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/accept`, {});
+    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/accept?addAuth=true`, {});
   }
 
   rejectTeam(teamId: string): Observable<Team> {
-    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/reject`, {});
+    return this.http.put<Team>(`${environment.apiBaseUrl}/teams/review/${teamId}/reject?addAuth=true`, {});
   }
 
   changeSubmissionUrl(teamId: string, submissionUrl: string) {
-    return this.http.put(`${environment.apiBaseUrl}/teams/${teamId}/upload/${submissionUrl}`, {})
+    return this.http.put(`${environment.apiBaseUrl}/teams/${teamId}/upload/${submissionUrl}?addAuth=true`, {})
   }
 }

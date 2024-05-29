@@ -67,6 +67,12 @@ export class TeamAddComponent {
         next: (response) => {
           this.sharedService.showNotification(true, 'Congratulations!', `Team ${model.name} registered successfully!`);
           this.router.navigateByUrl(`/activities/get/${this.activityId}`);
+        },
+        error: (error: any) => {
+          if(error.error) {
+            this.sharedService.showNotification(false, 'Error!', error.error);
+            this.router.navigateByUrl(`/activities/get/${this.activityId}`);
+          }
         }
       })
       console.log(model);

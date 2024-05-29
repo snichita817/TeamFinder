@@ -39,6 +39,12 @@ export class ActivityGetComponent implements OnInit {
           this.activityServiceSubscription = this.activityService.getActivity(this.activityId).subscribe({
             next: (result) => {
               this.model = result;
+            },
+            error: (error) => {
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
+              this.router.navigateByUrl('/activities')
             }
           });
         }
@@ -75,6 +81,12 @@ export class ActivityGetComponent implements OnInit {
     this.activityServiceSubscription = this.activityService.deleteActivity(id).subscribe({
       next: (response) => {
         this.sharedService.showNotification(true, "Succcess!", `Activity ${response.title} deleted successfully!`);
+        this.router.navigateByUrl('/activities')
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
         this.router.navigateByUrl('/activities')
       }
     })

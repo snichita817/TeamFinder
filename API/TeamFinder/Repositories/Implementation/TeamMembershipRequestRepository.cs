@@ -14,6 +14,20 @@ namespace TeamFinder.Repositories.Implementation
             _context = context;
         }
 
+        public async Task<TeamMembershipRequest> GetTeamMembershipRequestAsync(Guid requestId)
+        {
+            var request = await _context.TeamMembershipRequests
+                .Include(mr => mr.User)
+                .Include(mr => mr.Team)
+                .FirstOrDefaultAsync(mr => mr.Id == requestId);
+            if(request == null)
+            {
+                throw new Exception("Request not found");
+            }
+
+            return request;
+        }
+
         public async Task<bool> AcceptTeamMembershipRequestAsync(Guid requestId)
         {
             var request = await _context.TeamMembershipRequests.Include(x=>x.Team).Include(x=>x.User).FirstOrDefaultAsync(mem => mem.Id == requestId);

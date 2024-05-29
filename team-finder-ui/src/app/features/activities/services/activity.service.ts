@@ -14,7 +14,7 @@ export class ActivityService {
   constructor(private http: HttpClient) { }
 
   addActivity(model: ActivityAddRequest): Observable<void> {
-    return this.http.post<void>(`${environment.apiBaseUrl}/activities`, model);
+    return this.http.post<void>(`${environment.apiBaseUrl}/activities?addAuth=true`, model);
   }
 
   getActivity(id: string): Observable<Activity> {

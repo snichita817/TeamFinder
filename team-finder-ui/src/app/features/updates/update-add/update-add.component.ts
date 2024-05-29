@@ -5,6 +5,7 @@ import { UpdateService } from '../services/update.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-update-add',
@@ -21,7 +22,8 @@ export class UpdateAddComponent {
 
   constructor(private updateService: UpdateService,
     private route: ActivatedRoute,
-    private router: Router){
+    private router: Router,
+    private sharedService: SharedService){
       this.model = {
         title: '',
         text: '',
@@ -49,6 +51,12 @@ export class UpdateAddComponent {
           .subscribe({
             next: (response) => {
               this.router.navigateByUrl(`activities/get/${this.activityId}`,);
+            },
+            error: (error) => {
+              console.log(error)
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
             }
           })
         }

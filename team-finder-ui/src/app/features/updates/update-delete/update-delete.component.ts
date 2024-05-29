@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UpdateService } from '../services/update.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-update-delete',
@@ -16,7 +17,8 @@ export class UpdateDeleteComponent {
 
   constructor(private route: ActivatedRoute,
     private updateService: UpdateService,
-    private router: Router) {}
+    private router: Router,
+    private sharedService: SharedService) {}
   
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe({
@@ -27,6 +29,11 @@ export class UpdateDeleteComponent {
           this.deleteUpdateSubscription = this.updateService.deleteUpdate(this.id).subscribe({
             next: (response) => {
               this.router.navigateByUrl('');
+            },
+            error: (error) => {
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
             }
           })
         }

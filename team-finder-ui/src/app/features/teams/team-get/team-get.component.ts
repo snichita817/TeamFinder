@@ -5,6 +5,7 @@ import { StorageService } from 'src/app/shared/storage/storage.service';
 import { Subscription } from 'rxjs';
 import { Team } from '../models/team.model';
 import { SharedService } from 'src/app/shared/shared.service';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-team-get',
@@ -26,7 +27,8 @@ export class TeamGetComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private storageService: StorageService,
     private sharedService: SharedService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -38,8 +40,7 @@ export class TeamGetComponent implements OnInit, OnDestroy {
           this.teamServiceSubscription = this.teamService.getTeam(this.teamId).subscribe({
             next: (response) => {
               this.team = response;
-
-              if(response.submissionUrl) {
+              if(response.submissionUrl && this.canShowSubmissionLink()) {
                 console.log(response.submissionUrl)
                 this.submissionUrl = `https://storage.googleapis.com/team-submissions/${response.submissionUrl}`
               }
@@ -59,6 +60,12 @@ export class TeamGetComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.sharedService.showNotification(true, 'Success!', `Team ${response.name} has been deleted successfully!`);
         this.router.navigateByUrl(`/activity/teams/${response.activityRegistered.id}`);
+      },
+      error: (error) => {
+        console.log(error)
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
       }
     });
   }
@@ -71,6 +78,11 @@ export class TeamGetComponent implements OnInit, OnDestroy {
   }
 
   uploadFileToActivity() {
+    if(this.canShow() == false) {
+      this.sharedService.showNotification(false, "Error!", "You are not the team leader to upload files!");
+      return;
+    }
+
     if (!this.fileToUpload) {
       this.sharedService.showNotification(false, 'Error!', 'Please select a file to upload.');
       return;
@@ -84,11 +96,16 @@ export class TeamGetComponent implements OnInit, OnDestroy {
     if(this.teamId) {
       this.storageService.addFile(formData, 'team-submissions').subscribe({
         next: (fileName: string) => {
-          this.sharedService.showNotification(true, 'Success!', `File ${this.fileToUpload?.name} has been uploaded successfully!`);
   
           this.teamServiceSubscription = this.teamService.changeSubmissionUrl(this.teamId ?? '', fileName).subscribe({
             next: (response) => {
-              this.ngOnInit(); // refresh page
+              this.sharedService.showNotification(true, 'Success!', `File ${this.fileToUpload?.name} has been uploaded successfully!`);
+              this.ngOnInit();
+            },
+            error: (error) => {
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
             }
           })
         },
@@ -98,6 +115,31 @@ export class TeamGetComponent implements OnInit, OnDestroy {
       });
     }
     
+  }
+
+  canShow(): boolean {
+    const user = this.authService.getUser();
+    if (!user || !user.roles) {
+      return false;
+    }
+    return user.id === this.team?.teamCaptainId || user.roles.includes("Admin");
+  }
+
+  canShowSubmissionLink(): boolean {
+    const user = this.authService.getUser();
+    if (!user) {
+      return false;
+    }
+    if(user.roles.includes("Admin") || user.roles.includes("Organizer")) {
+      return true;
+    }
+
+    const team = this.team;
+    
+    if(!team) {
+      return false;
+    }
+    return team.members.find(mem => mem.id === user.id) == undefined ? false : true;
   }
 
   ngOnDestroy() {

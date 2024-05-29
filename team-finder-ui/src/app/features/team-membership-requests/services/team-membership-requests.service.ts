@@ -13,18 +13,18 @@ export class TeamMembershipRequestsService {
   constructor(private http: HttpClient) { }
 
   addTeamMembershipRequest(request: TeamMembershipRequestsAdd): Observable<void> {
-    return this.http.post<void>(`${environment.apiBaseUrl}/teams/team-membership-requests`, request);
+    return this.http.post<void>(`${environment.apiBaseUrl}/teams/team-membership-requests?addAuth=true`, request);
   }
 
   getTeamMembershipRequests(teamId: string): Observable<TeamMembershipRequest[]> {
-    return this.http.get<TeamMembershipRequest[]>(`${environment.apiBaseUrl}/teams/${teamId}/team-membership-requests`)
+    return this.http.get<TeamMembershipRequest[]>(`${environment.apiBaseUrl}/teams/${teamId}/team-membership-requests?addAuth=true`)
   }
 
   acceptTeamMembershipReuqest(requestId: string): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/teams/team-membership-requests/${requestId}/accept`, {});
+    return this.http.put<void>(`${environment.apiBaseUrl}/teams/team-membership-requests/${requestId}/accept?addAuth=true`, {});
   }
 
   declineTeamMembershipReuqest(requestId: string): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/teams/team-membership-requests/${requestId}/reject`, {});
+    return this.http.put<void>(`${environment.apiBaseUrl}/teams/team-membership-requests/${requestId}/reject?addAuth=true`, {});
   }
 }

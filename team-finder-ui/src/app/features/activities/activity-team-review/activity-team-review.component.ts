@@ -35,7 +35,6 @@ export class ActivityTeamReviewComponent {
           this.activityServiceSubscription = this.activityService.getTeamsForReview(this.activityId).subscribe({
             next: (response) => {
               this.teams = response;
-
               console.log(this.teams[0].activityRegistered)
             }
           })
@@ -52,8 +51,12 @@ export class ActivityTeamReviewComponent {
     this.teamServiceSubscription = this.teamService.acceptTeam(teamId).subscribe({
       next: (response) => {
         this.sharedService.showNotification(true, "Success!", `${response.name} accepted to the activity!`)
-        console.log(this.activityId)
-        this.router.navigateByUrl(`/activity/${this.activityId}/teams/review`)
+        this.ngOnInit()
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
       }
     })
   }
@@ -66,7 +69,12 @@ export class ActivityTeamReviewComponent {
     this.teamServiceSubscription = this.teamService.rejectTeam(teamId).subscribe({
       next: (response) => {
         this.sharedService.showNotification(true, "Success!", `${response.name} rejected from the activity!`)
-        this.router.navigateByUrl(`/activity/${this.activityId}/teams/review`)
+        this.ngOnInit()
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
       }
     })
   }
