@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iText.Commons.Actions.Contexts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeamFinder.Data;
 using TeamFinder.Models.Domain;
@@ -26,19 +27,56 @@ namespace TeamFinder.Repositories.Implementation
             return await _dbContext.Teams.Include(x => x.Members).Include(x=>x.TeamMembershipRequests).Include(x=>x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<IEnumerable<Team>> GetAllTeamsAsync()
+        public async Task<IEnumerable<Team>> GetAllTeamsAsync(string? query)
         {
-            return await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).ToListAsync();
+            var teams = _dbContext.Teams.AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(query) == false)
+            {
+                teams = teams.Where(t => t.Name.Contains(query));
+            }
+
+
+            return await teams.Include(x => x.Members).Include(x => x.ActivityRegistered).ToListAsync();
         }
 
-        public async Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId)
+        public async Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId, string? query)
         {
-            return await _dbContext.Teams.Include(x => x.Members).Include(x=>x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId).ToListAsync();
+            var teams = _dbContext.Teams.AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(query) == false)
+            {
+                teams = teams.Where(t => t.Name.Contains(query));
+            }
+
+            // Pagination
+            return await teams.Include(x => x.Members).Include(x => x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId)
+        public async Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId, string? query)
         {
-            return await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId && t.AcceptedToActivity == RequestStatus.Pending).ToListAsync();
+            var teams = _dbContext.Teams.AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(query) == false)
+            {
+                teams = teams.Where(t => t.Name.Contains(query));
+            }
+
+            return await teams
+                .Include(x => x.Members).Include(x => x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId && t.AcceptedToActivity == RequestStatus.Pending).ToListAsync();
+
+            //return await _dbContext.Teams.Include(x => x.Members).Include(x => x.ActivityRegistered).Where(t => t.ActivityRegistered.Id == activityId && t.AcceptedToActivity == RequestStatus.Pending).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Team>> GetTeamsByUserId(string userId)
+        {
+            return await _dbContext.Teams
+                .Include(t => t.Members)
+                .Where(t => t.Members.Any(m => m.Id == userId))
+                .ToListAsync();
         }
 
         public async Task<Team> AcceptTeam(Guid teamId)

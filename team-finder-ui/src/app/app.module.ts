@@ -53,6 +53,8 @@ import { ApplicationStatusComponent } from './features/organizer-applications/ap
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTabsModule } from '@angular/material/tabs';
+import { GetUserteamsComponent } from './features/teams/get-userteams/get-userteams.component';
+import { GetUserRequestsComponent } from './features/team-membership-requests/get-user-requests/get-user-requests.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +95,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     TeamGetComponent,
     TeamEditComponent,
     TeamGetAllComponent,
+    GetUserteamsComponent,
+    GetUserRequestsComponent,
     TeamMembershipRequestsAddComponent,
     TeamMembershipRequestsViewComponent,
     TeamMembershipRequestAcceptComponent,

@@ -9,11 +9,13 @@ namespace TeamFinder.Repositories.Interface
 
         Task<Team?> GetTeamByIdAsync(Guid id);
 
-        Task<IEnumerable<Team>> GetAllTeamsAsync();
+        Task<IEnumerable<Team>> GetAllTeamsAsync(string? query = null);
 
-        Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId);
+        Task<IEnumerable<Team>> GetTeamsByActivityId(Guid activityId, string? query = null);
 
-        Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId);
+        Task<IEnumerable<Team>> GetActivityUreviewedTeams(Guid activityId, string? query = null);
+
+        Task<IEnumerable<Team>> GetTeamsByUserId(string userId);
 
         Task<Team> AcceptTeam(Guid teamId);
 

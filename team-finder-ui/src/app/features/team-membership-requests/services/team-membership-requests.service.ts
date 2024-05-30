@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TeamMembershipRequestsAdd } from '../models/team-membership-add-req.model';
 import { Observable } from 'rxjs';
@@ -16,8 +16,14 @@ export class TeamMembershipRequestsService {
     return this.http.post<void>(`${environment.apiBaseUrl}/teams/team-membership-requests?addAuth=true`, request);
   }
 
-  getTeamMembershipRequests(teamId: string): Observable<TeamMembershipRequest[]> {
-    return this.http.get<TeamMembershipRequest[]>(`${environment.apiBaseUrl}/teams/${teamId}/team-membership-requests?addAuth=true`)
+  getTeamMembershipRequests(teamId: string, queryText?: string): Observable<TeamMembershipRequest[]> {
+    let params = new HttpParams();
+    if(queryText) {
+      params = params.set('query', queryText);
+    }
+    return this.http.get<TeamMembershipRequest[]>(`${environment.apiBaseUrl}/teams/${teamId}/team-membership-requests?addAuth=true`, {
+      params: params
+    })
   }
 
   acceptTeamMembershipReuqest(requestId: string): Observable<void> {
@@ -26,5 +32,9 @@ export class TeamMembershipRequestsService {
 
   declineTeamMembershipReuqest(requestId: string): Observable<void> {
     return this.http.put<void>(`${environment.apiBaseUrl}/teams/team-membership-requests/${requestId}/reject?addAuth=true`, {});
+  }
+
+  getUserTeamMembershipRequest(): Observable<TeamMembershipRequest[]> {
+    return this.http.get<TeamMembershipRequest[]>(`${environment.apiBaseUrl}/teams/my-team-membership-requests?addAuth=true`)
   }
 }

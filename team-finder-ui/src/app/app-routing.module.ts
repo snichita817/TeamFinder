@@ -40,6 +40,8 @@ import { ApplicationStatusComponent } from './features/organizer-applications/ap
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
 import { adminAuthGuard, userAuthGuard } from './features/auth/guards/auth.guard';
 import { organizerAuthGuard } from './features/auth/guards/auth.guard';
+import { GetUserteamsComponent } from './features/teams/get-userteams/get-userteams.component';
+import { GetUserRequestsComponent } from './features/team-membership-requests/get-user-requests/get-user-requests.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -72,6 +74,9 @@ const routes: Routes = [
   { path: 'categories/add', component: CategoryAddComponent, canActivate: [adminAuthGuard] },
   { path: 'team/view/:id', component: TeamGetComponent },
   { path: 'team/edit/:id', component: TeamEditComponent },
+  { path: 'my-teams', component: GetUserteamsComponent},
+  { path: 'my-team-requests', component: GetUserRequestsComponent },
+  { path: 'my-applications', component: ApplicationStatusComponent },
   { path: 'teams', component: TeamGetAllComponent },
   { path: 'activity/:activityId/teams/register', component: TeamAddComponent, canActivate: [userAuthGuard] },
   { path: 'activity/teams/:activityId', component: ViewTeamsInActivityComponent },

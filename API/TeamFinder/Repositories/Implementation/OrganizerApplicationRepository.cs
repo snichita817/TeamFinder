@@ -23,6 +23,14 @@ namespace TeamFinder.Data.Repositories
                                  .ToListAsync();
         }
 
+        public async Task<IEnumerable<OrganizerApplication>> GetUserApplications(string userId)
+        {
+            return await _context.OrganizerApplications
+                                 .Include(app => app.User)
+                                 .Where(app => app.User.Id == userId)
+                                 .ToListAsync();
+        }
+
         public async Task<OrganizerApplication> GetApplicationByIdAsync(Guid id)
         {
             var organizerApplications = await _context.OrganizerApplications

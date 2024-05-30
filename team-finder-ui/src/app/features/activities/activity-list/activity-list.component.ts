@@ -39,4 +39,16 @@ export class ActivityListComponent implements OnInit {
     return user.roles.includes("Organizer") || user.roles.includes("Admin");
   }
 
+  onSearch(queryText: string) {
+    this.activities$ = this.activityService.indexActivities(queryText);
+
+    this.activities$.subscribe({
+      next: (activities) => {
+        console.log('Activities:', activities);
+      },
+      error: (error) => {
+        console.error('Error fetching activities:', error);
+      }
+    });
+  }
 }

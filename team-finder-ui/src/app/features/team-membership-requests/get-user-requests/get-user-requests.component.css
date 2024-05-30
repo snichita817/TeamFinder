@@ -1,0 +1,20 @@
+a.subtle-link {
+    color: inherit;
+    transition: color 0.3s;
+}
+
+a.subtle-link:hover, a.subtle-link:focus {
+    color: #0056b3;
+}
+
+.text-pending {
+    color: #ffc107; /* Bootstrap warning color */
+  }
+  
+  .text-accepted {
+    color: #28a745; /* Bootstrap success color */
+  }
+  
+  .text-rejected {
+    color: #dc3545; /* Bootstrap danger color */
+  }

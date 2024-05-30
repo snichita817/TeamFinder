@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Teams</h2>
+    <div class="d-flex flex-column align-items-center">
+        <div *ngIf="teams.length > 0" class="w-100">
+            <div *ngFor="let team of teams" class="card mb-3 shadow-sm" style="max-width: 800px;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="subtle-link" [routerLink]="['/team/view', team.id]">{{ team.name }}</a>
+                    </h5>
+                    <p class="card-text"><strong>Status:</strong> {{ team.acceptedToActivity }}</p>
+                    <p class="card-text"><strong>Number of members:</strong> {{ team.members.length }}</p>
+                    <p *ngIf="team.isPrivate" class="card-text text-danger"><strong>Private Team</strong></p>
+                    <p *ngIf="!team.isPrivate" class="card-text text-success"><strong>Public Team</strong></p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="teams.length === 0" class="text-center">
+            <p>You have no teams created at the moment.</p>
+        </div>
+    </div>
+</div>

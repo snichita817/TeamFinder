@@ -1,16 +1,6 @@
 <div class="container mt-5">
     
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Teams registered for activity</h2>
-    </div>
     
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h5 class="card-title">Welcome to the Teams Page!</h5>
-            <p class="card-text">Here you can find teams that are registered for the selected activity. Joining a team can help you collaborate with others, build your portfolio, and increase your chances of success in the activity.</p>
-            <p class="card-text">To join a team, simply click on the team name to view more details and reach out to the team captain. You can also see the number of members currently in each team. If you have any questions, feel free to contact the team captain.</p>
-        </div>
-    </div>
     <ng-container *ngIf="teams$ | async as teams; else loading">
         <ng-container *ngIf="teams.length > 0; else noTeams">
             <nav aria-label="breadcrumb">
@@ -21,6 +11,21 @@
                   <li class="breadcrumb-item active" aria-current="page">Teams</li>
                 </ol>
             </nav>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Teams registered for activity</h2>
+                <div class="d-flex">
+                    <input type="text" class="form-control me-2" placeholder="Search teams" style="width: 200px;" #queryText>
+                    <button type="button" class="btn btn-info me-2" (click)="onSearch(queryText.value)">Search</button>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to the Teams Page!</h5>
+                    <p class="card-text">Here you can find teams that are registered for the selected activity. Joining a team can help you collaborate with others, build your portfolio, and increase your chances of success in the activity.</p>
+                    <p class="card-text">To join a team, simply click on the team name to view more details and reach out to the team captain. You can also see the number of members currently in each team. If you have any questions, feel free to contact the team captain.</p>
+                </div>
+            </div>
+            
             <div *ngFor="let team of teams" class="mb-3">
                 <div class="card border-0 shadow-sm custom-card" [routerLink]="['/team/view', team.id]">
                     <div class="card-body">
@@ -60,6 +65,14 @@
             </div>
         </ng-container>
         <ng-template #noTeams>
+            <h2>Teams registered for activity</h2>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to the Teams Page!</h5>
+                    <p class="card-text">Here you can find teams that are registered for the selected activity. Joining a team can help you collaborate with others, build your portfolio, and increase your chances of success in the activity.</p>
+                    <p class="card-text">To join a team, simply click on the team name to view more details and reach out to the team captain. You can also see the number of members currently in each team. If you have any questions, feel free to contact the team captain.</p>
+                </div>
+            </div>
             <div class="alert alert-warning" role="alert">
                 There are no teams registered for this activity at the moment. Please check back later or create a new team.
             </div>

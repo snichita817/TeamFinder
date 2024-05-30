@@ -21,6 +21,10 @@ export class OrganizerApplicationService {
     return this.http.get<OrganizerApplication[]>(`${this.apiUrl}?addAuth=true`);
   }
 
+  getUserApplications(): Observable<OrganizerApplication[]> {
+    return this.http.get<OrganizerApplication[]>(`${this.apiUrl}/my-applications?addAuth=true`);
+  }
+
   getApplication(id: string): Observable<OrganizerApplication> {
     return this.http.get<OrganizerApplication>(`${this.apiUrl}/${id}?addAuth=true`);
   }

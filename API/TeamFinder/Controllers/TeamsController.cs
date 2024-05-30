@@ -105,9 +105,9 @@ namespace TeamFinder.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTeams()
+        public async Task<IActionResult> GetAllTeams([FromQuery] string? query)
         {
-            var teams = await _teamRepository.GetAllTeamsAsync();
+            var teams = await _teamRepository.GetAllTeamsAsync(query);
 
             List<TeamDto> response = new List<TeamDto>();
             foreach (var team in teams)
@@ -119,9 +119,29 @@ namespace TeamFinder.Controllers
         }
 
         [HttpGet("activity/{activityId}")]
-        public async Task<IActionResult> GetTeamsByActivityId(Guid activityId)
+        public async Task<IActionResult> GetTeamsByActivityId(Guid activityId, [FromQuery] string? query)
         {
-            var teams = await _teamRepository.GetTeamsByActivityId(activityId);
+            var teams = await _teamRepository.GetTeamsByActivityId(activityId, query);
+
+            List<TeamDto> response = new List<TeamDto>();
+            foreach (var team in teams)
+            {
+                response.Add(await BuildTeamDto(team));
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("myteams")]
+        public async Task<IActionResult> GetTeamsForCurrentUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var teams = await _teamRepository.GetTeamsByUserId(userId);
 
             List<TeamDto> response = new List<TeamDto>();
             foreach (var team in teams)
@@ -133,9 +153,9 @@ namespace TeamFinder.Controllers
         }
 
         [HttpGet("review/activity/{activityId:Guid}")]
-        public async Task<IActionResult> ReviewTeams(Guid activityId)
+        public async Task<IActionResult> ReviewTeams(Guid activityId, [FromQuery] string? query)
         {
-            var teams = await _teamRepository.GetActivityUreviewedTeams(activityId);
+            var teams = await _teamRepository.GetActivityUreviewedTeams(activityId, query);
 
             List<TeamDto> response = new List<TeamDto>();
             foreach (var team in teams)
@@ -325,13 +345,13 @@ namespace TeamFinder.Controllers
         }
 
         [HttpGet("{teamId}/team-membership-requests")]
-        public async Task<IActionResult> GetMembershipRequests(Guid teamId)
+        public async Task<IActionResult> GetMembershipRequests(Guid teamId, [FromQuery] string? query)
         {
             if(await IsCurrentUserTeamLeader(teamId) == false)
             {
                 return Unauthorized("You are not authorized!");
             }
-            var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, RequestStatus.Pending);
+            var requests = await _teamMembershipRequestService.GetTeamMembershipRequestAsync(teamId, RequestStatus.Pending, query);
             
             var response = new List<TeamMembershipRequestDto>();
             foreach (var request in requests)
@@ -339,6 +359,26 @@ namespace TeamFinder.Controllers
                 response.Add(await BuildTeamMembershipRequestDto(request));
             }
             
+            return Ok(response);
+        }
+
+        [HttpGet("my-team-membership-requests")]
+        public async Task<IActionResult> GetUserMembershipRequests()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var requests = await _teamMembershipRequestService.GetUserTeamMembershipRequests(userId);
+
+            var response = new List<TeamMembershipRequestDto>();
+            foreach (var request in requests)
+            {
+                response.Add(await BuildTeamMembershipRequestDto(request));
+            }
+
             return Ok(response);
         }
 

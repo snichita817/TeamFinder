@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Team Membership Requests</h2>
+    <div class="d-flex flex-column align-items-center">
+        <div *ngIf="membershipRequests.length > 0" class="w-100">
+            <div *ngFor="let request of membershipRequests" class="card mb-3 shadow-sm mx-auto" style="max-width: 800px;">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Team: </strong> <a [routerLink]="['/team/view', request.team.id]">{{ request.team.name }}</a> </h5>
+                    <p class="card-text"><strong>Request Date:</strong> {{ request.requestDate | date: 'medium' }}</p>
+                    <p class="card-text">
+                        <strong>Status:</strong>
+                        <span [ngClass]="{
+                          'text-pending': request.status === 'Pending',
+                          'text-accepted': request.status === 'Accepted',
+                          'text-rejected': request.status === 'Rejected'
+                        }">
+                          {{ request.status }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="membershipRequests.length === 0" class="text-center">
+            <p>No team membership requests found.</p>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,21 @@
 				<li class="nav-item">
 					<a class="nav-link active text-white" aria-current="page" routerLink="/activities">Activities</a>
 				</li>
+				<ng-container>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle text-white" role="button"
+							data-bs-toggle="dropdown" aria-expanded="false">
+							Explore activities
+						</a>
+						<ul class="dropdown-menu navbar-custom">
+							<li>
+								<a class="dropdown-item text-white" [routerLink]="['/activites']">My teams</a>
+								<a class="dropdown-item text-white" [routerLink]="['/my-team-requests']">Team applications</a>
+								<a class="dropdown-item text-white" [routerLink]="['/my-applications']">Organizer applications</a>
+							</li>
+						</ul>
+					</li>
+				</ng-container>
 				<li class="nav-item">
 					<a class="nav-link active text-white" aria-current="page" routerLink="/teams">Looking For Group?</a>
 				</li>

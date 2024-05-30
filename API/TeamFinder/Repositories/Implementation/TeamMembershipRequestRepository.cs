@@ -79,9 +79,25 @@ namespace TeamFinder.Repositories.Implementation
             return request;
         }
 
-        public async Task<IEnumerable<TeamMembershipRequest>> GetTeamMembershipRequestAsync(Guid teamId, RequestStatus requestStatus)
+        public async Task<IEnumerable<TeamMembershipRequest>> GetUserTeamMembershipRequests(string userId)
         {
             return await _context.TeamMembershipRequests
+                .Where(mr => mr.User.Id == userId)
+                .Include(mr => mr.User)
+                .Include(mr => mr.Team)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TeamMembershipRequest>> GetTeamMembershipRequestAsync(Guid teamId, RequestStatus requestStatus, string? query)
+        {
+            var teams = _context.TeamMembershipRequests.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                teams = teams.Where(t => t.User.UserName.Contains(query));
+            }
+
+            return await teams
                 .Where(mr => mr.Team.Id == teamId && mr.Status == requestStatus)
                 .Include(mr => mr.User)
                 .Include(mr => mr.Team)

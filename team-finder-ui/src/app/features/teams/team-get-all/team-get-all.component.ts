@@ -20,8 +20,6 @@ export class TeamGetAllComponent {
     this.teamServiceSubscription = this.teamService.getAllTeams().subscribe({
       next: (response) => {
         this.teams = response;
-
-        console.log(this.teams);
       }
     })
   }
@@ -33,5 +31,13 @@ export class TeamGetAllComponent {
   getCaptainName(members: User[], captainId: string) {
     const captain = members.find(member => member.id === captainId);
     return captain ? captain.userName : "Username not found"
+  }
+
+  onSearch(queryText: string) {
+    this.teamServiceSubscription = this.teamService.getAllTeams(queryText).subscribe({
+      next: (response) => {
+        this.teams = response;
+      }
+    })
   }
 }

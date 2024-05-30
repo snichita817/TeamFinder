@@ -49,6 +49,29 @@ export class TeamMembershipRequestsViewComponent {
     })
   }
 
+  onSearch(queryText: string) {
+    this.activatedRouteSubscription = this.activatedRoute.paramMap.subscribe({
+      next: (route) => {
+        this.teamId = route.get('teamId');
+
+        if(this.teamId != null) {
+          this.teamMembershipServiceSubscription = this.teamMembershipService.getTeamMembershipRequests(this.teamId, queryText).subscribe({
+            next: (response) => {
+              this.teamMembershipRequests = response;
+            },
+            error: (error) => {
+              console.log(error)
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+              }
+              this.router.navigateByUrl(`/team/view/${this.teamId}`)
+            }
+          })
+        }
+      }
+    })
+  }
+
   onAccept(requestId:string, userName: string, event?: MouseEvent) {
     if(event) {
       event.stopPropagation()

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TeamAddRequest } from '../models/team-add-request.model';
 import { Observable } from 'rxjs';
@@ -21,8 +21,18 @@ export class TeamService {
     return this.http.get<Team>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`);
   }
 
-  getAllTeams(): Observable<Team[]> {
-    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams`);
+  getAllTeams(queryText?: string): Observable<Team[]> {
+    let params = new HttpParams();
+    if(queryText) {
+      params = params.set('query', queryText);
+    }
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams`, {
+      params: params
+    });
+  }
+
+  getUserTeams(): Observable<Team[]> {
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/myteams?addAuth=true`)
   }
 
   editTeam(request: TeamEditRequest, id: string): Observable<void> {
@@ -33,8 +43,15 @@ export class TeamService {
     return this.http.delete<Team>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`);
   }
 
-  indexByActivity(activityId: string): Observable<Team[]> {
-    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`);
+  indexByActivity(activityId: string, queryText?: string): Observable<Team[]> {
+    let params = new HttpParams();
+    if(queryText) {
+      params = params.set('query', queryText);
+    }
+
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`, {
+      params: params
+    });
   }
 
   acceptTeam(teamId: string): Observable<Team> {

@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TeamFinder.Data;
 using TeamFinder.Data.Repositories;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.Auth;
 using TeamFinder.Models.DTO.OrganizerApplications;
+using TeamFinder.Models.DTO.TeamMembershipRequests;
+using static System.Net.Mime.MediaTypeNames;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -60,6 +63,34 @@ public class OrganizerApplicationsController : ControllerBase
         var applications = await _repository.GetAllApplicationsAsync();
 
         var applicationDtos = applications.Select(app => new OrganizerApplicationDto
+        {
+            Id = app.Id,
+            User = new UserResponseDto
+            {
+                Id = app.User.Id,
+                UserName = app.User.UserName,
+                Email = app.User.Email
+            },
+            Reason = app.Reason,
+            ApplicationDate = app.ApplicationDate,
+            Status = app.Status.ToString()
+        }).ToList();
+
+        return Ok(applicationDtos);
+    }
+
+    [HttpGet("my-applications")]
+    public async Task<IActionResult> GetUserApplications()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var requests = await _repository.GetUserApplications(userId);
+
+        var applicationDtos = requests.Select(app => new OrganizerApplicationDto
         {
             Id = app.Id,
             User = new UserResponseDto

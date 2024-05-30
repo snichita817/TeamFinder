@@ -47,6 +47,10 @@ export class ViewTeamsInActivityComponent {
     return captain ? captain.userName : "Username not found"
   }
 
+  onSearch(queryText: string) {
+    this.teams$ = this.teamService.indexByActivity(this.activityId, queryText)
+  }
+
   ngOnDestroy() {
     this.activatedRouteSubscription?.unsubscribe();
   }

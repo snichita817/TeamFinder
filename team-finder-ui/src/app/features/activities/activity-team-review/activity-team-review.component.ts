@@ -35,7 +35,22 @@ export class ActivityTeamReviewComponent {
           this.activityServiceSubscription = this.activityService.getTeamsForReview(this.activityId).subscribe({
             next: (response) => {
               this.teams = response;
-              console.log(this.teams[0].activityRegistered)
+            }
+          })
+        }
+      }
+    })
+  }
+
+  onSearch(queryText: string) {
+    console.log(queryText)
+    this.routeSubscription = this.activatedRoute.paramMap.subscribe({
+      next: (route) => {
+        this.activityId = route.get('id')
+        if(this.activityId) {
+          this.activityServiceSubscription = this.activityService.getTeamsForReview(this.activityId, queryText).subscribe({
+            next: (response) => {
+              this.teams = response;
             }
           })
         }

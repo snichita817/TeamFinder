@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivityAddRequest } from '../models/activity-add-request.model';
 import { Activity } from '../models/activity.model';
@@ -21,12 +21,26 @@ export class ActivityService {
     return this.http.get<Activity>(`${environment.apiBaseUrl}/activities/${id}`);
   }
 
-  getTeamsForReview(id: string): Observable<Team[]>{
-    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/review/activity/${id}`);
+  getTeamsForReview(id: string, queryText?: string): Observable<Team[]>{
+    let params = new HttpParams();
+    if(queryText) {
+      params = params.set('query', queryText);
+    }
+    return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/review/activity/${id}`, {
+      params: params
+    });
   }
 
-  indexActivities(): Observable<Activity[]> {
-    return this.http.get<Activity[]>(`${environment.apiBaseUrl}/activities`);
+  indexActivities(queryText?: string): Observable<Activity[]> {
+    let params = new HttpParams();
+    if(queryText) {
+      params = params.set('query', queryText);
+    }
+    
+    return this.http.get<Activity[]>(`${environment.apiBaseUrl}/activities`, {
+      params: params
+    });
+    
   }
 
   updateActivity(id: string, model:ActivityEditRequest): Observable<void> {
