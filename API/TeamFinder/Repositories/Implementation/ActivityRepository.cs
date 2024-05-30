@@ -32,7 +32,7 @@ public class ActivityRepository : IActivityRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<IEnumerable<Activity>> GetAllActivities(string? query = null)
+    public async Task<IEnumerable<Activity>> GetAllActivities(string? query = null, string? filter = null)
     {
         // Query the database
         var activities = _dbContext.Activities.AsQueryable();
@@ -43,7 +43,15 @@ public class ActivityRepository : IActivityRepository
             activities = activities.Where(a => a.Title.Contains(query));
         }
 
-        // Sorting
+        var now = DateTime.Now;
+        if (filter == "upcoming")
+        {
+            activities = activities.Where(a => a.StartDate > now);
+        }
+        else if (filter == "ended")
+        {
+            activities = activities.Where(a => a.EndDate < now);
+        }
 
         // Pagination
 

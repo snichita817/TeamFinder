@@ -26,15 +26,19 @@ export class ActivityService {
     if(queryText) {
       params = params.set('query', queryText);
     }
+
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/review/activity/${id}`, {
       params: params
     });
   }
 
-  indexActivities(queryText?: string): Observable<Activity[]> {
+  indexActivities(queryText?: string, filterText?: string): Observable<Activity[]> {
     let params = new HttpParams();
     if(queryText) {
       params = params.set('query', queryText);
+    }
+    if(filterText) {
+      params = params.set('filter', filterText)
     }
     
     return this.http.get<Activity[]>(`${environment.apiBaseUrl}/activities`, {

@@ -4,7 +4,6 @@ import { Activity } from '../models/activity.model';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 
-
 @Component({
   selector: 'app-activity-list',
   templateUrl: './activity-list.component.html',
@@ -12,14 +11,20 @@ import { AuthService } from '../../auth/services/auth.service';
 })
 export class ActivityListComponent implements OnInit {
   activities$?: Observable<Activity[]>;
-  
-  constructor(private activityService: ActivityService,
+  currentFilter: string = '';
+  searchQuery: string = '';
+
+  constructor(
+    private activityService: ActivityService,
     private authService: AuthService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.activities$ = this.activityService.indexActivities();
+    this.fetchActivities();
+  }
+
+  fetchActivities() {
+    this.activities$ = this.activityService.indexActivities(this.searchQuery, this.currentFilter);
 
     this.activities$.subscribe({
       next: (activities) => {
@@ -36,19 +41,16 @@ export class ActivityListComponent implements OnInit {
     if (!user || !user.roles) {
       return false;
     }
-    return user.roles.includes("Organizer") || user.roles.includes("Admin");
+    return user.roles.includes('Organizer') || user.roles.includes('Admin');
   }
 
   onSearch(queryText: string) {
-    this.activities$ = this.activityService.indexActivities(queryText);
+    this.searchQuery = queryText;
+    this.fetchActivities();
+  }
 
-    this.activities$.subscribe({
-      next: (activities) => {
-        console.log('Activities:', activities);
-      },
-      error: (error) => {
-        console.error('Error fetching activities:', error);
-      }
-    });
+  setFilter(filter: string) {
+    this.currentFilter = filter;
+    this.fetchActivities();
   }
 }

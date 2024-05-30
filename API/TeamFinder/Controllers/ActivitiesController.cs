@@ -91,9 +91,9 @@ public class ActivitiesController : Controller
 
     [HttpGet]
     // GET: api/Activities?query=MateInfoUB
-    public async Task<IActionResult> GetAllActivities([FromQuery] string? query)
+    public async Task<IActionResult> GetAllActivities([FromQuery] string? query, [FromQuery] string? filter)
     {
-        var activities = await _activityRepository.GetAllActivities(query);
+        var activities = await _activityRepository.GetAllActivities(query, filter);
         
         // Mapping Domain Model to DTO
         var response = new List<ActivityDto>();
