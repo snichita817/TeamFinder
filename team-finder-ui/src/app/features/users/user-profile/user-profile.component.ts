@@ -7,6 +7,7 @@ import { AddReviewDto } from '../../reviews/models/add-review.model';
 import { Review } from '../../reviews/models/review.model';
 import { ReviewService } from '../../reviews/services/review.service';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -29,7 +30,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
               private route: ActivatedRoute,
-              private reviewService: ReviewService) {}
+              private reviewService: ReviewService,
+              private authService: AuthService) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe({
@@ -104,6 +106,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return star <= this.newReviewRating ? 'checked' : '';
   }
 
+  isOrganizer(): boolean {
+    const user = this.model;
+    if(user == undefined) {
+      return false;
+    }
+
+    return user.roles.includes("Organizer");
+  }
+
+  isUserCorrect(id: string): boolean {
+    const user = this.authService.getUser();
+    if(user == undefined){
+      return false;
+    }
+
+    return user.id === id;
+  }
+  
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
     this.userServiceSubscription?.unsubscribe();

@@ -89,7 +89,7 @@
               </div>
             </div>
             <hr>
-            <div class="row">
+            <div *ngIf="isUserCorrect(model.id)" class="row">
               <div class="col-sm-12">
                 <a class="btn btn-info" [routerLink]="['/user/edit', model.id]">Edit</a>
               </div>
@@ -105,11 +105,11 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                   <h6>Anonymous</h6>
-                  <p class="text-danger" style="cursor: pointer;" (click)="deleteReview(review.id)">Delete</p>
+                  <!-- <p class="text-danger" style="cursor: pointer;">Delete</p> -->
 
                 </div>
                 <p>{{ review.content }}</p>
-                <small class="text-muted">Rating: {{ review.rating }} stars</small>
+                <small *ngIf="isOrganizer()" class="text-muted">Rating: {{ review.rating }} stars</small>
                 <small class="text-muted d-block">Date: {{ review.date | date:'mediumDate' }}</small>
               </div>
             </div>
@@ -117,7 +117,7 @@
         </div>
 
         <!-- Review Form -->
-        <div class="card mb-3">
+        <div *ngIf="isOrganizer()" class="card mb-3">
           <div class="card-body">
             <h5>Leave a Review</h5>
             <div class="form-group">

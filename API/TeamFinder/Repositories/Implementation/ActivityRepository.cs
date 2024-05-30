@@ -24,12 +24,35 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> GetActivityAsync(Guid id)
     {
-        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).Include(x => x.CreatedBy).Include(x => x.Teams).FirstOrDefaultAsync(a => a.Id == id);
+        return await _dbContext.Activities
+            .Include(c => c.Categories)
+            .Include(x => x.Updates)
+            .Include(x => x.CreatedBy)
+            .Include(x => x.Teams)
+            .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<IEnumerable<Activity>> GetAllActivities()
+    public async Task<IEnumerable<Activity>> GetAllActivities(string? query = null)
     {
-        return await _dbContext.Activities.Include(c => c.Categories).Include(x => x.Updates).Include(x => x.CreatedBy).Include(x => x.Teams).ToListAsync();
+        // Query the database
+        var activities = _dbContext.Activities.AsQueryable();
+
+        // Filtering
+        if(string.IsNullOrWhiteSpace(query) == false)
+        {
+            activities = activities.Where(a => a.Title.Contains(query));
+        }
+
+        // Sorting
+
+        // Pagination
+
+        return await activities
+            .Include(c => c.Categories)
+            .Include(x => x.Updates)
+            .Include(x => x.CreatedBy)
+            .Include(x => x.Teams)
+            .ToListAsync();
     }
 
     public async Task<Activity?> EditActivity(Activity activity)

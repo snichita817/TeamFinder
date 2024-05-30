@@ -36,6 +36,8 @@ public class ReviewsController : Controller
     public async Task<IActionResult> PostReview([FromBody] AddReviewDto reviewDto)
     {
         var organizer = await _userManager.FindByIdAsync(reviewDto.OrganizerId);
+        if (organizer == null)
+            return BadRequest("Organizer not found");
         var review = new Review
         {
             Content = reviewDto.Content,

@@ -52,7 +52,7 @@ import { ApplyOrganizerComponent } from './features/organizer-applications/apply
 import { ApplicationStatusComponent } from './features/organizer-applications/application-status/application-status.component';
 import { AdminApplicationReviewComponent } from './features/organizer-applications/admin-application-review/admin-application-review.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MatSnackBar } from '@angular/material/snack-bar'
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -107,6 +107,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    MatTabsModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     ModalModule.forRoot()

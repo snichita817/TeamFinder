@@ -33,6 +33,6 @@ export class UserService {
   }
 
   updateUser(id: string, editUserRequest: UserEditRequest): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/auth/users/edit/${id}`, editUserRequest);
+    return this.http.put<void>(`${environment.apiBaseUrl}/auth/users/edit/${id}?addAuth=true`, editUserRequest);
   }
 }

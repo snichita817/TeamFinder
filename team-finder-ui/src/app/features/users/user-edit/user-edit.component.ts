@@ -10,6 +10,7 @@ import { StorageService } from 'src/app/shared/storage/storage.service';
 import { ProcessCvService } from 'src/app/shared/process-cv/process-cv.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { CvInfo } from '../models/cv-info.model';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -40,7 +41,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private storageService: StorageService,
     private sharedService: SharedService,
-    private cvService: ProcessCvService
+    private cvService: ProcessCvService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -48,11 +50,15 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
     this.routeSubscription = this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
+
       if (this.id) {
+        if(this.isUserCorrect(this.id) == false) {
+          this.sharedService.showNotification(false, "Error", "You have no access to edit this profile!")
+          this.router.navigateByUrl('')
+          return;
+        } 
         this.getUserSubscription = this.userService.getUser(this.id).subscribe(result => {
           this.model = result;
-          console.log(this.model);
-
           if (this.model.profilePictureUrl) {
             this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${this.model.profilePictureUrl}`;
           }
@@ -60,6 +66,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  isUserCorrect(id: string): boolean {
+    const user = this.authService.getUser()
+    if(user == undefined) {
+      return false;
+    }
+    return user.id === id;
   }
 
   ngOnDestroy(): void {
@@ -173,7 +187,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(`/user/${this.id}`);
       },
       error: (err) => {
-        console.error('Error updating user', err);
+        this.sharedService.showNotification(false, "Unauthorized!", "You do not have access to edit this page!");
+        this.router.navigateByUrl('');
       }
     });
   }

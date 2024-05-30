@@ -6,3 +6,7 @@ a.subtle-link {
 a.subtle-link:hover, a.subtle-link:focus {
     color: #0056b3; /* Subtle blue that’s not too bright */
 }
+
+.mat-tab-group {
+    margin-top: 1rem;
+}

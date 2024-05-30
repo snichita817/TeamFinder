@@ -329,6 +329,11 @@ namespace TeamFinder.Controllers
         [Route("users/edit/{id:Guid}")]
         public async Task<IActionResult> EditUser([FromRoute] Guid id, [FromBody] EditUserRequestDto request)
         {
+            if(!IsCurrentUserCorrect(id.ToString()))
+            {
+                return Unauthorized("You are not authorized to edit this user.");
+            }
+
             var userToUpdate = await _userManager.Users.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id.ToString());
             if (userToUpdate == null)
             {
@@ -561,6 +566,16 @@ namespace TeamFinder.Controllers
             var emailSend = new EmailSendDto(user.Email, "Reset your password", body);
 
             return await _emailRepository.SendEmailAsync(emailSend);
+        }
+    
+        private bool IsCurrentUserCorrect(string userId)
+        {
+            var accessedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (accessedUserId == null)
+            {
+                return false;
+            }
+            return accessedUserId == userId;
         }
     }
 }
