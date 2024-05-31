@@ -38,6 +38,7 @@ builder.Services.AddScoped<ITeamMembershipRequestRepository, TeamMembershipReque
 builder.Services.AddScoped<IOrganizerApplicationRepository, OrganizerApplicationRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IWinnerResultRepository, WinnerResultRepository>();
 
 /*builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()

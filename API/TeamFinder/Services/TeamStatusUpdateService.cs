@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using TeamFinder.Models;
-using TeamFinder.Models.Domain;
+﻿using TeamFinder.Models.Domain;
 using TeamFinder.Data;
 
 namespace TeamFinder.Services
@@ -41,7 +33,7 @@ namespace TeamFinder.Services
                 try
                 {
                     var teamsToUpdate = dbContext.Teams
-                        .Where(t => t.AcceptedToActivity == RequestStatus.Pending && t.ActivityRegistered.StartDate <= DateTime.UtcNow)
+                        .Where(t => (t.AcceptedToActivity == RequestStatus.Pending || (t.Members.Count() < t.MaxParticipant && t.AcceptedToActivity != RequestStatus.Rejected)) && t.ActivityRegistered.StartDate <= DateTime.UtcNow)
                         .ToList();
 
                     foreach (var team in teamsToUpdate)

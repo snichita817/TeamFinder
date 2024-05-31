@@ -35,6 +35,10 @@ export class TeamService {
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/myteams?addAuth=true`)
   }
 
+  getUserTeam(activityId: string): Observable<Team> {
+    return this.http.get<Team>(`${environment.apiBaseUrl}/teams/user-team/${activityId}?addAuth=true`);
+  }
+
   editTeam(request: TeamEditRequest, id: string): Observable<void> {
     return this.http.put<void>(`${environment.apiBaseUrl}/teams/${id}?addAuth=true`, request)
   }
@@ -52,6 +56,10 @@ export class TeamService {
     return this.http.get<Team[]>(`${environment.apiBaseUrl}/teams/activity/${activityId}`, {
       params: params
     });
+  }
+
+  removeMember(teamId: string, userId: string) {
+    return this.http.put(`${environment.apiBaseUrl}/teams/remove-member/${teamId}/${userId}/?addAuth=true`, {})
   }
 
   acceptTeam(teamId: string): Observable<Team> {

@@ -42,6 +42,7 @@ import { adminAuthGuard, userAuthGuard } from './features/auth/guards/auth.guard
 import { organizerAuthGuard } from './features/auth/guards/auth.guard';
 import { GetUserteamsComponent } from './features/teams/get-userteams/get-userteams.component';
 import { GetUserRequestsComponent } from './features/team-membership-requests/get-user-requests/get-user-requests.component';
+import { PickWinnerComponent } from './features/activities/pick-winner/pick-winner.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -85,6 +86,7 @@ const routes: Routes = [
   { path: 'team/membership-request/:memId/:res', component: TeamMembershipRequestAcceptComponent },
   { path: 'apply-organizer', component: ApplyOrganizerComponent },
   { path: 'application-status', component: ApplicationStatusComponent },
+  { path: 'activity/:activityId/pick-winners', component: PickWinnerComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamFinder.Data;
 
@@ -11,9 +12,11 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240531154437_add_winner_result")]
+    partial class addwinnerresult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -571,8 +574,7 @@ namespace TeamFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId")
-                        .IsUnique();
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("WinnerResults");
                 });
@@ -771,8 +773,8 @@ namespace TeamFinder.Migrations
             modelBuilder.Entity("TeamFinder.Models.Domain.WinnerResult", b =>
                 {
                     b.HasOne("TeamFinder.Models.Activity", "Activity")
-                        .WithOne("WinnerResult")
-                        .HasForeignKey("TeamFinder.Models.Domain.WinnerResult", "ActivityId")
+                        .WithMany()
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -784,8 +786,6 @@ namespace TeamFinder.Migrations
                     b.Navigation("Teams");
 
                     b.Navigation("Updates");
-
-                    b.Navigation("WinnerResult");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.ApplicationUser", b =>

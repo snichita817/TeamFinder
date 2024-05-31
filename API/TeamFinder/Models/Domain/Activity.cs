@@ -23,4 +23,5 @@ public class Activity
     public ICollection<Update> Updates { get; set; }
     public ICollection<Category> Categories { get; set; }
     public ICollection<Team> Teams { get; set; }
+    public WinnerResult? WinnerResult { get; set; }
 }

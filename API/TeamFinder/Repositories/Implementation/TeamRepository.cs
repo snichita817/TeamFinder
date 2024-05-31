@@ -29,14 +29,14 @@ namespace TeamFinder.Repositories.Implementation
 
         public async Task<IEnumerable<Team>> GetAllTeamsAsync(string? query)
         {
-            var teams = _dbContext.Teams.AsQueryable();
+            var teams = _dbContext.Teams.Include(x => x.ActivityRegistered).AsQueryable();
 
             // Filtering
             if (string.IsNullOrWhiteSpace(query) == false)
             {
                 teams = teams.Where(t => t.Name.Contains(query));
             }
-
+            teams = teams.Where(t => t.AcceptedToActivity != RequestStatus.Rejected);
 
             return await teams.Include(x => x.Members).Include(x => x.ActivityRegistered).ToListAsync();
         }
@@ -139,8 +139,7 @@ namespace TeamFinder.Repositories.Implementation
         public async Task<Team?> GetUserTeam(Guid activityId, string userId)
         {
             return await _dbContext.Teams
-                .Include(x => x.Members)
-                .Include(x => x.ActivityRegistered)
+                .Include(t => t.Members)
                 .FirstOrDefaultAsync(t => t.Members.Any(m => m.Id == userId) && t.ActivityRegistered.Id == activityId);
         }
     }

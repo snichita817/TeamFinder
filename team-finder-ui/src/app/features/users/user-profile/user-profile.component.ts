@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserProfile } from '../models/user-profile.model';
 import { UserService } from '../services/user.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AddReviewDto } from '../../reviews/models/add-review.model';
 import { Review } from '../../reviews/models/review.model';
 import { ReviewService } from '../../reviews/services/review.service';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../auth/services/auth.service';
+import { Activity } from '../../activities/models/activity.model';
+import { ActivityService } from '../../activities/services/activity.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,7 +19,8 @@ import { AuthService } from '../../auth/services/auth.service';
 export class UserProfileComponent implements OnInit, OnDestroy {
   userId: string | null = null;
   model?: UserProfile;
-
+  activities$?: Observable<Activity[]>;
+  
   routeSubscription?: Subscription;
   userServiceSubscription?: Subscription;
 
@@ -31,7 +34,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService,
               private route: ActivatedRoute,
               private reviewService: ReviewService,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private activityService: ActivityService) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe({
@@ -41,7 +45,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if(this.userId) {
           this.userServiceSubscription = this.userService.getUser(this.userId).subscribe({
             next: (response) => {
-              console.log(response);
               this.model = {
                 id: response.id,
                 email: response.email,
@@ -63,7 +66,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
               if(response.profilePictureUrl) {
                 this.imageUrl = `https://storage.googleapis.com/profile-picture-uploads/${response.profilePictureUrl}`;
               }
-
+              
               this.loadReviews(this.model.id);
             }
           });
@@ -76,6 +79,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.reviewService.getReviews(organizerId).subscribe(reviews => {
       this.reviews = reviews;
     });
+
+    if(this.userId != null){
+      console.log(this.userId)
+      this.activities$ = this.activityService.indexActivities(undefined, undefined, organizerId);
+    }
   }
 
   postReview(): void {

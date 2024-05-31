@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Team } from '../models/team.model';
 import { SharedService } from 'src/app/shared/shared.service';
 import { AuthService } from '../../auth/services/auth.service';
+import { User } from '../../auth/models/user.model';
 
 @Component({
   selector: 'app-team-get',
@@ -19,8 +20,10 @@ export class TeamGetComponent implements OnInit, OnDestroy {
 
   activatedRouteSubscription?: Subscription;
   teamServiceSubscription?: Subscription;
+  removeMemberSubscription?: Subscription;
 
   submissionUrl: string | null = null;
+  user?: User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -32,17 +35,24 @@ export class TeamGetComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.user = this.authService.getUser();
+
     this.activatedRouteSubscription = this.activatedRoute.paramMap.subscribe({
       next: (route) => {
         this.teamId = route.get('id');
-
         if(this.teamId) {
           this.teamServiceSubscription = this.teamService.getTeam(this.teamId).subscribe({
             next: (response) => {
               this.team = response;
+              console.log(this.team)
               if(response.submissionUrl && this.canShowSubmissionLink()) {
-                console.log(response.submissionUrl)
                 this.submissionUrl = `https://storage.googleapis.com/team-submissions/${response.submissionUrl}`
+              }
+            },
+            error: (error) => {
+              if(error.error) {
+                this.sharedService.showNotification(false, 'Error!', error.error);
+                this.router.navigateByUrl('/activities')
               }
             }
           });
@@ -62,12 +72,21 @@ export class TeamGetComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(`/activity/teams/${response.activityRegistered.id}`);
       },
       error: (error) => {
-        console.log(error)
         if(error.error) {
           this.sharedService.showNotification(false, 'Error!', error.error);
         }
       }
     });
+  }
+
+  isUserMember(): boolean {
+    if(this.team && this.user) {
+      for(let member of this.team.members)
+        if(member.id === this.user.id)
+          return true;
+    }
+
+    return false;
   }
 
   handleFileInput(event: Event) {
@@ -142,8 +161,22 @@ export class TeamGetComponent implements OnInit, OnDestroy {
     return team.members.find(mem => mem.id === user.id) == undefined ? false : true;
   }
 
+  onUserDelete(userId: string, teamId: string) {
+    this.removeMemberSubscription = this.teamService.removeMember(teamId, userId).subscribe({
+      next: (response) => {
+        this.ngOnInit()
+      },
+      error: (error) => {
+        if(error.error) {
+          this.sharedService.showNotification(false, 'Error!', error.error);
+        }
+      }
+    })
+  }
+
   ngOnDestroy() {
     this.activatedRouteSubscription?.unsubscribe();
     this.teamServiceSubscription?.unsubscribe();
+    this.removeMemberSubscription?.unsubscribe();
   }
 }

@@ -261,8 +261,8 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
-        [HttpGet("get-user-team/{activityId:Guid}")]
-        public async Task<IActionResult> GetUserTeam([FromRoute] Guid activityId)
+        [HttpGet("user-team/{activityId:Guid}")]
+        public async Task<IActionResult> GetUserTeamForActivity(Guid activityId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -281,7 +281,59 @@ namespace TeamFinder.Controllers
 
             return Ok(response);
         }
-        
+
+        [HttpPut("remove-member/{teamId:Guid}/{userId}")]
+        public async Task<IActionResult> RemoveMember([FromRoute] Guid teamId, [FromRoute] string userId)
+        {
+            var callerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (callerId != userId && await IsCurrentUserTeamLeader(teamId) == false)
+            {
+                return Unauthorized("You are not authorized!");
+            }
+
+            var team = await _teamRepository.GetTeamByIdAsync(teamId);
+            if (team == null)
+            {
+                return NotFound("Team not found.");
+            }
+
+            var user = team.Members.FirstOrDefault(m => m.Id == userId);
+            if (user == null)
+            {
+                return NotFound("Member not found in the team.");
+            }
+
+            if (team.TeamCaptainId.ToString() == userId)
+            {
+                team.Members.Remove(user);
+
+                if (team.Members.Any())
+                {
+                    var random = new Random();
+                    int index = random.Next(team.Members.Count);
+                    team.TeamCaptainId = Guid.Parse(team.Members.ElementAt(index).Id);
+                }
+                else
+                {
+                    team.TeamCaptainId = Guid.Empty;
+                }
+            }
+            else
+            {
+                team.Members.Remove(user);
+            }
+            if(team.Members.Count <= 0)
+            {
+                await _teamRepository.DeleteTeam(teamId);
+                return NotFound("Team has been deleted!");
+            }
+
+            // Update the team in the repository
+            await _teamRepository.EditTeam(team);
+
+            return Ok();
+        }
+    
         #region File Uploads
         [HttpPut("{teamId:Guid}/upload/{submissionUrl}")]
         public async Task<IActionResult> ChangeSubmissionLink([FromRoute] Guid teamId, [FromRoute] string submissionUrl)
@@ -293,7 +345,8 @@ namespace TeamFinder.Controllers
 
             var team = await _teamRepository.GetTeamByIdAsync(teamId);
             if (team == null) return BadRequest("Team not found.");
-            if(team.ActivityRegistered.StartDate > DateTime.Now) return BadRequest("Activity has not started yet.");
+            if (team.AcceptedToActivity != RequestStatus.Accepted) return BadRequest("Team has not been accepted to the activity.");
+            if (team.ActivityRegistered.StartDate > DateTime.Now) return BadRequest("Activity has not started yet.");
             if (team.ActivityRegistered.EndDate < DateTime.Now) return BadRequest("Activity has ended.");
 
             team.SubmissionUrl = submissionUrl;
@@ -427,7 +480,7 @@ namespace TeamFinder.Controllers
             if(activity.StartDate < DateTime.Now) return BadRequest("Activity has already started.");
 
             var result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
-            if (!result) return BadRequest("Unable to accept membership request.");
+            if (!result) return BadRequest("Unable to accept membership request. Verify if the user is already in a different team.");
 
             return Ok();
         }

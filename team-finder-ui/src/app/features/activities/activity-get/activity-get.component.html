@@ -1,142 +1,188 @@
 <div class="container mt-5">
     <div *ngIf="model">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
-              <li class="breadcrumb-item active" aria-current="page">{{model.title}}</li>
-            </ol>
-        </nav>
-        <div class="row">
-            <!-- Left Column -->
-            <div class="col-sm-3">
-                <!-- Schedule Card -->
-                <div class="card border-0 shadow mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">Schedule</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">
-                                <span class="text-black">What?</span>
-                                <span class="float-end text-black">When?</span>
-                            </li>
-                            <li class="border-top mb-2 pr-2">
-                                <span class="text-secondary">Start Date</span>
-                                <strong class="float-end">{{model.startDate | date:'dd-MM-yyyy, HH:mm'}}</strong>
-                            </li>
-                            <li class="mb-2">
-                                <span class="text-secondary">End Date</span>
-                                <strong class="float-end">{{model.endDate | date:'dd-MM-yyyy, HH:mm'}}</strong>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="card border-0 shadow mb-2">
-                    <!-- Registration Type -->
-                    <div class="card-body">
-                        <span>
-                            Registration Status: <strong>{{ model.openRegistration ? 'Open' : 'Closed' }}</strong>
-                        </span>
-                    </div>
-                    <div class="card-body">
-                        <span>
-                            Minimum Participants per Team: <strong>{{model.minParticipant}}</strong>
-                        </span>
-                    </div>
-                    <div class="card-body">
-                        <span>
-                            Maximum Participants per Team: <strong>{{model.maxParticipant}}</strong>
-                        </span>
-                    </div>
-                    <div class="card-body">
-                        <span>
-                            Maximum Number of Teams Allowed: <strong>{{model.maxTeams}}</strong>
-                        </span>
-                    </div>
-                </div>                  
-
-                <!-- Action Buttons -->
-                <div class="card shadow mb-2">
-                    <div class="card-body">
-                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
-                            <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', model.id]" role="button">
-                                <i class="bi bi-plus-circle me-1"></i> Add Update
-                            </a>
-                        </div>
-                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
-                            <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/activities/edit', model.id]">
-                                <i class="bi bi-pencil-square me-1"></i> Edit Activity
-                            </a>
-                        </div>
-                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
-                            <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(model.id, $event)">
-                                <i class="bi bi-trash me-1"></i> Delete Activity
-                            </a>
-                        </div>
-                        <div *ngIf="canShow()" class="row mb-3 justify-content-center">
-                            <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity', model.id, 'teams', 'review']">
-                                <i class="bi bi-people me-1"></i> Manage Join Requests
-                            </a>
-                        </div>
-                        <div class="row mb-3 justify-content-center">
-                            <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity/teams', model.id]" role="button">
-                                <i class="bi bi-people me-1"></i> View Teams
-                            </a>
-                        </div>
-                        <div class="row mb-3 justify-content-center">
-                            <a class="btn btn-secondary" style="max-width: 230px;" role="button">
-                                <i class="bi bi-people me-1"></i> View My Team
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="/activities">Activities</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ model.title }}</li>
+        </ol>
+      </nav>
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-sm-3">
+          <!-- Schedule Card -->
+          <div class="card border-0 shadow mb-2">
+            <div class="card-body">
+              <h5 class="card-title">Schedule</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <span class="text-black">What?</span>
+                  <span class="float-end text-black">When?</span>
+                </li>
+                <li class="border-top mb-2 pr-2">
+                  <span class="text-secondary">Start Date</span>
+                  <strong class="float-end">{{ model.startDate | date: 'dd-MM-yyyy, HH:mm' }}</strong>
+                </li>
+                <li class="mb-2">
+                  <span class="text-secondary">End Date</span>
+                  <strong class="float-end">{{ model.endDate | date: 'dd-MM-yyyy, HH:mm' }}</strong>
+                </li>
+              </ul>
             </div>
-
-            <!-- Right Column -->
-            <div class="col-sm-8">
-                <mat-tab-group>
-                    <mat-tab label="Overview">
-                        <div class="card border-0 shadow mb-3" style="padding: 1rem;">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title text-primary">{{model.title}}</h4>
-                                    <a *ngIf="showRegisterButton()" class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
-                                </div>
-                                <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
-                                <div class="border-top pt-3">
-                                    <p class="card-text">{{model.shortDescription}}</p>
-                                    <p [innerHTML]="model.longDescription" class="card-text"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-tab>
-                    <mat-tab label="Updates">
-                        <div *ngIf="model.updates && model.updates.length > 0" class="card border-0 shadow mb-3">
-                            <div class="card-body">
-                                <h4 class="card-title">Updates</h4>
-                                <div class="border-top">
-                                    <div *ngFor="let update of model.updates" class="update-card">
-                                        <div class="card-body" (click)="navigateToUpdate(update.id)" tabindex="0">
-                                            <!-- Flex container for title and action buttons -->
-                                            <div class="d-flex justify-content-between">
-                                                <h3 class="card-title text-primary mb-0">{{update.title}}</h3>
-                                                <!-- Container for View and Delete -->
-                                                <div>
-                                                    <p class="text-primary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToUpdate(update.id, $event)">Read More</p>
-                                                    <p *ngIf="canShow()" class="text-secondary d-inline-block me-2" style="cursor: pointer;" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
-                                                    <small *ngIf="canShow()" class="text-danger" style="cursor: pointer;" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
-                                                </div>
-                                            </div>
-                                            <p [innerHTML]="update.text" class="card-text"></p>
-                                            <!-- <button type="button" class="btn btn-primary" (click)="navigateToUpdate(update.id, $event)">Read More</button> -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-tab>
-                </mat-tab-group>
+          </div>
+  
+          <div class="card border-0 shadow mb-2">
+            <!-- Registration Type -->
+            <div class="card-body">
+              <span>Registration Status: <strong>{{ model.openRegistration ? 'Open' : 'Closed' }}</strong></span>
             </div>
+            <div class="card-body">
+              <span>Minimum Participants per Team: <strong>{{ model.minParticipant }}</strong></span>
+            </div>
+            <div class="card-body">
+              <span>Maximum Participants per Team: <strong>{{ model.maxParticipant }}</strong></span>
+            </div>
+            <div class="card-body">
+              <span>Maximum Number of Teams Allowed: <strong>{{ model.maxTeams }}</strong></span>
+            </div>
+          </div>
+  
+          <!-- Action Buttons -->
+          <div class="card shadow mb-2">
+            <div class="card-body">
+              <div *ngIf="canShow()" class="row mb-3 justify-content-center">
+                <a class="btn btn-primary" style="max-width: 230px;" (click)="pickWinners()">
+                  <i class="bi bi-trophy"></i> Pick winner!
+                </a>
+              </div>
+              <div *ngIf="canShow()" class="row mb-3 justify-content-center">
+                <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/updates/add', model.id]" role="button">
+                  <i class="bi bi-plus-circle me-1"></i> Add Update
+                </a>
+              </div>
+              <div *ngIf="canShow()" class="row mb-3 justify-content-center">
+                <a class="btn btn-primary" style="max-width: 230px;" [routerLink]="['/activities/edit', model.id]">
+                  <i class="bi bi-pencil-square me-1"></i> Edit Activity
+                </a>
+              </div>
+              <div *ngIf="canShow()" class="row mb-3 justify-content-center">
+                <a class="btn btn-danger" style="max-width: 230px;" (click)="onDelete(model.id, $event)">
+                  <i class="bi bi-trash me-1"></i> Delete Activity
+                </a>
+              </div>
+              <div *ngIf="canShow()" class="row mb-3 justify-content-center">
+                <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity', model.id, 'teams', 'review']">
+                  <i class="bi bi-people me-1"></i> Manage Join Requests
+                </a>
+              </div>
+              <div class="row mb-3 justify-content-center">
+                <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/activity/teams', model.id]" role="button">
+                  <i class="bi bi-people me-1"></i> View Teams
+                </a>
+              </div>
+              <div *ngIf="teamId != null" class="row mb-3 justify-content-center">
+                <a class="btn btn-secondary" style="max-width: 230px;" [routerLink]="['/team/view', teamId]" role="button">
+                  <i class="bi bi-people me-1"></i> View My Team
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+  
+        <!-- Right Column -->
+        <div class="col-sm-8">
+          <!-- <div class="card border-0 shadow mb-3" *ngIf="model">
+            <div class="card-body">
+              <h4 class="card-title text-primary">{{ model.title }}</h4>
+              <h6 class="card-subtitle mb-2 text-muted">Created by <a [routerLink]="['/user', model.createdBy.id]">{{ model.createdBy.userName }}</a> on {{ model.createdDate | date: 'mediumDate' }}</h6>
+              <p class="card-text">{{ model.shortDescription }}</p>
+              <p class="card-text" [innerHTML]="model.longDescription"></p>
+            </div>
+          </div> -->
+  
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="updates-tab" data-bs-toggle="tab" href="#updates" role="tab" aria-controls="updates" aria-selected="false">Updates</a>
+            </li>
+            <li class="nav-item" role="presentation" *ngIf="model.winnerResult">
+              <a class="nav-link" id="leaderboard-tab" data-bs-toggle="tab" href="#leaderboard" role="tab" aria-controls="leaderboard" aria-selected="false">Leaderboard</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                <div class="card border-0 shadow mb-3" style="padding: 1rem;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title text-primary">{{model.title}}</h4>
+                            <a *ngIf="showRegisterButton()" class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
+                        </div>
+                        <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
+                        <div class="border-top pt-3">
+                            <p class="card-text">{{model.shortDescription}}</p>
+                            <p [innerHTML]="model.longDescription" class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="updates" role="tabpanel" aria-labelledby="updates-tab">
+              <div class="card border-0 shadow mb-3" *ngIf="model.updates && model.updates.length > 0">
+                <div class="card-body">
+                  <h4 class="card-title">Updates</h4>
+                  <div *ngIf="model.updates.length != 0" class="border-top">
+                    <div *ngFor="let update of model.updates" class="update-card">
+                      <div class="card-body" (click)="navigateToUpdate(update.id)" tabindex="0">
+                        <div class="d-flex justify-content-between">
+                          <h5 class="card-title text-primary">{{ update.title }}</h5>
+                          <div>
+                            <p class="text-primary d-inline-block me-2" (click)="navigateToUpdate(update.id, $event)">Read More</p>
+                            <p *ngIf="canShow()" class="text-secondary d-inline-block me-2" (click)="navigateToEditUpdate(update.id, $event)">Update</p>
+                            <small *ngIf="canShow()" class="text-danger" (click)="navigateToDeleteUpdate(update.id, $event)">Delete</small>
+                          </div>
+                        </div>
+                        <p class="card-text" [innerHTML]="update.text"></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="model.updates.length == 0" class="border-top">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Explore Our Activities</h5>
+                            <p class="card-text">Find various activities such as hackathons, workshops, and conferences. Participating in these activities can help you develop your skills, collaborate with others, and enhance your portfolio. Click on any activity to view more details or to join.</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="leaderboard" role="tabpanel" aria-labelledby="leaderboard-tab">
+              <div class="card border-0 shadow mb-3">
+                <div class="card-body">
+                  <h4 class="card-title">Leaderboard</h4>
+                  <div class="border-top">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">Position</th>
+                          <th scope="col">Name</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let team of dataSource">
+                          <th scope="row">{{ dataSource.indexOf(team) + 1 }}</th>
+                          <td>{{ team.name }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
+  

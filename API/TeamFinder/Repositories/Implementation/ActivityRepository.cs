@@ -29,10 +29,11 @@ public class ActivityRepository : IActivityRepository
             .Include(x => x.Updates)
             .Include(x => x.CreatedBy)
             .Include(x => x.Teams)
+            .Include(x => x.WinnerResult)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<IEnumerable<Activity>> GetAllActivities(string? query = null, string? filter = null)
+    public async Task<IEnumerable<Activity>> GetAllActivities(string? query = null, string? filter = null, string? organizerId = null)
     {
         // Query the database
         var activities = _dbContext.Activities.AsQueryable();
@@ -53,7 +54,12 @@ public class ActivityRepository : IActivityRepository
             activities = activities.Where(a => a.EndDate < now);
         }
 
-        // Pagination
+        if(string.IsNullOrWhiteSpace(organizerId) == false)
+        {
+            activities = activities
+                .Where(a => a.CreatedBy.Id == organizerId)
+                .OrderByDescending(x => x.EndDate);
+        }
 
         return await activities
             .Include(c => c.Categories)
@@ -65,15 +71,32 @@ public class ActivityRepository : IActivityRepository
 
     public async Task<Activity?> EditActivity(Activity activity)
     {
-        var existingActivity = await _dbContext.Activities.Include(c => c.Categories)
-            .FirstOrDefaultAsync(act => act.Id == activity.Id);
+        var existingActivity = await _dbContext.Activities
+        .Include(c => c.Categories)
+        .Include(t => t.Teams)  // Assuming Teams is the navigation property for the list of teams
+        .FirstOrDefaultAsync(act => act.Id == activity.Id);
 
         if (existingActivity != null)
         {
             existingActivity.Categories = activity.Categories;
             _dbContext.Entry(existingActivity).CurrentValues.SetValues(activity);
+
+            // Update the MinParticipant and MaxParticipant values of each Team in Activities
+            if (existingActivity.Teams != null)
+            {
+                foreach (var team in existingActivity.Teams)
+                {
+                    var updatedTeam = existingActivity.Teams.FirstOrDefault(t => t.Id == team.Id);
+                    if (updatedTeam != null)
+                    {
+                        updatedTeam.MinParticipant = existingActivity.MinParticipant;
+                        updatedTeam.MaxParticipant = existingActivity.MaxParticipant;
+                    }
+                }
+            }
+
             await _dbContext.SaveChangesAsync();
-            return activity;
+            return existingActivity;
         }
 
         return null;

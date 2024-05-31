@@ -1,0 +1,32 @@
+.example-container {
+  margin-bottom: 2rem;
+}
+.example-list {
+  min-height: 200px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+}
+.example-box {
+  cursor: grab;
+  margin-bottom: 0.5rem;
+}
+.card {
+  border-radius: 10px;
+}
+.card-header {
+  border-radius: 10px 10px 0 0;
+}
+.list-group-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.list-group-item-action {
+  transition: all 0.2s ease;
+}
+
+.list-group-item-action:hover {
+  background-color: #f1f1f1;
+}

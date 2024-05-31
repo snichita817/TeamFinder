@@ -36,7 +36,7 @@ export class AdminApplicationReviewComponent implements OnInit {
   approve(id: string) {
     this.organizerApplicationService.approveApplication(id).subscribe(() => {
       alert('Application approved successfully.');
-      this.ngOnInit(); // Refresh the list
+      this.ngOnInit();
     }, error => {
       alert('An error occurred while approving the application.');
     });

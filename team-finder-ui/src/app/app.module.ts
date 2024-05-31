@@ -55,6 +55,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GetUserteamsComponent } from './features/teams/get-userteams/get-userteams.component';
 import { GetUserRequestsComponent } from './features/team-membership-requests/get-user-requests/get-user-requests.component';
+import { PickWinnerComponent } from './features/activities/pick-winner/pick-winner.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -100,6 +103,7 @@ import { GetUserRequestsComponent } from './features/team-membership-requests/ge
     TeamMembershipRequestsAddComponent,
     TeamMembershipRequestsViewComponent,
     TeamMembershipRequestAcceptComponent,
+    PickWinnerComponent,
     ApplyOrganizerComponent,
     ApplicationStatusComponent,
     AdminApplicationReviewComponent
@@ -114,6 +118,8 @@ import { GetUserRequestsComponent } from './features/team-membership-requests/ge
     MatTabsModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    DragDropModule,
+    MatTableModule,
     ModalModule.forRoot()
   ],
   providers: [

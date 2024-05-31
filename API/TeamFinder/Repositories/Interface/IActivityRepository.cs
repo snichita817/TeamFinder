@@ -8,7 +8,7 @@ public interface IActivityRepository
 
     Task<Activity?> GetActivityAsync(Guid id);
 
-    Task<IEnumerable<Activity>> GetAllActivities(string? query = null, string? filter = null);
+    Task<IEnumerable<Activity>> GetAllActivities(string? query = null, string? filter = null, string? organizerId = null);
 
     Task<Activity?> EditActivity(Activity activity);
 

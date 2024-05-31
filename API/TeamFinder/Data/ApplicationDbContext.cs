@@ -21,4 +21,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrganizerApplication> OrganizerApplications { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<WinnerResult> WinnerResults { get; set; }
 }

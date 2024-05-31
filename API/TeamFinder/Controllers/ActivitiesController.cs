@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using TeamFinder.Models.DTO.WinnerResults;
 
 namespace TeamFinder.Controllers;
 [Route("api/[controller]")]
@@ -91,9 +92,9 @@ public class ActivitiesController : Controller
 
     [HttpGet]
     // GET: api/Activities?query=MateInfoUB
-    public async Task<IActionResult> GetAllActivities([FromQuery] string? query, [FromQuery] string? filter)
+    public async Task<IActionResult> GetAllActivities([FromQuery] string? query, [FromQuery] string? filter, [FromQuery] string? organizerId)
     {
-        var activities = await _activityRepository.GetAllActivities(query, filter);
+        var activities = await _activityRepository.GetAllActivities(query, filter, organizerId);
         
         // Mapping Domain Model to DTO
         var response = new List<ActivityDto>();
@@ -160,7 +161,7 @@ public class ActivitiesController : Controller
 
     [HttpDelete]
     [Route("{id:Guid}")]
-    [Authorize(Roles = "Admin, Organizer")]
+/*    [Authorize(Roles = "Admin, Organizer")]*/
     public async Task<IActionResult> DeleteActivity([FromRoute] Guid id)
     {
         if (await IsCurrentUserActivityCreatorOrAdmin(id) == false)
@@ -230,6 +231,19 @@ public class ActivitiesController : Controller
                     TeamCaptainId = c.TeamCaptainId.ToString(),
                 }).ToList(),
             };
+            if(activity.WinnerResult != null)
+            {
+                response.WinnerResult = new WinnerResultDto
+                {
+                    Id = activity.WinnerResult.Id,
+                    Teams = activity.WinnerResult.Teams.Select(t => new TeamDto
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        CreatedDate = t.CreatedDate,
+                    }).ToList()
+                };
+            }
             return response;
         }
         catch (Exception e)

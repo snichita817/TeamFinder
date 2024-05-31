@@ -1,0 +1,51 @@
+<h2 class="mb-3 text-center">Pick Winners for the Activity!</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Winning Team</h5>
+                </div>
+                <div class="card-body">
+                    <div
+                        cdkDropList
+                        #doneList="cdkDropList"
+                        [cdkDropListData]="winners"
+                        [cdkDropListConnectedTo]="[todoList]"
+                        class="example-list list-group"
+                        (cdkDropListDropped)="drop($event)">
+                        <div class="example-box list-group-item list-group-item-action" *ngFor="let item of winners" cdkDrag> 
+                          <a [routerLink]="['/team/view', item.id]">{{item.name}}</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title mb-0">All Teams</h5>
+                </div>
+                <div class="card-body">
+                    <div
+                        cdkDropList
+                        #todoList="cdkDropList"
+                        [cdkDropListData]="allTeams"
+                        [cdkDropListConnectedTo]="[doneList]"
+                        class="example-list list-group"
+                        (cdkDropListDropped)="drop($event)">
+                        <div class="example-box list-group-item list-group-item-action" *ngFor="let item of allTeams" cdkDrag>
+                          <a [routerLink]="['/team/view', item.id]">{{item.name}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-success mt-3" (click)="confirmFinalizeWinners()">Finalize Winners</button>
+    </div>
+</div>
