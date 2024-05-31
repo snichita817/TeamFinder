@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using TeamFinder.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using TeamFinder.Data.Repositories;
+using TeamFinder.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,8 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("TeamFinder")
     .AddDefaultTokenProviders();*/
 
+builder.Services.AddLogging();
+builder.Services.AddHostedService<TeamStatusUpdateService>();
 
 builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()

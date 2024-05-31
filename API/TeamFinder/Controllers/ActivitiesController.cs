@@ -227,6 +227,7 @@ public class ActivitiesController : Controller
                     CreatedDate = c.CreatedDate,
                     AcceptedToActivity = c.AcceptedToActivity.ToString(),
                     IsPrivate = c.IsPrivate,
+                    TeamCaptainId = c.TeamCaptainId.ToString(),
                 }).ToList(),
             };
             return response;

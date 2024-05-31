@@ -261,6 +261,27 @@ namespace TeamFinder.Controllers
             return Ok(response);
         }
 
+        [HttpGet("get-user-team/{activityId:Guid}")]
+        public async Task<IActionResult> GetUserTeam([FromRoute] Guid activityId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized("Please login before accessing this page!");
+            }
+
+            var team = await _teamRepository.GetUserTeam(activityId, userId);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            var response = await BuildTeamDto(team);
+
+            return Ok(response);
+        }
+        
         #region File Uploads
         [HttpPut("{teamId:Guid}/upload/{submissionUrl}")]
         public async Task<IActionResult> ChangeSubmissionLink([FromRoute] Guid teamId, [FromRoute] string submissionUrl)

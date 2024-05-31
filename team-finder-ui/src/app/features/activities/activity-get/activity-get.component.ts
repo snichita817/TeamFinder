@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Update } from '../../updates/models/update.model';
 import { SharedService } from 'src/app/shared/shared.service';
 import { AuthService } from '../../auth/services/auth.service';
+import { TeamService } from '../../teams/services/team.service';
+import { Team } from '../../teams/models/team.model';
 
 @Component({
   selector: 'app-activity-get',
@@ -15,14 +17,17 @@ import { AuthService } from '../../auth/services/auth.service';
 export class ActivityGetComponent implements OnInit {
   activityId: string | null = null;
   model?: Activity;
+  team?: Team;
 
   routeSubscription?: Subscription;
   activityServiceSubscription?: Subscription;
+  teamServiceSubscription?: Subscription;
 
   constructor(private activityService: ActivityService,
     private route:ActivatedRoute,
     private router: Router,
     private sharedService: SharedService,
+    private teamService: TeamService,
     private authService: AuthService) {
   }
 
@@ -55,6 +60,7 @@ export class ActivityGetComponent implements OnInit {
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
     this.activityServiceSubscription?.unsubscribe();
+    this.teamServiceSubscription?.unsubscribe();
   }
 
   navigateToUpdate(id: string, event?:MouseEvent) {
@@ -100,6 +106,22 @@ export class ActivityGetComponent implements OnInit {
     return (user.roles.includes("Organizer") && user.id === this.model?.createdBy.id) || user.roles.includes("Admin");
   }
 
+  showRegisterButton(): boolean {
+    if (this.model === undefined) {
+        return false;
+    }
+
+    const currentDate = Date.now(); // date in milliseconds
+    const startDate = new Date(this.model.startDate).getTime();
+
+    if (startDate < currentDate) {
+        return false;
+    }
+
+    return true;
+}
+
+ 
   navigateToDeleteUpdate(id: string, event?:MouseEvent) { 
     if(event) {
       event.stopPropagation();

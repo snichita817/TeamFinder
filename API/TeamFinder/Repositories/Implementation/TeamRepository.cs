@@ -135,5 +135,13 @@ namespace TeamFinder.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
             return existingTeam;
         }
+
+        public async Task<Team?> GetUserTeam(Guid activityId, string userId)
+        {
+            return await _dbContext.Teams
+                .Include(x => x.Members)
+                .Include(x => x.ActivityRegistered)
+                .FirstOrDefaultAsync(t => t.Members.Any(m => m.Id == userId) && t.ActivityRegistered.Id == activityId);
+        }
     }
 }

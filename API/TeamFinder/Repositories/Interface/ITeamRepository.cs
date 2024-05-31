@@ -24,5 +24,7 @@ namespace TeamFinder.Repositories.Interface
         Task<Team?> EditTeam(Team team);
 
         Task<Team?> DeleteTeam(Guid id);
+
+        Task<Team?> GetUserTeam(Guid activityId, string userId);
     }
 }

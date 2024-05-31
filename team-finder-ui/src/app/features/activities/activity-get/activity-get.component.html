@@ -83,6 +83,11 @@
                                 <i class="bi bi-people me-1"></i> View Teams
                             </a>
                         </div>
+                        <div class="row mb-3 justify-content-center">
+                            <a class="btn btn-secondary" style="max-width: 230px;" role="button">
+                                <i class="bi bi-people me-1"></i> View My Team
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +100,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4 class="card-title text-primary">{{model.title}}</h4>
-                                    <a class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
+                                    <a *ngIf="showRegisterButton()" class="btn btn-primary" [routerLink]="['/activity', model.id, 'teams', 'register']">Register</a>
                                 </div>
                                 <h6 class="card-subtitle mb-3 text-muted">Created by <a class="subtle-link" [routerLink]="['/user', model.createdBy.id]">{{model.createdBy.userName}}</a> on {{model.createdDate | date:'mediumDate'}}</h6>
                                 <div class="border-top pt-3">
