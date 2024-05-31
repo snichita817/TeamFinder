@@ -64,14 +64,12 @@ export class PickWinnerComponent implements OnInit, OnDestroy {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+      const item = event.previousContainer.data[event.previousIndex];
+      event.previousContainer.data.splice(event.previousIndex, 1);
+      event.container.data.splice(event.currentIndex, 0, item);
     }
   }
+
   confirmFinalizeWinners() {
     if (confirm("Are you sure you want to finalize the winners? This cannot be undone!")) {
         this.finalizeWinners();
@@ -93,6 +91,7 @@ export class PickWinnerComponent implements OnInit, OnDestroy {
     this.activityService.createWinnerResult(winnerResultDto).subscribe({
       next: (response) => {
         this.sharedService.showNotification(true, "Success!", "Winning teams have been submitted!")
+        this.router.navigateByUrl(`/activities/get/${this.activityId}`);
       },
       error: (error) => {
         if(error.error) {

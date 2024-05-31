@@ -87,6 +87,12 @@ namespace TeamFinder.Repositories.Implementation
             {
                 throw new Exception("Team not found");
             }
+
+            var acceptedTeams = team.ActivityRegistered.Teams.Where(t => t.AcceptedToActivity == RequestStatus.Accepted).ToList();
+            if(acceptedTeams.Count >= team.ActivityRegistered.MaxTeams)
+            {
+                throw new Exception("Activity has reached maximum number of accepted Teams!");
+            }
             
             team.AcceptedToActivity = RequestStatus.Accepted;
             await _dbContext.SaveChangesAsync();

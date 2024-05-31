@@ -33,7 +33,7 @@ namespace TeamFinder.Services
                 try
                 {
                     var teamsToUpdate = dbContext.Teams
-                        .Where(t => (t.AcceptedToActivity == RequestStatus.Pending || (t.Members.Count() < t.MaxParticipant && t.AcceptedToActivity != RequestStatus.Rejected)) && t.ActivityRegistered.StartDate <= DateTime.UtcNow)
+                        .Where(t => (t.AcceptedToActivity == RequestStatus.Pending || (t.Members.Count() < t.MinParticipant && t.AcceptedToActivity != RequestStatus.Rejected)) && t.ActivityRegistered.StartDate <= DateTime.UtcNow)
                         .ToList();
 
                     foreach (var team in teamsToUpdate)

@@ -37,7 +37,19 @@ namespace TeamFinder.Repositories.Implementation
             _context.TeamMembershipRequests.Update(request);
 
             // Add the user to the team
-            var team = await _context.Teams.Include(x=>x.Members).FirstOrDefaultAsync(t => t.Id == request.Team.Id);
+            var team = await _context.Teams.Include(x=>x.Members).Include(x => x.ActivityRegistered).FirstOrDefaultAsync(t => t.Id == request.Team.Id);
+            if(team!= null)
+            {
+                var activityTeams = _context.Teams.Include(x=>x.Members).Where(t => t.ActivityRegistered.Id == team.ActivityRegistered.Id).ToList();
+                foreach(var activityTeam in activityTeams)
+                {
+                    if (activityTeam.Members.Contains(request.User))
+                    {
+                        throw new Exception("User already in a team for this activity");
+                    }
+                }
+            }
+
             var user = await _context.Users.FindAsync(request.User.Id);
             if (team != null && user != null)
             {

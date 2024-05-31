@@ -45,9 +45,10 @@ namespace TeamFinder.Controllers
                 return BadRequest("Activity has already started.");
             }
 
-            if(activityRegistered.Teams.Count >= activityRegistered.MaxTeams)
+            var acceptedTeams = activityRegistered.Teams.Where(t => t.AcceptedToActivity == RequestStatus.Accepted).ToList();
+            if (acceptedTeams.Count >= activityRegistered.MaxTeams)
             {
-                return BadRequest("Activity has reached the maximum number of teams.");
+                return BadRequest("Activity has reached the maximum number of accepted teams.");
             }
 
             // Map request to domain model
@@ -173,8 +174,15 @@ namespace TeamFinder.Controllers
             {
                 return Unauthorized("You are not authorized!");
             }
-
-            var team = await _teamRepository.AcceptTeam(teamId);
+            Team? team;
+            try
+            {
+                team = await _teamRepository.AcceptTeam(teamId);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             if (team == null)
             {
@@ -479,7 +487,16 @@ namespace TeamFinder.Controllers
             }
             if(activity.StartDate < DateTime.Now) return BadRequest("Activity has already started.");
 
-            var result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
+            bool result = false;
+            try
+            {
+                result = await _teamMembershipRequestService.AcceptTeamMembershipRequestAsync(requestId);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             if (!result) return BadRequest("Unable to accept membership request. Verify if the user is already in a different team.");
 
             return Ok();

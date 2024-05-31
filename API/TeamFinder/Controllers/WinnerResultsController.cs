@@ -32,10 +32,10 @@ namespace TeamFinder.Controllers
             {
                 return NotFound("Activity not found");
             }
-            if (activity.EndDate > DateTime.Now)
+            /*if (activity.EndDate > DateTime.Now)
             {
                 return BadRequest("Activity has not ended yet");
-            }
+            }*/
             if (activity.WinnerResult != null)
             {
                 return BadRequest("Winner result already exists for this activity");
