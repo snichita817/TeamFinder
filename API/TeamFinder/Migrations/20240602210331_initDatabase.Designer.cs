@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240529164836_init_db")]
-    partial class initdb
+    [Migration("20240602210331_initDatabase")]
+    partial class initDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -496,9 +496,14 @@ namespace TeamFinder.Migrations
                     b.Property<Guid>("TeamCaptainId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("WinnerResultId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityRegisteredId");
+
+                    b.HasIndex("WinnerResultId");
 
                     b.ToTable("Teams");
                 });
@@ -556,6 +561,23 @@ namespace TeamFinder.Migrations
                     b.HasIndex("ActivityId");
 
                     b.ToTable("Updates");
+                });
+
+            modelBuilder.Entity("TeamFinder.Models.Domain.WinnerResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId")
+                        .IsUnique();
+
+                    b.ToTable("WinnerResults");
                 });
 
             modelBuilder.Entity("ActivityCategory", b =>
@@ -712,6 +734,10 @@ namespace TeamFinder.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TeamFinder.Models.Domain.WinnerResult", null)
+                        .WithMany("Teams")
+                        .HasForeignKey("WinnerResultId");
+
                     b.Navigation("ActivityRegistered");
                 });
 
@@ -745,11 +771,24 @@ namespace TeamFinder.Migrations
                     b.Navigation("Activity");
                 });
 
+            modelBuilder.Entity("TeamFinder.Models.Domain.WinnerResult", b =>
+                {
+                    b.HasOne("TeamFinder.Models.Activity", "Activity")
+                        .WithOne("WinnerResult")
+                        .HasForeignKey("TeamFinder.Models.Domain.WinnerResult", "ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+                });
+
             modelBuilder.Entity("TeamFinder.Models.Activity", b =>
                 {
                     b.Navigation("Teams");
 
                     b.Navigation("Updates");
+
+                    b.Navigation("WinnerResult");
                 });
 
             modelBuilder.Entity("TeamFinder.Models.Domain.ApplicationUser", b =>
@@ -766,6 +805,11 @@ namespace TeamFinder.Migrations
             modelBuilder.Entity("TeamFinder.Models.Domain.Team", b =>
                 {
                     b.Navigation("TeamMembershipRequests");
+                });
+
+            modelBuilder.Entity("TeamFinder.Models.Domain.WinnerResult", b =>
+                {
+                    b.Navigation("Teams");
                 });
 #pragma warning restore 612, 618
         }

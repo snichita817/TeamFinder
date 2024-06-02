@@ -1,5 +1,6 @@
 ﻿using TeamFinder.Models.Domain;
 using TeamFinder.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TeamFinder.Services
 {
@@ -33,7 +34,8 @@ namespace TeamFinder.Services
                 try
                 {
                     var teamsToUpdate = dbContext.Teams
-                        .Where(t => (t.AcceptedToActivity == RequestStatus.Pending || (t.Members.Count() < t.MinParticipant && t.AcceptedToActivity != RequestStatus.Rejected)) && t.ActivityRegistered.StartDate <= DateTime.UtcNow)
+                        .Include(x=>x.Members)
+                        .Where(t => (t.AcceptedToActivity == RequestStatus.Pending || t.Members.Count() < t.MinParticipant) && t.ActivityRegistered.StartDate <= DateTime.Now)
                         .ToList();
 
                     foreach (var team in teamsToUpdate)

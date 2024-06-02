@@ -221,15 +221,23 @@ namespace TeamFinder.Controllers
             {
                 return Unauthorized("You are not authorized!");
             }
+            var existingTeam = await _teamRepository.GetTeamByIdAsync(id);
+            if(existingTeam == null) return NotFound("Team not found.");
 
             var team = new Team
             {
                 Id = id,
                 Name = request.Name,
                 Description = request.Description,
+                AcceptedToActivity = existingTeam.AcceptedToActivity,
                 IsPrivate = request.IsPrivate,
                 TeamCaptainId = Guid.Parse(request.TeamCaptainId),
+                SubmissionUrl = existingTeam.SubmissionUrl,
+                MinParticipant = existingTeam.MinParticipant,
+                MaxParticipant = existingTeam.MaxParticipant,
+                ActivityRegistered = existingTeam.ActivityRegistered,
                 Members = new List<ApplicationUser>(),
+                TeamMembershipRequests = existingTeam.TeamMembershipRequests,
             };
 
             foreach (var member in request.Members)

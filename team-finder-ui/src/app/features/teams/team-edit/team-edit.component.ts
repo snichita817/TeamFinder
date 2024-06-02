@@ -61,7 +61,6 @@ export class TeamEditComponent implements OnInit, OnDestroy {
       const updatedTeam: TeamEditRequest = {
         name: this.teamForm.get('name')?.value,
         description: this.teamForm.get('description')?.value,
-        createdDate: this.team.createdDate,
         isPrivate: this.teamForm.get('isPrivate')?.value,
         teamCaptainId: this.teamForm.get('teamCaptainId')?.value,
         members: this.team.members.map(mem => mem.id)

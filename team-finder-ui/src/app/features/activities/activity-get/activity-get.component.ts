@@ -145,10 +145,10 @@ export class ActivityGetComponent implements OnInit, OnDestroy {
     if(this.model) {
       const currentDate = Date.now();
       const endDate = new Date(this.model?.endDate).getTime();
-      // if(currentDate < endDate) {
-      //   this.sharedService.showNotification(false, "Error!", "You must wait until the end of activity to choose a winner!");
-      //   return;
-      // }
+      if(currentDate < endDate) {
+        this.sharedService.showNotification(false, "Error!", "You must wait until the end of activity to choose a winner!");
+        return;
+      }
     }
     if (this.model?.winnerResult != null) {
       this.sharedService.showNotification(false, "Error!", "Winners are already picked!");

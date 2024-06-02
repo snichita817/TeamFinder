@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class initdb : Migration
+    public partial class initDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -300,33 +300,6 @@ namespace TeamFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teams",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AcceptedToActivity = table.Column<int>(type: "int", nullable: false),
-                    IsPrivate = table.Column<bool>(type: "bit", nullable: false),
-                    TeamCaptainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubmissionUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MinParticipant = table.Column<int>(type: "int", nullable: false),
-                    MaxParticipant = table.Column<int>(type: "int", nullable: false),
-                    ActivityRegisteredId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Teams_Activities_ActivityRegisteredId",
-                        column: x => x.ActivityRegisteredId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Updates",
                 columns: table => new
                 {
@@ -345,6 +318,84 @@ namespace TeamFinder.Migrations
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WinnerResults",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ActivityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WinnerResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WinnerResults_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Updates_UpdateId",
+                        column: x => x.UpdateId,
+                        principalTable: "Updates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AcceptedToActivity = table.Column<int>(type: "int", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "bit", nullable: false),
+                    TeamCaptainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubmissionUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MinParticipant = table.Column<int>(type: "int", nullable: false),
+                    MaxParticipant = table.Column<int>(type: "int", nullable: false),
+                    ActivityRegisteredId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WinnerResultId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teams_Activities_ActivityRegisteredId",
+                        column: x => x.ActivityRegisteredId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Teams_WinnerResults_WinnerResultId",
+                        column: x => x.WinnerResultId,
+                        principalTable: "WinnerResults",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -394,33 +445,6 @@ namespace TeamFinder.Migrations
                         name: "FK_TeamMembershipRequests_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_Updates_UpdateId",
-                        column: x => x.UpdateId,
-                        principalTable: "Updates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -520,9 +544,20 @@ namespace TeamFinder.Migrations
                 column: "ActivityRegisteredId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Teams_WinnerResultId",
+                table: "Teams",
+                column: "WinnerResultId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Updates_ActivityId",
                 table: "Updates",
                 column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WinnerResults_ActivityId",
+                table: "WinnerResults",
+                column: "ActivityId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -575,6 +610,9 @@ namespace TeamFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teams");
+
+            migrationBuilder.DropTable(
+                name: "WinnerResults");
 
             migrationBuilder.DropTable(
                 name: "Activities");
