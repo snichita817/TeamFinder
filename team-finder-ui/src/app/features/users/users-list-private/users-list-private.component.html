@@ -1,29 +1,41 @@
 <div class="container mt-5">
     <h2>All Users - Admin</h2>
     <ng-container *ngIf="users$ | async as users">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Roles</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users">
-                    <th scope="row">{{user.id}}</th>
-                    <td>{{user.email}}</td>
-                    <td>{{user.roles}}</td>
-                    <ng-container *ngIf="user?.roles?.includes('Organizer'); else addOrganizerRole">
-                        <td><button class="btn" [class.btn-primary]="false" [class.disabled]="true">Assign Organizer</button></td>
-                    </ng-container>
-                    <ng-template #addOrganizerRole>
-                        <td><button class="btn btn-primary" (click)="assignOrganizer(this.user.email)">Assign Organizer</button></td>
-                    </ng-template>
-                    <td><button class="btn btn-danger" [routerLink]="['/users/delete', user.id]">Delete</button></td>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-4" *ngFor="let user of users">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">ID: {{user.id}}</h5>
+                        <p class="card-text">Email: {{user.email}}</p>
+                        <p class="card-text">Roles: {{user.roles}}</p>
+                        <div class="d-flex justify-content-between">
+                            <!-- <ng-container *ngIf="user?.roles?.includes('Organizer'); else addOrganizerRole">
+                                <button class="btn btn-secondary disabled">Assign Organizer</button>
+                            </ng-container>
+                            <ng-template #addOrganizerRole>
+                                <button class="btn btn-primary" (click)="assignOrganizer(user.email)">Assign Organizer</button>
+                            </ng-template> -->
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Assign Roles
+                                </button>
+                                <ul class="dropdown-menu p-3">
+                                    <li *ngFor="let role of allRoles">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" [id]="'role-' + role" [checked]="user.roles.includes(role)">
+                                            <label class="form-check-label" [for]="'role-' + role">
+                                                {{ role }}
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-danger mt-2" [routerLink]="['/users/delete', user.id]">Delete</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </ng-container>
 </div>

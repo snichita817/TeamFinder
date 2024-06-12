@@ -13,6 +13,7 @@ export class UsersListPrivateComponent {
   users$?: Observable<User[]>;
 
   userServiceSubscription?: Subscription;
+  allRoles = ["Admin", "Organizer", "User"]
 
   constructor(private userService: UserService,
     private router: Router) { }
