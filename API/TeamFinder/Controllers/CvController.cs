@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
@@ -27,17 +28,20 @@ public class CvController : ControllerBase
         if (file == null || file.Length == 0)
             return BadRequest("Invalid file.");
 
-        string extractedText;
+        StringBuilder extractedText = new StringBuilder();
         using (var reader = new PdfReader(file.OpenReadStream()))
         {
             using (var pdfDoc = new PdfDocument(reader))
             {
-                extractedText = PdfTextExtractor.GetTextFromPage(pdfDoc.GetFirstPage());
-                // Consider looping through pages if the CV spans multiple pages
+                for (int page = 1; page <= pdfDoc.GetNumberOfPages(); page++)
+                {
+                    extractedText.Append(PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(page)));
+                    extractedText.Append('\n'); // Add a newline for separation between pages
+                }
             }
         }
 
-        var prompt = $"Extract the following information from this CV: {extractedText}\n\n" +
+        var prompt = $"Extract the following information from this CV: {extractedText.ToString()}\n\n" +
                      "1. First Name: \n" +
                      "2. Last Name: \n" +
                      "3. Email: \n" +
