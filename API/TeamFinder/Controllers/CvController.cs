@@ -13,10 +13,11 @@ using TeamFinder.Models.Domain;
 public class CvController : ControllerBase
 {
     private readonly OpenAIAPI _openAiApi;
-
-    public CvController()
+    private readonly IConfiguration _configuraton;
+    public CvController(IConfiguration configuraton)
     {
-        _openAiApi = new OpenAIAPI("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");
+        _configuraton = configuraton;
+        _openAiApi = new OpenAIAPI(_configuraton["OpenAI:ApiKey"]);
     }
 
     [HttpPost("upload")]
