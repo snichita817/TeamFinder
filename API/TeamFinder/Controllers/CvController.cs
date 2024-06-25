@@ -1,5 +1,4 @@
-﻿// Controllers/CvController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Threading.Tasks;
 using iText.Kernel.Pdf;
@@ -14,6 +13,8 @@ public class CvController : ControllerBase
 {
     private readonly OpenAIAPI _openAiApi;
     private readonly IConfiguration _configuraton;
+    private const int MaxRetries = 5;
+
     public CvController(IConfiguration configuraton)
     {
         _configuraton = configuraton;
@@ -48,10 +49,20 @@ public class CvController : ControllerBase
                      "9. Portfolio URL: \n" +
                      "10. Bio:";
 
-        var completionRequest = new CompletionRequest(prompt, model: "gpt-3.5-turbo-instruct", max_tokens: 500);
-        var completionResult = await _openAiApi.Completions.CreateCompletionAsync(completionRequest);
-        var extractedInfo = ParseCvInfo(completionResult.Completions[0].Text);
-        return Ok(extractedInfo);
+        CvInfo finalCvInfo = new CvInfo();
+        int attempt = 0;
+
+        while (attempt < MaxRetries)
+        {
+            var completionRequest = new CompletionRequest(prompt, model: "gpt-3.5-turbo-instruct", max_tokens: 500);
+            var completionResult = await _openAiApi.Completions.CreateCompletionAsync(completionRequest);
+            var extractedInfo = ParseCvInfo(completionResult.Completions[0].Text);
+
+            MergeCvInfo(finalCvInfo, extractedInfo);
+            attempt++;
+        }
+
+        return Ok(finalCvInfo);
     }
 
     private CvInfo ParseCvInfo(string completionText)
@@ -70,6 +81,30 @@ public class CvController : ControllerBase
         cvInfo.Bio = ExtractField(completionText, "Bio:");
 
         return cvInfo;
+    }
+
+    private void MergeCvInfo(CvInfo finalCvInfo, CvInfo newInfo)
+    {
+        if (string.IsNullOrEmpty(finalCvInfo.FirstName))
+            finalCvInfo.FirstName = newInfo.FirstName;
+        if (string.IsNullOrEmpty(finalCvInfo.LastName))
+            finalCvInfo.LastName = newInfo.LastName;
+        if (string.IsNullOrEmpty(finalCvInfo.Email))
+            finalCvInfo.Email = newInfo.Email;
+        if (string.IsNullOrEmpty(finalCvInfo.University))
+            finalCvInfo.University = newInfo.University;
+        if (!finalCvInfo.GraduationYear.HasValue)
+            finalCvInfo.GraduationYear = newInfo.GraduationYear;
+        if (string.IsNullOrEmpty(finalCvInfo.Skills))
+            finalCvInfo.Skills = newInfo.Skills;
+        if (string.IsNullOrEmpty(finalCvInfo.LinkedInUrl))
+            finalCvInfo.LinkedInUrl = newInfo.LinkedInUrl;
+        if (string.IsNullOrEmpty(finalCvInfo.GitHubUrl))
+            finalCvInfo.GitHubUrl = newInfo.GitHubUrl;
+        if (string.IsNullOrEmpty(finalCvInfo.PortfolioUrl))
+            finalCvInfo.PortfolioUrl = newInfo.PortfolioUrl;
+        if (string.IsNullOrEmpty(finalCvInfo.Bio))
+            finalCvInfo.Bio = newInfo.Bio;
     }
 
     private string ExtractField(string text, string fieldName)
