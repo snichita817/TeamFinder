@@ -233,15 +233,20 @@ public class ActivitiesController : Controller
             };
             if(activity.WinnerResult != null)
             {
-                response.WinnerResult = new WinnerResultDto
-                {
-                    Id = activity.WinnerResult.Id,
-                    Teams = activity.WinnerResult.Teams.Select(t => new TeamDto
+                var orderedTeams = activity.WinnerResult.OrderedTeams
+                    .OrderBy(ot => ot.Order)
+                    .Select(ot => activity.WinnerResult.Teams.First(t => t.Id == ot.TeamId))
+                    .Select(t => new TeamDto
                     {
                         Id = t.Id,
                         Name = t.Name,
                         CreatedDate = t.CreatedDate,
-                    }).ToList()
+                    }).ToList();
+
+                response.WinnerResult = new WinnerResultDto
+                {
+                    Id = activity.WinnerResult.Id,
+                    Teams = orderedTeams
                 };
             }
             return response;

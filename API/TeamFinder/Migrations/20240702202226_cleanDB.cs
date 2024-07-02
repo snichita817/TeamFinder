@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class initDatabase : Migration
+    public partial class cleanDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -366,6 +366,25 @@ namespace TeamFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderedTeam",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    WinnerResultId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderedTeam", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderedTeam_WinnerResults_WinnerResultId",
+                        column: x => x.WinnerResultId,
+                        principalTable: "WinnerResults",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Teams",
                 columns: table => new
                 {
@@ -519,6 +538,11 @@ namespace TeamFinder.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderedTeam_WinnerResultId",
+                table: "OrderedTeam",
+                column: "WinnerResultId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrganizerApplications_UserId",
                 table: "OrganizerApplications",
                 column: "UserId");
@@ -589,6 +613,9 @@ namespace TeamFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "OrderedTeam");
 
             migrationBuilder.DropTable(
                 name: "OrganizerApplications");

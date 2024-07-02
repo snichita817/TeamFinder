@@ -12,8 +12,8 @@ using TeamFinder.Data;
 namespace TeamFinder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240602210331_initDatabase")]
-    partial class initDatabase
+    [Migration("20240702202226_cleanDB")]
+    partial class cleanDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -404,6 +404,28 @@ namespace TeamFinder.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("TeamFinder.Models.Domain.OrderedTeam", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("WinnerResultId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WinnerResultId");
+
+                    b.ToTable("OrderedTeam");
+                });
+
             modelBuilder.Entity("TeamFinder.Models.Domain.OrganizerApplication", b =>
                 {
                     b.Property<Guid>("Id")
@@ -704,6 +726,13 @@ namespace TeamFinder.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TeamFinder.Models.Domain.OrderedTeam", b =>
+                {
+                    b.HasOne("TeamFinder.Models.Domain.WinnerResult", null)
+                        .WithMany("OrderedTeams")
+                        .HasForeignKey("WinnerResultId");
+                });
+
             modelBuilder.Entity("TeamFinder.Models.Domain.OrganizerApplication", b =>
                 {
                     b.HasOne("TeamFinder.Models.Domain.ApplicationUser", "User")
@@ -809,6 +838,8 @@ namespace TeamFinder.Migrations
 
             modelBuilder.Entity("TeamFinder.Models.Domain.WinnerResult", b =>
                 {
+                    b.Navigation("OrderedTeams");
+
                     b.Navigation("Teams");
                 });
 #pragma warning restore 612, 618

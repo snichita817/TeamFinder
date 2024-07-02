@@ -81,25 +81,24 @@ export class PickWinnerComponent implements OnInit, OnDestroy {
       alert('Activity ID is missing!');
       return;
     }
-
+  
     const winnerResultDto: PickWinnerAdd = {
       activityId: this.activityId,
-      teamIds: this.winners.map(team => team.id)
+      teams: this.winners.map((team, index) => ({ id: team.id, order: index + 1 }))
     };
-    console.log(winnerResultDto)
-
+  
     this.activityService.createWinnerResult(winnerResultDto).subscribe({
       next: (response) => {
-        this.sharedService.showNotification(true, "Success!", "Winning teams have been submitted!")
+        this.sharedService.showNotification(true, "Success!", "Winning teams have been submitted!");
         this.router.navigateByUrl(`/activities/get/${this.activityId}`);
       },
       error: (error) => {
-        if(error.error) {
+        if (error.error) {
           this.sharedService.showNotification(false, 'Error!', error.error);
         }
       }
     });
-  }
+  }  
 
   ngOnDestroy() {
     this.teamServiceSubscription?.unsubscribe();

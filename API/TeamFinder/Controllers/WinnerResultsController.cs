@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TeamFinder.Data;
 using TeamFinder.Models.Domain;
 using TeamFinder.Models.DTO.WinnerResults;
@@ -27,7 +28,7 @@ namespace TeamFinder.Controllers
         [Authorize(Roles = "Admin, Organizer")]
         public async Task<IActionResult> CreateWinnerResult([FromBody] AddWinnerResultDto winnerResultDto)
         {
-            var activity = await _dbContext.Activities.Include(x=>x.WinnerResult).FirstOrDefaultAsync(x => x.Id == winnerResultDto.ActivityId);
+            var activity = await _dbContext.Activities.Include(x => x.WinnerResult).FirstOrDefaultAsync(x => x.Id == winnerResultDto.ActivityId);
             if (activity == null)
             {
                 return NotFound("Activity not found");
@@ -41,22 +42,32 @@ namespace TeamFinder.Controllers
                 return BadRequest("Winner result already exists for this activity");
             }
 
-            var teams = await _dbContext.Teams.Where(t => winnerResultDto.TeamIds.Contains(t.Id)).ToListAsync();
-            if (teams.Count != winnerResultDto.TeamIds.Count)
+            var teamIds = winnerResultDto.Teams.Select(t => t.Id).ToList();
+            var teams = await _dbContext.Teams.Where(t => teamIds.Contains(t.Id)).ToListAsync();
+            if (teams.Count != winnerResultDto.Teams.Count)
             {
                 return BadRequest("One or more teams not found");
             }
 
+            var orderedTeams = winnerResultDto.Teams.Select(t => new OrderedTeam
+            {
+                TeamId = t.Id,
+                Order = t.Order
+            }).ToList();
+
             var winnerResult = new WinnerResult
             {
                 ActivityId = winnerResultDto.ActivityId,
-                Teams = teams
+                Teams = teams,
+                OrderedTeams = orderedTeams
             };
 
-            var createdWinnerResult = await _winnerResultRepository.CreateAsync(winnerResult);
+            _dbContext.WinnerResults.Add(winnerResult);
+            await _dbContext.SaveChangesAsync();
 
             return Ok();
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWinnerResultById(Guid id)
@@ -70,7 +81,15 @@ namespace TeamFinder.Controllers
                 return NotFound();
             }
 
-            return Ok(winnerResult);
+            var orderedTeams = winnerResult.OrderedTeams.OrderBy(ot => ot.Order)
+                .Select(ot => winnerResult.Teams.First(t => t.Id == ot.TeamId)).ToList();
+
+            return Ok(new
+            {
+                winnerResult.Id,
+                winnerResult.ActivityId,
+                Teams = orderedTeams
+            });
         }
     }
 }

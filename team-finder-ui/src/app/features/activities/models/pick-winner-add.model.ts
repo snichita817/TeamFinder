@@ -1,5 +1,5 @@
 export interface PickWinnerAdd 
 {
     activityId: string;
-    teamIds: string[];
+    teams: { id: string, order: number }[];
 }

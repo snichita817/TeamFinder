@@ -29,7 +29,7 @@ public class ActivityRepository : IActivityRepository
             .Include(x => x.Updates)
             .Include(x => x.CreatedBy)
             .Include(x => x.Teams)
-            .Include(x => x.WinnerResult)
+            .Include(x => x.WinnerResult).ThenInclude(x => x.OrderedTeams)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
